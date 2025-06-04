@@ -93,6 +93,7 @@
             margin: 20px 0;
             position: relative;
             overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
         }
         
         #map {
@@ -457,6 +458,94 @@
     </div>
 
     <script>
+        // NASA Tactical Map Style
+        const nasaTacticalStyle = [
+            {
+                "elementType": "geometry",
+                "stylers": [{"color": "#0a0a0a"}]
+            },
+            {
+                "elementType": "labels",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "administrative",
+                "elementType": "geometry",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "administrative.land_parcel",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "administrative.locality",
+                "elementType": "labels",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "administrative.neighborhood",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "landscape",
+                "elementType": "geometry",
+                "stylers": [{"color": "#1a252f"}]
+            },
+            {
+                "featureType": "landscape.man_made",
+                "elementType": "geometry",
+                "stylers": [{"color": "#2c3e50"}]
+            },
+            {
+                "featureType": "landscape.natural",
+                "elementType": "geometry",
+                "stylers": [{"color": "#1a252f"}]
+            },
+            {
+                "featureType": "poi",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "road",
+                "elementType": "geometry",
+                "stylers": [{"color": "#34495e"}, {"weight": 1}]
+            },
+            {
+                "featureType": "road",
+                "elementType": "labels",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "road.arterial",
+                "elementType": "geometry",
+                "stylers": [{"color": "#e74c3c"}, {"weight": 1}]
+            },
+            {
+                "featureType": "road.highway",
+                "elementType": "geometry",
+                "stylers": [{"color": "#f39c12"}, {"weight": 2}]
+            },
+            {
+                "featureType": "road.local",
+                "elementType": "geometry",
+                "stylers": [{"color": "#34495e"}, {"weight": 0.5}]
+            },
+            {
+                "featureType": "transit",
+                "stylers": [{"visibility": "off"}]
+            },
+            {
+                "featureType": "water",
+                "elementType": "geometry",
+                "stylers": [{"color": "#0f3460"}]
+            },
+            {
+                "featureType": "water",
+                "elementType": "labels",
+                "stylers": [{"visibility": "off"}]
+            }
+        ];
+
         // Store locations with their coordinates and info
         const locations = {
             bestBuy: {
@@ -496,39 +585,23 @@
         let map;
         let markers = {};
 
-        // Initialize Google Map with NASA/space theme
+        // Initialize Google Map with enhanced NASA/space theme
         function initMap() {
             const center = { lat: 38.9784, lng: -76.4951 };
             
             map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 14,
                 center: center,
-                mapTypeId: google.maps.MapTypeId.SATELLITE,
-                styles: [
-                    {
-                        "featureType": "all",
-                        "elementType": "labels",
-                        "stylers": [{"visibility": "off"}]
-                    },
-                    {
-                        "featureType": "road",
-                        "elementType": "geometry",
-                        "stylers": [
-                            {"color": "#2c3e50"},
-                            {"weight": 1}
-                        ]
-                    },
-                    {
-                        "featureType": "water",
-                        "elementType": "geometry",
-                        "stylers": [{"color": "#1a252f"}]
-                    }
-                ],
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                styles: nasaTacticalStyle,
                 disableDefaultUI: true,
-                gestureHandling: 'greedy'
+                gestureHandling: 'greedy',
+                backgroundColor: '#0a0a0a',
+                clickableIcons: false,
+                keyboardShortcuts: false
             });
 
-            // Add location markers
+            // Add location markers with enhanced styling
             Object.keys(locations).forEach(key => {
                 const location = locations[key];
                 
@@ -541,16 +614,39 @@
                         fillColor: getLocationColor(location.type),
                         fillOpacity: 1,
                         strokeColor: '#ffffff',
-                        strokeWeight: 2,
-                        scale: 8
-                    }
+                        strokeWeight: 3,
+                        scale: 10
+                    },
+                    animation: google.maps.Animation.DROP
                 });
 
                 markers[key] = marker;
 
-                // Add click listener for location info
+                // Add enhanced click listener for location info
                 marker.addListener('click', () => {
                     showLocationInfo(location);
+                    
+                    // Add tactical highlighting effect
+                    marker.setIcon({
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillColor: getLocationColor(location.type),
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 5,
+                        scale: 15
+                    });
+                    
+                    // Reset after 2 seconds
+                    setTimeout(() => {
+                        marker.setIcon({
+                            path: google.maps.SymbolPath.CIRCLE,
+                            fillColor: getLocationColor(location.type),
+                            fillOpacity: 1,
+                            strokeColor: '#ffffff',
+                            strokeWeight: 3,
+                            scale: 10
+                        });
+                    }, 2000);
                 });
             });
         }
@@ -588,8 +684,11 @@
                     const directionsRenderer = new google.maps.DirectionsRenderer({
                         polylineOptions: {
                             strokeColor: '#e74c3c',
-                            strokeWeight: 3
-                        }
+                            strokeWeight: 4,
+                            strokeOpacity: 0.8
+                        },
+                        suppressMarkers: true,
+                        preserveViewport: false
                     });
                     
                     directionsRenderer.setMap(map);
@@ -630,7 +729,6 @@
         // Initialize when page loads
         window.onload = function() {
             updateCoordinates();
-            // Note: You'll need to add your Google Maps API key
             if (typeof google !== 'undefined') {
                 initMap();
             }
@@ -644,7 +742,7 @@
         });
     </script>
     
-    <!-- Add Google Maps API - You'll need to add your API key -->
+    <!-- Add Google Maps API with your key -->
     <script async defer 
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTdJQ1Pk-PdixNjh82D3k7_Xqmfhhj1I0&callback=initMap">
     </script>
