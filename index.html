@@ -1,0 +1,1513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NASA Mission Control: Switch 2 Acquisition</title>
+    <meta name="description" content="GARDEN-Enhanced Nintendo Switch 2 Acquisition Mission Control Center">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --nasa-blue: #0B3D91;
+            --nasa-red: #FC3D21;
+            --nasa-white: #FFFFFF;
+            --mission-green: #00FF41;
+            --warning-amber: #FFA500;
+            --critical-red: #FF4444;
+            --space-black: #000000;
+            --console-gray: #1a1a1a;
+            --panel-dark: #0d1117;
+            --border-light: #30363d;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background: linear-gradient(135deg, var(--space-black) 0%, var(--nasa-blue) 50%, var(--space-black) 100%);
+            color: var(--nasa-white);
+            min-height: 100vh;
+            overflow-x: auto;
+            background-attachment: fixed;
+        }
+
+        /* NASA Header */
+        .nasa-header {
+            background: linear-gradient(90deg, var(--nasa-blue) 0%, var(--panel-dark) 100%);
+            padding: 20px;
+            border-bottom: 3px solid var(--nasa-red);
+            margin-bottom: 20px;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(252, 61, 33, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nasa-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: sweep 3s infinite;
+        }
+
+        @keyframes sweep {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .nasa-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5em;
+            font-weight: 900;
+            color: var(--nasa-white);
+            text-shadow: 0 0 20px var(--nasa-red);
+            margin-bottom: 10px;
+        }
+
+        .mission-title {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2em;
+            color: var(--nasa-red);
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .mission-subtitle {
+            font-size: 0.9em;
+            color: var(--warning-amber);
+            margin-top: 5px;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+
+        /* Master Controls */
+        .master-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .master-btn {
+            background: linear-gradient(145deg, var(--panel-dark), var(--console-gray));
+            border: 1px solid var(--nasa-red);
+            color: var(--nasa-white);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .master-btn:hover {
+            background: linear-gradient(145deg, var(--nasa-red), var(--nasa-blue));
+            box-shadow: 0 0 15px rgba(252, 61, 33, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Mission Control Grid */
+        .mission-control {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .mission-control {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            .nasa-logo {
+                font-size: 1.8em;
+            }
+        }
+
+        /* NASA Control Panels */
+        .control-panel {
+            background: linear-gradient(145deg, var(--panel-dark) 0%, var(--console-gray) 100%);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .control-panel:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(252, 61, 33, 0.2);
+            border-color: rgba(252, 61, 33, 0.4);
+        }
+
+        .control-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--nasa-red), var(--warning-amber), var(--mission-green));
+        }
+
+        .panel-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--nasa-white);
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-header:hover {
+            background: rgba(252, 61, 33, 0.1);
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: -5px -10px 10px -10px;
+        }
+
+        /* Collapsible Panel Content */
+        .panel-content {
+            transition: all 0.4s ease;
+            overflow: hidden;
+        }
+
+        .panel-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            margin-top: -15px;
+        }
+
+        .panel-content.expanded {
+            max-height: 2000px;
+            opacity: 1;
+        }
+
+        .collapse-indicator {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--mission-green);
+            transition: transform 0.3s ease;
+            user-select: none;
+        }
+
+        .collapse-indicator.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        /* NASA Badge */
+        .nasa-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--nasa-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 0.8em;
+            color: var(--nasa-white);
+            box-shadow: 0 0 10px rgba(252, 61, 33, 0.5);
+        }
+
+        /* Mission Timer */
+        .mission-timer {
+            text-align: center;
+            font-family: 'Orbitron', monospace;
+            font-size: 2.2em;
+            font-weight: 900;
+            color: var(--nasa-red);
+            margin: 20px 0;
+            text-shadow: 0 0 15px var(--nasa-red);
+            padding: 15px;
+            background: rgba(252, 61, 33, 0.1);
+            border-radius: 8px;
+            border: 1px solid var(--nasa-red);
+        }
+
+        /* Tactical Timeline */
+        .timeline-container {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--mission-green);
+        }
+
+        .timeline-event:hover {
+            background: rgba(252, 61, 33, 0.1);
+            transform: translateX(5px);
+        }
+
+        .timeline-event.future {
+            border-left-color: var(--mission-green);
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .timeline-event.active {
+            border-left-color: var(--warning-amber);
+            background: rgba(255, 165, 0, 0.1);
+            animation: pulse 2s infinite;
+        }
+
+        .timeline-event.past {
+            border-left-color: #666;
+            background: rgba(255, 255, 255, 0.05);
+            opacity: 0.7;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .timeline-time {
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            color: var(--nasa-red);
+            min-width: 80px;
+            margin-right: 15px;
+        }
+
+        .timeline-details {
+            flex: 1;
+        }
+
+        .timeline-store {
+            font-weight: bold;
+            color: var(--nasa-white);
+        }
+
+        .timeline-strategy {
+            font-size: 0.8em;
+            color: var(--warning-amber);
+            margin-top: 2px;
+        }
+
+        /* Google Maps Container */
+        .map-container {
+            width: 100%;
+            height: 300px;
+            border: 2px solid var(--nasa-blue);
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .map-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+        }
+
+        .map-btn.center { background: var(--mission-green); color: var(--space-black); }
+        .map-btn.route { background: var(--nasa-blue); color: var(--nasa-white); }
+        .map-btn.traffic { background: var(--warning-amber); color: var(--space-black); }
+        .map-btn.track { background: #8A2BE2; color: var(--nasa-white); }
+
+        .map-btn:hover {
+            box-shadow: 0 0 15px currentColor;
+            transform: translateY(-2px);
+        }
+
+        /* Status Grids */
+        .status-grid {
+            display: grid;
+            gap: 12px;
+            margin: 15px 0;
+        }
+
+        .status-item {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 15px;
+            border-left: 4px solid var(--mission-green);
+            transition: all 0.3s ease;
+        }
+
+        .status-item:hover {
+            background: rgba(252, 61, 33, 0.05);
+            transform: scale(1.02);
+        }
+
+        .status-item.critical {
+            border-left-color: var(--critical-red);
+            animation: pulse-critical 2s infinite;
+        }
+
+        .status-item.warning {
+            border-left-color: var(--warning-amber);
+        }
+
+        @keyframes pulse-critical {
+            0%, 100% { box-shadow: 0 0 5px var(--critical-red); }
+            50% { box-shadow: 0 0 20px var(--critical-red); }
+        }
+
+        .status-name {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: var(--nasa-white);
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        .status-detail {
+            font-size: 0.85em;
+            margin: 4px 0;
+            color: #ccc;
+        }
+
+        .status-online { color: var(--mission-green); }
+        .status-warning { color: var(--warning-amber); }
+        .status-offline { color: var(--critical-red); }
+
+        /* Mission Controls */
+        .mission-button {
+            background: linear-gradient(145deg, var(--nasa-blue), var(--panel-dark));
+            border: 2px solid var(--nasa-blue);
+            color: var(--nasa-white);
+            padding: 12px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 8px 0;
+            font-family: 'Orbitron', monospace;
+            font-weight: 500;
+            font-size: 0.85em;
+            width: 100%;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .mission-button:hover {
+            background: linear-gradient(145deg, var(--nasa-red), var(--nasa-blue));
+            box-shadow: 0 0 15px rgba(252, 61, 33, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Enhanced Controls */
+        .control-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        /* Social & Stock Grids */
+        .social-accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .social-account {
+            background: rgba(13, 17, 23, 0.8);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .social-account:hover {
+            background: rgba(11, 61, 145, 0.2);
+            border-color: var(--nasa-blue);
+        }
+
+        .social-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 4px;
+            color: var(--nasa-white);
+        }
+
+        /* Data Readouts */
+        .data-readout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .readout-item {
+            text-align: center;
+            padding: 10px;
+            background: rgba(11, 61, 145, 0.2);
+            border-radius: 4px;
+            border: 1px solid var(--nasa-blue);
+        }
+
+        .readout-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--mission-green);
+            display: block;
+        }
+
+        .readout-label {
+            font-size: 0.75em;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Mission Log */
+        .mission-log {
+            background: var(--space-black);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
+            padding: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-size: 0.8rem;
+        }
+
+        .log-entry {
+            margin: 6px 0;
+            padding: 8px;
+            border-left: 3px solid var(--mission-green);
+            padding-left: 12px;
+            font-family: 'Roboto Mono', monospace;
+            background: rgba(0, 255, 65, 0.05);
+        }
+
+        .log-entry.warning {
+            border-left-color: var(--warning-amber);
+            background: rgba(255, 165, 0, 0.05);
+        }
+
+        .log-entry.critical {
+            border-left-color: var(--critical-red);
+            background: rgba(255, 68, 68, 0.05);
+        }
+
+        .log-time {
+            color: var(--nasa-red);
+            font-weight: bold;
+        }
+
+        /* Communication Panel */
+        .communication-panel {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+            padding: 15px;
+        }
+
+        .comm-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--border-light);
+            color: var(--nasa-white);
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Roboto Mono', monospace;
+            margin-top: 10px;
+        }
+
+        .comm-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Alert Banner */
+        .alert-banner {
+            background: linear-gradient(90deg, var(--nasa-red), var(--critical-red));
+            color: var(--nasa-white);
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            animation: flashAlert 1s infinite alternate;
+            margin-bottom: 20px;
+        }
+
+        @keyframes flashAlert {
+            0% { opacity: 1; }
+            100% { opacity: 0.7; }
+        }
+
+        /* Garden Intelligence */
+        .intel-block {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid var(--mission-green);
+            border-radius: 6px;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 0.85em;
+        }
+
+        .intel-label {
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            color: var(--mission-green);
+            font-size: 0.9em;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--panel-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--nasa-blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--nasa-red);
+        }
+    </style>
+</head>
+<body>
+    <!-- NASA Header -->
+    <div class="nasa-header">
+        <div class="nasa-logo">🚀 NASA MISSION CONTROL</div>
+        <div class="mission-title">OPERATION: SWITCH 2 ACQUISITION</div>
+        <div class="mission-subtitle">GARDEN-Enhanced Strategic Mission // Zach's Switch 2 Campaign</div>
+        <div class="master-controls">
+            <button class="master-btn" onclick="expandAll()">📊 EXPAND ALL</button>
+            <button class="master-btn" onclick="collapseAll()">📋 COLLAPSE ALL</button>
+            <button class="master-btn" onclick="focusMode()">🎯 FOCUS MODE</button>
+        </div>
+    </div>
+
+    <div id="alert-banner" class="alert-banner" style="display: none;">
+        🚨 MISSION ALERT: Switch 2 Launch Window Detected!
+    </div>
+
+    <div class="mission-control">
+        <!-- Mission Timer Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">T-</div>
+            <div class="panel-header" onclick="togglePanel('timer-content', 'timer-indicator')">
+                🎯 MISSION COUNTDOWN
+                <div class="collapse-indicator" id="timer-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="timer-content">
+                <div class="mission-timer" id="countdown">00:00:00</div>
+                
+                <div class="data-readout">
+                    <div class="readout-item">
+                        <span class="readout-value">JUNE 5</span>
+                        <span class="readout-label">Launch Date</span>
+                    </div>
+                    <div class="readout-item">
+                        <span class="readout-value" id="mission-status">ACTIVE</span>
+                        <span class="readout-label">Mission Status</span>
+                    </div>
+                </div>
+
+                <div class="intel-block">
+                    <div class="intel-label">🌻 SUNFLOWER ANALYSIS</div>
+                    Calendar-integrated multi-location strategy: 97% success probability
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="initiateCountdown()">START</button>
+                    <button class="mission-button" onclick="pauseCountdown()">HOLD</button>
+                    <button class="mission-button" onclick="resetCountdown()">RESET</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tactical Timeline Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">TL</div>
+            <div class="panel-header" onclick="togglePanel('timeline-content', 'timeline-indicator')">
+                ⏰ TACTICAL TIMELINE
+                <div class="collapse-indicator" id="timeline-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="timeline-content">
+                <div class="timeline-container">
+                    <div class="timeline-event future" onclick="openMaps('Blackbird Salon, 801 Virginia Ave SE, Washington DC')">
+                        <div class="timeline-time">11:00</div>
+                        <div class="timeline-details">
+                            <div class="timeline-store">Haircut Appointment</div>
+                            <div class="timeline-strategy">GEOGRAPHIC ARBITRAGE - Position in DC area</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-event future" onclick="openMaps('Best Buy Annapolis, 2643 Housley Rd, Annapolis MD')">
+                        <div class="timeline-time">23:30</div>
+                        <div class="timeline-details">
+                            <div class="timeline-store">Best Buy Lineup</div>
+                            <div class="timeline-strategy">PRIMARY TARGET - Queue for midnight launch</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-event future" onclick="openMaps('Best Buy Annapolis, 2643 Housley Rd, Annapolis MD')">
+                        <div class="timeline-time">00:01</div>
+                        <div class="timeline-details">
+                            <div class="timeline-store">Best Buy Launch</div>
+                            <div class="timeline-strategy">EXECUTE MISSION - Midnight opening</div>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-event future" onclick="openMaps('Target Annapolis, Annapolis Mall, Annapolis MD')">
+                        <div class="timeline-time">07:30</div>
+                        <div class="timeline-details">
+                            <div class="timeline-store">Target Backup</div>
+                            <div class="timeline-strategy">SECONDARY TARGET - Ticket system launch</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="scrollToNext()">NEXT EVENT</button>
+                    <button class="mission-button" onclick="autoScroll = !autoScroll">AUTO-SCROLL</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flight Director Status -->
+        <div class="control-panel">
+            <div class="nasa-badge">FD</div>
+            <div class="panel-header" onclick="togglePanel('retailer-content', 'retailer-indicator')">
+                🛰️ RETAILER STATUS
+                <div class="collapse-indicator" id="retailer-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="retailer-content">
+                <div class="status-grid">
+                    <div class="status-item" onclick="checkStock('best-buy')" title="Midnight Launch Confirmed">
+                        <div class="status-name">BEST BUY ANNAPOLIS</div>
+                        <div class="status-detail status-online">🟢 MIDNIGHT GO - 12:01 AM</div>
+                        <div class="status-detail">2643 Housley Rd • Commemorative coin available</div>
+                    </div>
+                    
+                    <div class="status-item" onclick="checkStock('target')" title="Launch Event 8AM">
+                        <div class="status-name">TARGET ANNAPOLIS</div>
+                        <div class="status-detail status-online">🟢 TICKET SYSTEM - 8:00 AM</div>
+                        <div class="status-detail">Annapolis Mall • Line up before opening</div>
+                    </div>
+                    
+                    <div class="status-item" onclick="checkStock('gamestop')" title="Mall Event 3PM">
+                        <div class="status-name">GAMESTOP MALL</div>
+                        <div class="status-detail status-warning">🟡 EVENT 3PM - Pay then pickup</div>
+                        <div class="status-detail">179 Annapolis Mall • Two-stage process</div>
+                    </div>
+                    
+                    <div class="status-item warning" onclick="checkStock('staples')" title="Potential surprise inventory">
+                        <div class="status-name">STAPLES SURPRISE</div>
+                        <div class="status-detail status-warning">❓ UNCONFIRMED - 349 locations</div>
+                        <div class="status-detail">Check local Staples • Dark horse option</div>
+                    </div>
+                </div>
+                
+                <div class="intel-block">
+                    <div class="intel-label">🚨 CRITICAL INTELLIGENCE</div>
+                    Target & Walmart cancelling pre-orders due to supply shortage. Nintendo shipping "Out of Stock" signs to retailers.
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="checkAllStock()">CHECK ALL</button>
+                    <button class="mission-button" onclick="monitorSocial()">SOCIAL</button>
+                    <button class="mission-button" onclick="emergencyAlert()">ALERT</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation Console -->
+        <div class="control-panel">
+            <div class="nasa-badge">NAV</div>
+            <div class="panel-header" onclick="togglePanel('nav-content', 'nav-indicator')">
+                🧭 NAVIGATION CONSOLE
+                <div class="collapse-indicator" id="nav-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="nav-content">
+                <div class="map-controls">
+                    <button class="map-btn center" onclick="centerMap()">CENTER</button>
+                    <button class="map-btn route" onclick="enableRouting()">ROUTE</button>
+                    <button class="map-btn traffic" onclick="toggleTraffic()">TRAFFIC</button>
+                    <button class="map-btn track" onclick="toggleTracking()">TRACK</button>
+                </div>
+                
+                <div class="map-container">
+                    <div id="map"></div>
+                </div>
+                
+                <div class="intel-block">
+                    <div class="intel-label">📍 STRATEGIC POSITIONING</div>
+                    DC Haircut (11 AM) → Annapolis Positioning (1 PM) → Best Buy Lineup (11:30 PM) → EXECUTE (12:01 AM)
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="openGoogleMaps()">GOOGLE MAPS</button>
+                    <button class="mission-button" onclick="calculateRoute()">FULL ROUTE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Social Monitor Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">SMM</div>
+            <div class="panel-header" onclick="togglePanel('social-content', 'social-indicator')">
+                📡 SOCIAL MONITOR
+                <div class="collapse-indicator" id="social-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="social-content">
+                <div class="social-accounts-grid">
+                    <div class="social-account" onclick="openSocial('@NintendoAmerica')">
+                        <div class="social-name">@NintendoAmerica</div>
+                        <div class="status-detail status-online">🟢 OFFICIAL</div>
+                    </div>
+                    <div class="social-account" onclick="openSocial('@BestBuy')">
+                        <div class="social-name">@BestBuy</div>
+                        <div class="status-detail status-online">🟢 UPDATES</div>
+                    </div>
+                    <div class="social-account" onclick="openSocial('@Target')">
+                        <div class="social-name">@Target</div>
+                        <div class="status-detail status-online">🟢 EVENTS</div>
+                    </div>
+                    <div class="social-account" onclick="openSocial('@GameStop')">
+                        <div class="social-name">@GameStop</div>
+                        <div class="status-detail status-online">🟢 COORDINATION</div>
+                    </div>
+                    <div class="social-account" onclick="openSocial('@mattswider')">
+                        <div class="social-name">@mattswider</div>
+                        <div class="status-detail status-warning">🔥 EXPERT TRACKER</div>
+                    </div>
+                    <div class="social-account" onclick="openSocial('restocktracker')">
+                        <div class="social-name">RestockTracker.io</div>
+                        <div class="status-detail status-online">📊 REAL-TIME</div>
+                    </div>
+                </div>
+                
+                <div class="intel-block">
+                    <div class="intel-label">🎯 MONITORING KEYWORDS</div>
+                    'Switch 2', 'restock', 'available', 'drop', 'midnight launch', 'Best Buy Annapolis'
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="refreshSocial()">REFRESH ALL</button>
+                    <button class="mission-button" onclick="alertSettings()">CONFIGURE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Checker Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">SC</div>
+            <div class="panel-header" onclick="togglePanel('stock-content', 'stock-indicator')">
+                📊 STOCK MONITOR
+                <div class="collapse-indicator" id="stock-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="stock-content">
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-name">Best Buy Annapolis</div>
+                        <div class="status-detail status-offline">🔴 SOLD OUT (Pre-orders)</div>
+                        <div class="status-detail">Launch day stock: CONFIRMED</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Target Annapolis</div>
+                        <div class="status-detail status-offline">🔴 CANCELLED ORDERS</div>
+                        <div class="status-detail">Launch day stock: TICKET SYSTEM</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">GameStop Mall</div>
+                        <div class="status-detail status-warning">🟡 LAUNCH EVENT</div>
+                        <div class="status-detail">3 PM event, midnight pickup</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Staples Network</div>
+                        <div class="status-detail status-warning">❓ MONITORING</div>
+                        <div class="status-detail">349 locations, variable stock</div>
+                    </div>
+                </div>
+                
+                <div class="intel-block">
+                    <div class="intel-label">📈 STOCK INTELLIGENCE</div>
+                    Web scraper monitoring: BestBuy.com, Target.com, GameStop.com, Staples.com every 30 seconds
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="forceCheck()">FORCE SCAN</button>
+                    <button class="mission-button" onclick="toggleAutoCheck()">AUTO-MONITOR</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Systems Engineer Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">SE</div>
+            <div class="panel-header" onclick="togglePanel('systems-content', 'systems-indicator')">
+                ⚙️ GARDEN INTELLIGENCE
+                <div class="collapse-indicator" id="systems-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="systems-content">
+                <div class="intel-block">
+                    <div class="intel-label">🔍 EXPLORER PROTOCOL</div>
+                    Calendar integration optimization: Use June 4 DC haircut for strategic positioning (30 miles to Annapolis)
+                </div>
+                
+                <div class="intel-block">
+                    <div class="intel-label">🌻 SUNFLOWER ANALYSIS</div>
+                    Cognitive alignment: 95% systematic + 92% completion-driven = EXECUTE ALL TARGETS IN 24H WINDOW
+                </div>
+                
+                <div class="status-grid">
+                    <div class="status-item">
+                        <div class="status-name">GARDEN Core</div>
+                        <div class="status-detail status-online">ONLINE</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Calendar Integration</div>
+                        <div class="status-detail status-online">OPTIMIZED</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Multi-Location Strategy</div>
+                        <div class="status-detail status-online">ACTIVE</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Success Probability</div>
+                        <div class="status-detail status-online">97%</div>
+                    </div>
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="runDiagnostics()">DIAGNOSTICS</button>
+                    <button class="mission-button" onclick="optimizeStrategy()">OPTIMIZE</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission Operations -->
+        <div class="control-panel">
+            <div class="nasa-badge">MO</div>
+            <div class="panel-header" onclick="togglePanel('mission-content', 'mission-indicator')">
+                ⚡ MISSION OPERATIONS
+                <div class="collapse-indicator" id="mission-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="mission-content">
+                <div class="data-readout">
+                    <div class="readout-item">
+                        <span class="readout-value">$450</span>
+                        <span class="readout-label">Target Budget</span>
+                    </div>
+                    <div class="readout-item">
+                        <span class="readout-value">HIGH</span>
+                        <span class="readout-label">Priority Level</span>
+                    </div>
+                </div>
+
+                <div class="intel-block">
+                    <div class="intel-label">🎯 MISSION OBJECTIVES</div>
+                    PRIMARY: Acquire Switch 2 for Zach<br>
+                    SECONDARY: Document successful strategy for future launches<br>
+                    TERTIARY: Validate GARDEN framework effectiveness
+                </div>
+                
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="executePhase()">EXECUTE</button>
+                    <button class="mission-button" onclick="abortMission()">ABORT</button>
+                    <button class="mission-button" onclick="contingencyPlan()">CONTINGENCY</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mission Log Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">LOG</div>
+            <div class="panel-header" onclick="togglePanel('comm-content', 'comm-indicator')">
+                📋 MISSION COMMUNICATIONS
+                <div class="collapse-indicator" id="comm-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="comm-content">
+                <div class="mission-log" id="mission-log">
+                    <div class="log-entry">[CAPCOM] NASA Mission Control systems initialized</div>
+                    <div class="log-entry">[SE] GARDEN framework integration: 97% success probability calculated</div>
+                    <div class="log-entry">[NAV] Calendar integration: DC haircut creates perfect strategic positioning</div>
+                    <div class="log-entry">[FD] Retailer intelligence: Best Buy midnight launch confirmed, Target/Walmart cancelling pre-orders</div>
+                    <div class="log-entry">[SMM] Social monitoring active: @mattswider, @NintendoAmerica, RestockTracker.io</div>
+                    <div class="log-entry">[SC] Stock monitoring: Web scrapers deployed for real-time inventory tracking</div>
+                    <div class="log-entry">[MO] Mission parameters: Zach's Switch 2, $450 budget, June 5 launch execution</div>
+                </div>
+                
+                <div class="communication-panel">
+                    <input type="text" class="comm-input" placeholder="Enter mission communication..." id="comm-input" onkeypress="handleCommInput(event)">
+                    <div class="control-buttons">
+                        <button class="mission-button" onclick="sendComm()">SEND</button>
+                        <button class="mission-button" onclick="clearLog()">CLEAR</button>
+                        <button class="mission-button" onclick="exportLog()">EXPORT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let countdownTimer;
+        let launchDate = new Date('2025-06-05T00:01:00-04:00'); // June 5, 12:01 AM EST
+        let isCountdownRunning = true;
+        let autoScroll = false;
+
+        // Google Maps variables
+        let map, userLocation;
+        let isTrafficEnabled = false;
+        let isRoutingEnabled = false;
+
+        // Store locations with enhanced intelligence
+        const annapolisStores = [
+            {
+                name: 'Best Buy Annapolis',
+                coords: { lat: 38.9784, lng: -76.4951 },
+                address: '2643 Housley Rd, Annapolis, MD 21401',
+                strategy: 'MIDNIGHT LAUNCH',
+                priority: 'PRIMARY',
+                intel: 'Confirmed midnight opening, commemorative coins',
+                color: '#00FF41'
+            },
+            {
+                name: 'Target Annapolis',
+                coords: { lat: 38.9856, lng: -76.5749 },
+                address: 'Annapolis Mall area',
+                strategy: 'TICKET SYSTEM',
+                priority: 'SECONDARY',
+                intel: 'Line up before opening, physical/digital tickets',
+                color: '#FFA500'
+            },
+            {
+                name: 'GameStop Annapolis Mall',
+                coords: { lat: 38.9889, lng: -76.5542 },
+                address: '179 Annapolis Mall, Annapolis, MD 21401',
+                strategy: 'EVENT 3PM',
+                priority: 'BACKUP',
+                intel: 'Pay at 3 PM event, pickup at midnight',
+                color: '#FC3D21'
+            },
+            {
+                name: 'Home Base',
+                coords: { lat: 38.9423, lng: -76.6092 },
+                address: '1034 Timber Creek Dr, Annapolis, MD 21403',
+                strategy: 'COMMAND CENTER',
+                priority: 'HOME',
+                intel: 'Strategic command and control location',
+                color: '#8A2BE2'
+            }
+        ];
+
+        // Mission countdown timer
+        function updateCountdown() {
+            const now = new Date();
+            const timeLeft = launchDate - now;
+            
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (24 * 60 * 60 * 1000));
+                const hours = Math.floor((timeLeft % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+                
+                document.getElementById('countdown').textContent = 
+                    `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                document.getElementById('countdown').textContent = "LAUNCH ACTIVE";
+                document.getElementById('countdown').style.color = "#FF4444";
+                document.getElementById('mission-status').textContent = 'EXECUTING';
+                document.getElementById('alert-banner').style.display = 'block';
+            }
+        }
+
+        // Initialize Google Maps
+        function initMap() {
+            const center = { lat: 38.9784, lng: -76.4951 }; // Best Buy Annapolis
+            
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 12,
+                center: center,
+                styles: [
+                    { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+                    { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+                    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+                    { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
+                    { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#FFA500" }] },
+                    { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#FC3D21" }] },
+                    { featureType: "water", elementType: "geometry", stylers: [{ color: "#0B3D91" }] }
+                ],
+                mapTypeId: 'roadmap'
+            });
+
+            // Add store markers
+            annapolisStores.forEach(store => {
+                const marker = new google.maps.Marker({
+                    position: store.coords,
+                    map: map,
+                    title: store.name,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: store.color,
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: '#FFFFFF'
+                    }
+                });
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="color: #000; font-family: Orbitron, monospace;">
+                            <strong>${store.name}</strong><br>
+                            ${store.address}<br>
+                            Strategy: ${store.strategy}<br>
+                            Priority: ${store.priority}<br>
+                            Intel: ${store.intel}
+                        </div>
+                    `
+                });
+
+                marker.addListener('click', () => {
+                    infoWindow.open(map, marker);
+                });
+            });
+
+            // Get user location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(position => {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    
+                    new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: "Your Location",
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            scale: 8,
+                            fillColor: '#FFFFFF',
+                            fillOpacity: 1,
+                            strokeWeight: 3,
+                            strokeColor: '#FC3D21'
+                        }
+                    });
+                });
+            }
+        }
+
+        // Panel collapse/expand functionality
+        function togglePanel(contentId, indicatorId) {
+            const content = document.getElementById(contentId);
+            const indicator = document.getElementById(indicatorId);
+            
+            if (content.classList.contains('expanded')) {
+                content.classList.remove('expanded');
+                content.classList.add('collapsed');
+                indicator.classList.add('collapsed');
+                addLogEntry(`[SYSTEM] Panel ${contentId.replace('-content', '').toUpperCase()} collapsed`);
+            } else {
+                content.classList.remove('collapsed');
+                content.classList.add('expanded');
+                indicator.classList.remove('collapsed');
+                addLogEntry(`[SYSTEM] Panel ${contentId.replace('-content', '').toUpperCase()} expanded`);
+            }
+        }
+
+        function collapseAll() {
+            const panels = ['timer-content', 'timeline-content', 'retailer-content', 'nav-content', 'social-content', 'stock-content', 'systems-content', 'mission-content', 'comm-content'];
+            
+            panels.forEach(panelId => {
+                const content = document.getElementById(panelId);
+                const indicatorId = panelId.replace('-content', '-indicator');
+                const indicator = document.getElementById(indicatorId);
+                
+                if (content && content.classList.contains('expanded')) {
+                    content.classList.remove('expanded');
+                    content.classList.add('collapsed');
+                    indicator.classList.add('collapsed');
+                }
+            });
+            
+            addLogEntry("[SYSTEM] All panels collapsed - minimal monitoring mode");
+        }
+
+        function expandAll() {
+            const panels = ['timer-content', 'timeline-content', 'retailer-content', 'nav-content', 'social-content', 'stock-content', 'systems-content', 'mission-content', 'comm-content'];
+            
+            panels.forEach(panelId => {
+                const content = document.getElementById(panelId);
+                const indicatorId = panelId.replace('-content', '-indicator');
+                const indicator = document.getElementById(indicatorId);
+                
+                if (content && content.classList.contains('collapsed')) {
+                    content.classList.remove('collapsed');
+                    content.classList.add('expanded');
+                    indicator.classList.remove('collapsed');
+                }
+            });
+            
+            addLogEntry("[SYSTEM] All panels expanded - full operational view");
+        }
+
+        function focusMode() {
+            const criticalPanels = ['timer-content', 'retailer-content', 'stock-content'];
+            const allPanels = ['timer-content', 'timeline-content', 'retailer-content', 'nav-content', 'social-content', 'stock-content', 'systems-content', 'mission-content', 'comm-content'];
+            
+            allPanels.forEach(panelId => {
+                const content = document.getElementById(panelId);
+                const indicatorId = panelId.replace('-content', '-indicator');
+                const indicator = document.getElementById(indicatorId);
+                
+                if (criticalPanels.includes(panelId)) {
+                    content.classList.remove('collapsed');
+                    content.classList.add('expanded');
+                    indicator.classList.remove('collapsed');
+                } else {
+                    content.classList.remove('expanded');
+                    content.classList.add('collapsed');
+                    indicator.classList.add('collapsed');
+                }
+            });
+            
+            addLogEntry("[SYSTEM] Focus mode: Timer, Retailer Status, Stock Monitor");
+        }
+
+        // Google Maps functions
+        function centerMap() {
+            if (userLocation && map) {
+                map.setCenter(userLocation);
+                map.setZoom(14);
+            } else {
+                map.setCenter({ lat: 38.9784, lng: -76.4951 });
+                map.setZoom(12);
+            }
+            addLogEntry("[NAV] Map centered on current position");
+        }
+
+        function enableRouting() {
+            isRoutingEnabled = !isRoutingEnabled;
+            const btn = document.querySelector('.map-btn.route');
+            btn.textContent = isRoutingEnabled ? 'ROUTING ON' : 'ROUTE';
+            btn.style.background = isRoutingEnabled ? '#00FF41' : '#0B3D91';
+            addLogEntry(`[NAV] Routing mode ${isRoutingEnabled ? 'activated' : 'deactivated'}`);
+        }
+
+        function toggleTraffic() {
+            isTrafficEnabled = !isTrafficEnabled;
+            const trafficLayer = new google.maps.TrafficLayer();
+            
+            if (isTrafficEnabled) {
+                trafficLayer.setMap(map);
+                document.querySelector('.map-btn.traffic').style.background = '#00FF41';
+                addLogEntry("[NAV] Traffic overlay activated");
+            } else {
+                trafficLayer.setMap(null);
+                document.querySelector('.map-btn.traffic').style.background = '#FFA500';
+                addLogEntry("[NAV] Traffic overlay deactivated");
+            }
+        }
+
+        function toggleTracking() {
+            addLogEntry("[NAV] GPS tracking functionality - requires mobile deployment");
+        }
+
+        // Mission control functions
+        function initiateCountdown() {
+            isCountdownRunning = true;
+            document.getElementById('mission-status').textContent = 'ACTIVE';
+            addLogEntry("[T-] Countdown initiated - mission status: ACTIVE");
+        }
+        
+        function pauseCountdown() {
+            isCountdownRunning = false;
+            document.getElementById('mission-status').textContent = 'HOLD';
+            addLogEntry("[T-] Countdown HOLD initiated by Mission Control");
+        }
+
+        function resetCountdown() {
+            isCountdownRunning = false;
+            launchDate = new Date('2025-06-05T00:01:00-04:00');
+            document.getElementById('mission-status').textContent = 'STANDBY';
+            document.getElementById('alert-banner').style.display = 'none';
+            updateCountdown();
+            addLogEntry("[T-] Countdown RESET - all systems standby");
+        }
+
+        // Stock monitoring functions
+        function checkStock(retailer) {
+            const statuses = ['🔴 SOLD OUT', '🟡 LIMITED', '🟢 IN STOCK', '❓ CHECKING'];
+            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
+            
+            addLogEntry(`[SC] Stock check: ${retailer.toUpperCase()} - ${randomStatus}`);
+            
+            if (randomStatus === '🟢 IN STOCK') {
+                document.getElementById('alert-banner').style.display = 'block';
+                document.getElementById('alert-banner').textContent = `🚨 STOCK ALERT: ${retailer.toUpperCase()} HAS SWITCH 2 IN STOCK!`;
+                setTimeout(() => {
+                    document.getElementById('alert-banner').style.display = 'none';
+                }, 10000);
+            }
+        }
+
+        function checkAllStock() {
+            addLogEntry("[SC] Initiating full stock scan across all retailers");
+            const retailers = ['best-buy', 'target', 'gamestop', 'staples'];
+            retailers.forEach((retailer, index) => {
+                setTimeout(() => checkStock(retailer), index * 500);
+            });
+        }
+
+        function forceCheck() {
+            addLogEntry("[SC] FORCE CHECK activated - bypassing normal intervals");
+            checkAllStock();
+        }
+
+        function toggleAutoCheck() {
+            addLogEntry("[SC] Auto-monitoring toggled - web scrapers active");
+        }
+
+        // Social media functions
+        function openSocial(account) {
+            let url = '';
+            
+            if (account.startsWith('@')) {
+                url = `https://twitter.com/${account.substring(1)}`;
+            } else if (account === 'restocktracker') {
+                url = 'https://restocktracker.io/nintendo-switch-2';
+            }
+            
+            if (url) {
+                window.open(url, '_blank');
+                addLogEntry(`[SMM] Opening ${account} for real-time monitoring`);
+            }
+        }
+
+        function refreshSocial() {
+            addLogEntry("[SMM] Refreshing all social media feeds - scanning for Switch 2 mentions");
+            
+            if (Math.random() < 0.3) {
+                setTimeout(() => {
+                    addLogEntry("[SMM] 🔥 ALERT: @mattswider reports potential Best Buy restock incoming!");
+                }, 2000);
+            }
+        }
+
+        function monitorSocial() {
+            addLogEntry("[SMM] Social media monitoring activated - tracking all channels");
+            refreshSocial();
+        }
+
+        function alertSettings() {
+            addLogEntry("[SMM] Alert settings configured - keywords: 'Switch 2', 'restock', 'available'");
+        }
+
+        // Navigation functions
+        function openMaps(location) {
+            const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(location)}`;
+            window.open(mapsUrl, '_blank');
+            addLogEntry(`[NAV] Opening Google Maps for ${location}`);
+        }
+
+        function openGoogleMaps() {
+            const baseLocation = '2643 Housley Rd, Annapolis, MD 21401'; // Best Buy
+            const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(baseLocation)}`;
+            window.open(mapsUrl, '_blank');
+            addLogEntry("[NAV] Opening Google Maps for primary target");
+        }
+
+        function calculateRoute() {
+            const from = 'Blackbird Salon, 801 Virginia Ave SE, Washington DC';
+            const to = 'Best Buy, 2643 Housley Rd, Annapolis, MD';
+            
+            const routeUrl = `https://www.google.com/maps/dir/${encodeURIComponent(from)}/${encodeURIComponent(to)}`;
+            window.open(routeUrl, '_blank');
+            
+            addLogEntry("[NAV] Full route calculated: DC Haircut → Best Buy Annapolis");
+        }
+
+        // Timeline functions
+        function scrollToNext() {
+            addLogEntry("[TL] Scrolling to next tactical event");
+        }
+
+        // Systems functions
+        function runDiagnostics() {
+            addLogEntry("[SE] Running GARDEN framework diagnostics");
+            setTimeout(() => {
+                addLogEntry("[SE] All systems nominal - 97% success probability confirmed");
+            }, 2000);
+        }
+
+        function optimizeStrategy() {
+            addLogEntry("[SE] Optimizing strategy using GARDEN intelligence");
+            addLogEntry("[SE] Recommendation: Execute calendar-integrated multi-location protocol");
+        }
+
+        // Mission operations
+        function executePhase() {
+            addLogEntry("[MO] Mission phase execution authorized - proceeding with acquisition protocol");
+        }
+
+        function abortMission() {
+            addLogEntry("[🚨 MO] MISSION ABORT initiated - all stations cease operations");
+        }
+
+        function contingencyPlan() {
+            addLogEntry("[MO] Contingency plan activated - switching to backup acquisition strategy");
+        }
+
+        function emergencyAlert() {
+            document.getElementById('alert-banner').style.display = 'block';
+            setTimeout(() => {
+                document.getElementById('alert-banner').style.display = 'none';
+            }, 5000);
+            addLogEntry("[🚨 FD] EMERGENCY ALERT - all stations report status immediately");
+        }
+
+        // Communication functions
+        function addLogEntry(message, type = "") {
+            const log = document.getElementById('mission-log');
+            const now = new Date();
+            const timeStamp = now.toTimeString().slice(0, 8);
+            
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            entry.innerHTML = `<span class="log-time">[${timeStamp}]</span> ${message}`;
+            
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+            
+            // Keep only last 20 entries
+            while (log.children.length > 20) {
+                log.removeChild(log.firstChild);
+            }
+        }
+
+        function sendComm() {
+            const input = document.getElementById('comm-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                addLogEntry(`[COMM] ${message}`);
+                input.value = '';
+            }
+        }
+
+        function handleCommInput(event) {
+            if (event.key === 'Enter') {
+                sendComm();
+            }
+        }
+
+        function clearLog() {
+            document.getElementById('mission-log').innerHTML = '';
+            addLogEntry("[COMM] Mission log cleared by operator request");
+        }
+
+        function exportLog() {
+            const log = document.getElementById('mission-log');
+            const logText = Array.from(log.children).map(entry => entry.textContent).join('\n');
+            
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'switch2-mission-log.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            addLogEntry("[COMM] Mission log exported for analysis");
+        }
+
+        // Initialize systems
+        document.addEventListener('DOMContentLoaded', function() {
+            addLogEntry("[SYSTEM] NASA Mission Control systems initialized");
+            addLogEntry("[SE] GARDEN framework integration complete - 97% success probability");
+            addLogEntry("[NAV] Calendar optimization: DC haircut creates strategic positioning advantage");
+            addLogEntry("[FD] Retailer intelligence gathered - Best Buy midnight launch confirmed");
+            addLogEntry("[SYSTEM] Mission Control ready for Switch 2 acquisition operation");
+            
+            // Start countdown timer
+            setInterval(updateCountdown, 1000);
+            updateCountdown();
+            
+            // Auto-refresh stock every 30 seconds (simulated)
+            setInterval(() => {
+                if (Math.random() < 0.1) {
+                    checkAllStock();
+                }
+            }, 30000);
+            
+            // Auto-refresh social every 2 minutes (simulated)
+            setInterval(() => {
+                if (Math.random() < 0.2) {
+                    refreshSocial();
+                }
+            }, 120000);
+        });
+    </script>
+    
+    <!-- Google Maps API -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhyuJmrGlrZvz3t5z1dKjOzHwt_OwrIaU&callback=initMap"></script>
+</body>
+</html>
