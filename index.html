@@ -39,6 +39,7 @@
             background: linear-gradient(90deg, var(--nasa-blue), var(--panel-dark));
             border-bottom: 3px solid var(--nasa-red);
             position: relative;
+            z-index: 10;
         }
 
         .mission-title {
@@ -95,6 +96,21 @@
             padding: 20px;
             max-width: 1400px;
             margin: 0 auto;
+            transition: all 0.5s ease;
+        }
+
+        /* Full-width mode for navigation panel */
+        .control-grid.nav-fullwidth {
+            grid-template-columns: 1fr;
+            max-width: 95%;
+        }
+
+        .control-grid.nav-fullwidth .panel:not(#navigation-panel) {
+            display: none;
+        }
+
+        .control-grid.nav-fullwidth #navigation-panel {
+            grid-column: 1;
         }
 
         .panel {
@@ -111,6 +127,16 @@
             display: none;
         }
 
+        /* Enhanced navigation panel for full-width mode */
+        #navigation-panel.fullwidth {
+            border: 3px solid var(--warning-orange);
+            box-shadow: 0 0 30px rgba(255, 140, 66, 0.3);
+        }
+
+        #navigation-panel.fullwidth .map-container {
+            height: 600px; /* Larger map in full-width mode */
+        }
+
         .panel-header {
             background: linear-gradient(90deg, var(--nasa-red), var(--warning-orange));
             padding: 15px;
@@ -122,6 +148,7 @@
             justify-content: space-between;
             align-items: center;
             user-select: none;
+            position: relative;
         }
 
         .panel-header:hover {
@@ -135,6 +162,35 @@
 
         .collapsed .expand-icon {
             transform: rotate(-90deg);
+        }
+
+        /* Full-width expansion button */
+        .fullwidth-btn {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, var(--warning-orange), #ff6b1a);
+            border: 2px solid var(--warning-orange);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Orbitron', monospace;
+            font-weight: 700;
+            font-size: 0.8em;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .fullwidth-btn:hover {
+            background: linear-gradient(45deg, #ff6b1a, var(--warning-orange));
+            box-shadow: 0 0 15px var(--warning-orange);
+        }
+
+        .fullwidth-btn.active {
+            background: linear-gradient(45deg, var(--mission-green), #00cc33);
+            border-color: var(--mission-green);
         }
 
         .panel-content {
@@ -291,6 +347,14 @@
             border: 2px solid var(--text-cyan);
             background: var(--panel-dark);
             margin-bottom: 15px;
+            transition: all 0.5s ease;
+        }
+
+        /* Enhanced map container for full-width mode */
+        .fullwidth .map-container {
+            height: 600px;
+            border: 3px solid var(--warning-orange);
+            box-shadow: 0 0 20px rgba(255, 140, 66, 0.2);
         }
 
         .nav-controls {
@@ -693,6 +757,10 @@
             .countdown-time {
                 font-size: 2em;
             }
+            
+            .fullwidth-btn {
+                display: none; /* Hide on mobile */
+            }
         }
     </style>
 </head>
@@ -709,7 +777,7 @@
         </div>
     </div>
 
-    <div class="control-grid">
+    <div class="control-grid" id="controlGrid">
         <!-- TACTICAL TIMELINE - Position 1 -->
         <div class="panel" id="timeline-panel">
             <div class="panel-header" onclick="togglePanel('timeline-panel')">
@@ -780,10 +848,11 @@
             </div>
         </div>
 
-        <!-- TACTICAL NAVIGATION - Position 2 -->
+        <!-- TACTICAL NAVIGATION - Position 2 with Full-Width Capability -->
         <div class="panel" id="navigation-panel">
             <div class="panel-header" onclick="togglePanel('navigation-panel')">
                 <span>📍 TACTICAL NAVIGATION</span>
+                <button class="fullwidth-btn" onclick="toggleFullWidth()" id="fullwidthBtn">🔳 EXPAND</button>
                 <span class="expand-icon">🔽</span>
             </div>
             <div class="panel-content">
@@ -937,19 +1006,23 @@
             <div class="legend-items">
                 <div class="legend-item green">
                     <div class="legend-dot green"></div>
-                    <div class="legend-text">🟢 Best Buy (Primary target)</div>
-                </div>
-                <div class="legend-item red">
-                    <div class="legend-dot red"></div>
-                    <div class="legend-text">🔴 Target (Secondary objective)</div>
+                    <div class="legend-text">🟢 Best Buy (HIGH STOCK)</div>
                 </div>
                 <div class="legend-item orange">
                     <div class="legend-dot orange"></div>
-                    <div class="legend-text">🟠 Walmart (Supply resupply)</div>
+                    <div class="legend-text">🟡 Target (MEDIUM STOCK)</div>
+                </div>
+                <div class="legend-item red">
+                    <div class="legend-dot red"></div>
+                    <div class="legend-text">🔴 Walmart (LOW STOCK)</div>
                 </div>
                 <div class="legend-item blue">
                     <div class="legend-dot blue"></div>
-                    <div class="legend-text">🔵 GameStop (Backup location)</div>
+                    <div class="legend-text">🔵 GameStop (BACKUP READY)</div>
+                </div>
+                <div class="legend-item purple">
+                    <div class="legend-dot purple"></div>
+                    <div class="legend-text">🟣 Home Base (COMMAND CENTER)</div>
                 </div>
                 <div class="legend-item white">
                     <div class="legend-dot white"></div>
@@ -979,6 +1052,7 @@
         let userLocation = null;
         let selectedLocation = null;
         let isSharedView = new URLSearchParams(window.location.search).has('view');
+        let isFullWidth = false;
 
         // Location data with stock status colors
         const locations = {
@@ -1240,6 +1314,42 @@
             return R * c;
         }
 
+        // Full-width toggle function
+        function toggleFullWidth() {
+            isFullWidth = !isFullWidth;
+            const controlGrid = document.getElementById('controlGrid');
+            const navPanel = document.getElementById('navigation-panel');
+            const fullwidthBtn = document.getElementById('fullwidthBtn');
+            
+            if (isFullWidth) {
+                controlGrid.classList.add('nav-fullwidth');
+                navPanel.classList.add('fullwidth');
+                fullwidthBtn.textContent = '🔲 COLLAPSE';
+                fullwidthBtn.classList.add('active');
+                
+                // Trigger map resize for full-width
+                setTimeout(() => {
+                    google.maps.event.trigger(map, 'resize');
+                    if (userLocation) {
+                        map.setCenter(userLocation);
+                    }
+                }, 500);
+            } else {
+                controlGrid.classList.remove('nav-fullwidth');
+                navPanel.classList.remove('fullwidth');
+                fullwidthBtn.textContent = '🔳 EXPAND';
+                fullwidthBtn.classList.remove('active');
+                
+                // Trigger map resize for normal view
+                setTimeout(() => {
+                    google.maps.event.trigger(map, 'resize');
+                    if (userLocation) {
+                        map.setCenter(userLocation);
+                    }
+                }, 500);
+            }
+        }
+
         // Navigation controls
         function centerMap() {
             if (userLocation) {
@@ -1385,6 +1495,9 @@
             // Disable tracking for viewers
             document.getElementById('trackBtn').textContent = 'VIEW ONLY';
             document.getElementById('trackBtn').disabled = true;
+            
+            // Disable full-width for viewers
+            document.getElementById('fullwidthBtn').style.display = 'none';
             
             // Add shared viewing indicator
             const indicator = document.createElement('div');
