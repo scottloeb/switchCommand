@@ -364,6 +364,156 @@
         .legend-item.walmart { border-left-color: #f39c12; }
         .legend-item.home { border-left-color: #3498db; }
         .legend-item.current { border-left-color: #fff; }
+        
+        /* Location Detail Popup */
+        .location-detail-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1100;
+            backdrop-filter: blur(5px);
+        }
+        
+        .location-detail-panel {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border: 3px solid #e74c3c;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: detailSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes detailSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #34495e;
+        }
+        
+        .detail-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ecf0f1;
+            letter-spacing: 2px;
+        }
+        
+        .detail-close {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .detail-close:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+        
+        .detail-content {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .detail-section {
+            background: rgba(52, 73, 94, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        
+        .detail-section-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #f39c12;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 12px;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        
+        .detail-value {
+            font-size: 14px;
+            color: #ecf0f1;
+            font-weight: bold;
+        }
+        
+        .detail-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .detail-button {
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-family: 'Orbitron', monospace;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+        
+        .detail-button:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+        
+        .detail-button.navigate {
+            background: #e74c3c;
+        }
+        
+        .detail-button.navigate:hover {
+            background: #c0392b;
+        }
     </style>
 </head>
 <body>
@@ -457,6 +607,19 @@
         </div>
     </div>
 
+    <!-- Location Detail Popup -->
+    <div class="location-detail-overlay" id="locationDetailOverlay" onclick="hideLocationDetail()">
+        <div class="location-detail-panel" onclick="event.stopPropagation()">
+            <div class="detail-header">
+                <div class="detail-title" id="detailTitle">LOCATION INTEL</div>
+                <button class="detail-close" onclick="hideLocationDetail()">×</button>
+            </div>
+            <div class="detail-content" id="detailContent">
+                <!-- Content will be populated dynamically -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // NASA Tactical Map Style
         const nasaTacticalStyle = [
@@ -546,7 +709,7 @@
             }
         ];
 
-        // Store locations with their coordinates and info
+        // Store locations with enhanced details
         const locations = {
             bestBuy: {
                 name: 'Best Buy Annapolis',
@@ -554,7 +717,12 @@
                 address: '2021 Annapolis Mall, Annapolis, MD 21401',
                 type: 'best-buy',
                 status: 'Open until 10 PM',
-                distance: '0.8 miles'
+                phone: '(410) 266-9465',
+                hours: '10 AM - 10 PM',
+                distance: '0.8 miles',
+                eta: '3 mins',
+                category: 'Electronics',
+                services: ['Geek Squad', 'Best Buy Mobile', 'Car Installation']
             },
             target: {
                 name: 'Target Annapolis',
@@ -562,7 +730,12 @@
                 address: '1905 Towne Centre Blvd, Annapolis, MD 21401',
                 type: 'target',
                 status: 'Open until 11 PM',
-                distance: '1.2 miles'
+                phone: '(410) 266-5856',
+                hours: '8 AM - 11 PM',
+                distance: '1.2 miles',
+                eta: '5 mins',
+                category: 'General Retail',
+                services: ['Pharmacy', 'Grocery', 'Starbucks Cafe']
             },
             walmart: {
                 name: 'Walmart Supercenter',
@@ -570,7 +743,12 @@
                 address: '1131 Annapolis Mall Rd, Annapolis, MD 21401',
                 type: 'walmart',
                 status: 'Open 24 hours',
-                distance: '1.5 miles'
+                phone: '(410) 266-7722',
+                hours: '24 Hours',
+                distance: '1.5 miles',
+                eta: '6 mins',
+                category: 'Supercenter',
+                services: ['Grocery', 'Pharmacy', 'Auto Service', 'Vision Center']
             },
             home: {
                 name: 'Home Base',
@@ -578,12 +756,19 @@
                 address: 'Classified Location',
                 type: 'home',
                 status: 'Secure',
-                distance: '0 miles'
+                phone: 'N/A',
+                hours: 'Always Available',
+                distance: '0 miles',
+                eta: 'Current',
+                category: 'Command Center',
+                services: ['Safe House', 'Communications Hub', 'Supply Cache']
             }
         };
 
         let map;
         let markers = {};
+        let currentLocationMarker = null;
+        let userLocation = null;
 
         // Initialize Google Map with enhanced NASA/space theme
         function initMap() {
@@ -622,9 +807,9 @@
 
                 markers[key] = marker;
 
-                // Add enhanced click listener for location info
+                // Add enhanced click listener for location details
                 marker.addListener('click', () => {
-                    showLocationInfo(location);
+                    showLocationDetail(location);
                     
                     // Add tactical highlighting effect
                     marker.setIcon({
@@ -649,6 +834,38 @@
                     }, 2000);
                 });
             });
+
+            // Get and track current location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    
+                    // Add current location marker
+                    currentLocationMarker = new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: 'Current Location',
+                        icon: {
+                            path: google.maps.SymbolPath.CIRCLE,
+                            fillColor: '#ffffff',
+                            fillOpacity: 1,
+                            strokeColor: '#e74c3c',
+                            strokeWeight: 3,
+                            scale: 8
+                        },
+                        zIndex: 1000
+                    });
+
+                    // Center map on user location
+                    map.setCenter(userLocation);
+                    
+                    // Update distances for all locations
+                    updateDistancesFromCurrentLocation();
+                });
+            }
         }
 
         function getLocationColor(type) {
@@ -662,14 +879,117 @@
             return colors[type] || '#7f8c8d';
         }
 
-        function showLocationInfo(location) {
-            alert(`${location.name}\n${location.address}\nStatus: ${location.status}\nDistance: ${location.distance}`);
+        function updateDistancesFromCurrentLocation() {
+            if (!userLocation) return;
+
+            Object.keys(locations).forEach(key => {
+                const location = locations[key];
+                if (location.type !== 'current') {
+                    const distance = calculateDistance(userLocation, location.coords);
+                    const eta = calculateETA(distance);
+                    location.distance = `${distance.toFixed(1)} miles`;
+                    location.eta = eta;
+                }
+            });
+        }
+
+        function calculateDistance(pos1, pos2) {
+            const R = 3959; // Earth's radius in miles
+            const dLat = (pos2.lat - pos1.lat) * Math.PI / 180;
+            const dLon = (pos2.lng - pos1.lng) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(pos1.lat * Math.PI / 180) * Math.cos(pos2.lat * Math.PI / 180) *
+                Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        function calculateETA(distance) {
+            // Assume average city speed of 25 mph
+            const timeHours = distance / 25;
+            const timeMinutes = Math.round(timeHours * 60);
+            return `${timeMinutes} mins`;
+        }
+
+        function showLocationDetail(location) {
+            const overlay = document.getElementById('locationDetailOverlay');
+            const title = document.getElementById('detailTitle');
+            const content = document.getElementById('detailContent');
+            
+            title.textContent = location.name.toUpperCase();
+            
+            content.innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-section-title">Mission Intel</div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Status</div>
+                            <div class="detail-value">${location.status}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Distance</div>
+                            <div class="detail-value">${location.distance}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">ETA</div>
+                            <div class="detail-value">${location.eta}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Category</div>
+                            <div class="detail-value">${location.category}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-section">
+                    <div class="detail-section-title">Contact Info</div>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <div class="detail-label">Address</div>
+                            <div class="detail-value">${location.address}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Phone</div>
+                            <div class="detail-value">${location.phone}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Hours</div>
+                            <div class="detail-value">${location.hours}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Services</div>
+                            <div class="detail-value">${location.services.join(', ')}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-actions">
+                    <button class="detail-button" onclick="callLocation('${location.phone}')">Call</button>
+                    <button class="detail-button navigate" onclick="navigateToLocation(${location.coords.lat}, ${location.coords.lng})">Navigate</button>
+                </div>
+            `;
+            
+            overlay.style.display = 'flex';
+        }
+
+        function hideLocationDetail() {
+            document.getElementById('locationDetailOverlay').style.display = 'none';
+        }
+
+        function callLocation(phone) {
+            if (phone !== 'N/A') {
+                window.open(`tel:${phone}`);
+            }
+        }
+
+        function navigateToLocation(lat, lng) {
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+            window.open(url, '_blank');
         }
 
         function openMaps() {
             const bestBuy = locations.bestBuy;
-            const url = `https://www.google.com/maps/dir/?api=1&destination=${bestBuy.coords.lat},${bestBuy.coords.lng}&travelmode=driving`;
-            window.open(url, '_blank');
+            navigateToLocation(bestBuy.coords.lat, bestBuy.coords.lng);
         }
 
         function plotRoute() {
@@ -734,10 +1054,11 @@
             }
         };
 
-        // Close legend with Escape key
+        // Close popups with Escape key
         document.addEventListener('keydown', function(event) {
             if (event.key === 'Escape') {
                 hideLegend();
+                hideLocationDetail();
             }
         });
     </script>
