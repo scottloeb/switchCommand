@@ -977,27 +977,27 @@
         let isCountdownRunning = false;
         let missionStartTime = new Date();
 
-        // Timeline data structure
+        // Timeline data structure - CORRECTED MILITARY TIMES FOR REALISTIC LAUNCH DAY
         const timelineEvents = [
-            // Best Buy Mission
-            { time: '06:30', store: 'Best Buy', phase: 'departure', type: 'Departure', status: 'READY', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
-            { time: '07:00', store: 'Best Buy', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
-            { time: '10:00', store: 'Best Buy', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
+            // Best Buy Mission - Early morning launch strategy
+            { time: '18:30', store: 'Best Buy', phase: 'departure', type: 'Departure', status: 'READY', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
+            { time: '19:00', store: 'Best Buy', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
+            { time: '22:00', store: 'Best Buy', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
             
-            // GameStop Mission
-            { time: '10:45', store: 'GameStop', phase: 'departure', type: 'Departure', status: 'STANDBY', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
-            { time: '11:00', store: 'GameStop', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
-            { time: '12:00', store: 'GameStop', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
+            // GameStop Mission - After Best Buy attempt
+            { time: '22:45', store: 'GameStop', phase: 'departure', type: 'Departure', status: 'STANDBY', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
+            { time: '23:00', store: 'GameStop', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
+            { time: '00:00', store: 'GameStop', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
             
-            // Target Mission
-            { time: '12:30', store: 'Target', phase: 'departure', type: 'Departure', status: 'BACKUP', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
-            { time: '12:45', store: 'Target', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
-            { time: '14:00', store: 'Target', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
+            // Target Mission - Early morning backup 
+            { time: '00:30', store: 'Target', phase: 'departure', type: 'Departure', status: 'BACKUP', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
+            { time: '00:45', store: 'Target', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
+            { time: '02:00', store: 'Target', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
             
-            // Walmart Mission
-            { time: '15:00', store: 'Walmart', phase: 'departure', type: 'Departure', status: 'FINAL', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' },
-            { time: '15:15', store: 'Walmart', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' },
-            { time: '16:00', store: 'Walmart', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' }
+            // Walmart Mission - Final attempt of the night
+            { time: '03:00', store: 'Walmart', phase: 'departure', type: 'Departure', status: 'FINAL', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' },
+            { time: '03:15', store: 'Walmart', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' },
+            { time: '04:00', store: 'Walmart', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' }
         ];
 
         let nextEventIndex = 0;
@@ -1348,7 +1348,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             addLogEntry('Enhanced NASA Mission Control initialized');
-            addLogEntry('Tactical Timeline operational');
+            addLogEntry('Tactical Timeline operational with corrected military times');
             document.getElementById('last-check').textContent = new Date().toLocaleTimeString();
             document.getElementById('social-last-update').textContent = new Date().toLocaleTimeString();
         });
