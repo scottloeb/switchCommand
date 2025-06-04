@@ -20,6 +20,9 @@
             --console-gray: #1a1a1a;
             --panel-dark: #0d1117;
             --border-light: #30363d;
+            --timeline-past: rgba(255, 255, 255, 0.3);
+            --timeline-future: #00FF41;
+            --timeline-active: #FFA500;
         }
 
         * { 
@@ -223,6 +226,193 @@
         .collapse-indicator.collapsed {
             transform: rotate(-90deg);
         }
+
+        /* TACTICAL TIMELINE STYLES */
+        .timeline-container {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid var(--border-light);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .current-time {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--nasa-red);
+            text-shadow: 0 0 10px var(--nasa-red);
+        }
+
+        .timeline-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .timeline-btn {
+            background: rgba(11, 61, 145, 0.3);
+            border: 1px solid var(--nasa-blue);
+            color: var(--nasa-white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-btn:hover {
+            background: rgba(252, 61, 33, 0.3);
+            border-color: var(--nasa-red);
+        }
+
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            margin: 12px 0;
+            position: relative;
+            padding: 8px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-event:hover {
+            background: rgba(252, 61, 33, 0.1);
+            border-radius: 5px;
+            padding: 8px 10px;
+            margin: 12px -10px;
+        }
+
+        .timeline-time {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.85em;
+            font-weight: bold;
+            width: 60px;
+            text-align: right;
+            margin-right: 15px;
+        }
+
+        .timeline-connector {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 15px;
+        }
+
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .timeline-line {
+            width: 2px;
+            height: 40px;
+            margin: 2px 0;
+        }
+
+        /* Timeline Event States */
+        .timeline-event.past .timeline-time {
+            color: var(--timeline-past);
+        }
+
+        .timeline-event.past .timeline-dot {
+            border-color: var(--timeline-past);
+            background: transparent;
+        }
+
+        .timeline-event.past .timeline-line {
+            background: var(--timeline-past);
+        }
+
+        .timeline-event.future .timeline-time {
+            color: var(--timeline-future);
+        }
+
+        .timeline-event.future .timeline-dot {
+            border-color: var(--timeline-future);
+            background: var(--timeline-future);
+            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+        }
+
+        .timeline-event.future .timeline-line {
+            background: var(--timeline-future);
+        }
+
+        .timeline-event.active .timeline-time {
+            color: var(--timeline-active);
+            animation: pulse 1s infinite;
+        }
+
+        .timeline-event.active .timeline-dot {
+            border-color: var(--timeline-active);
+            background: var(--timeline-active);
+            animation: flashDot 1s infinite;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+        }
+
+        .timeline-event.active .timeline-line {
+            background: var(--timeline-active);
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes flashDot {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .timeline-info {
+            flex: 1;
+        }
+
+        .timeline-store {
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 3px;
+            color: var(--nasa-white);
+        }
+
+        .timeline-phase {
+            font-size: 0.75em;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .timeline-status {
+            font-size: 0.7em;
+            margin-top: 2px;
+            font-family: 'Orbitron', monospace;
+            font-weight: bold;
+        }
+
+        /* Store-specific colors */
+        .store-bestbuy { color: #FFD700; }
+        .store-gamestop { color: #FF6B35; }
+        .store-target { color: #CC0000; }
+        .store-walmart { color: #004C91; }
+
+        /* Phase-specific styling */
+        .phase-departure .timeline-phase { color: #87CEEB; }
+        .phase-lineup .timeline-phase { color: var(--warning-amber); }
+        .phase-launch .timeline-phase { color: var(--nasa-red); }
 
         /* Mission Timer */
         .mission-timer {
@@ -532,6 +722,37 @@
     </div>
 
     <div class="mission-control">
+        <!-- TACTICAL TIMELINE PANEL - FIRST POSITION -->
+        <div class="control-panel">
+            <div class="nasa-badge">⏰</div>
+            <div class="panel-header" onclick="togglePanel('timeline-content', 'timeline-indicator')">
+                ⏰ TACTICAL TIMELINE
+                <div class="collapse-indicator" id="timeline-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="timeline-content">
+                <div class="timeline-header">
+                    <div class="current-time" id="current-time">16:42:15</div>
+                    <div class="timeline-controls">
+                        <button class="timeline-btn" onclick="scrollToNext()">NEXT ▼</button>
+                        <button class="timeline-btn" onclick="resetTimeline()">RESET</button>
+                    </div>
+                </div>
+                
+                <div class="timeline-container" id="timeline-container">
+                    <!-- Timeline events will be populated by JavaScript -->
+                </div>
+                
+                <div class="data-row">
+                    <span class="data-label">Next Event:</span>
+                    <span class="data-value" id="next-event">Best Buy Departure</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Time to Next:</span>
+                    <span class="data-value" id="time-to-next">T-2:15:30</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Mission Timer Panel -->
         <div class="control-panel">
             <div class="nasa-badge">T-</div>
@@ -729,6 +950,10 @@
                     <span class="data-value">✅ FUNCTIONAL</span>
                 </div>
                 <div class="data-row">
+                    <span class="data-label">Tactical Timeline:</span>
+                    <span class="data-value">✅ OPERATIONAL</span>
+                </div>
+                <div class="data-row">
                     <span class="data-label">GitHub Sync:</span>
                     <span class="data-value" id="github-status">✅ CONNECTED</span>
                 </div>
@@ -751,6 +976,142 @@
         let countdownTime = 45 * 24 * 60 * 60; // 45 days in seconds
         let isCountdownRunning = false;
         let missionStartTime = new Date();
+
+        // Timeline data structure
+        const timelineEvents = [
+            // Best Buy Mission
+            { time: '06:30', store: 'Best Buy', phase: 'departure', type: 'Departure', status: 'READY', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
+            { time: '07:00', store: 'Best Buy', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
+            { time: '10:00', store: 'Best Buy', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401' },
+            
+            // GameStop Mission
+            { time: '10:45', store: 'GameStop', phase: 'departure', type: 'Departure', status: 'STANDBY', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
+            { time: '11:00', store: 'GameStop', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
+            { time: '12:00', store: 'GameStop', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401' },
+            
+            // Target Mission
+            { time: '12:30', store: 'Target', phase: 'departure', type: 'Departure', status: 'BACKUP', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
+            { time: '12:45', store: 'Target', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
+            { time: '14:00', store: 'Target', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401' },
+            
+            // Walmart Mission
+            { time: '15:00', store: 'Walmart', phase: 'departure', type: 'Departure', status: 'FINAL', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' },
+            { time: '15:15', store: 'Walmart', phase: 'lineup', type: 'Prepare for Launch', status: 'QUEUE', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' },
+            { time: '16:00', store: 'Walmart', phase: 'launch', type: 'Launch', status: 'GO', url: 'https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401' }
+        ];
+
+        let nextEventIndex = 0;
+
+        // Timeline functions
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('en-US', { 
+                hour12: false, 
+                hour: '2-digit', 
+                minute: '2-digit', 
+                second: '2-digit' 
+            });
+            document.getElementById('current-time').textContent = timeString;
+        }
+
+        function getCurrentTimeMinutes() {
+            const now = new Date();
+            return now.getHours() * 60 + now.getMinutes();
+        }
+
+        function timeToMinutes(timeString) {
+            const [hours, minutes] = timeString.split(':').map(Number);
+            return hours * 60 + minutes;
+        }
+
+        function getEventState(eventTime) {
+            const currentMinutes = getCurrentTimeMinutes();
+            const eventMinutes = timeToMinutes(eventTime);
+            
+            if (eventMinutes < currentMinutes) return 'past';
+            if (eventMinutes === currentMinutes || 
+                (eventMinutes > currentMinutes && eventMinutes <= currentMinutes + 5)) return 'active';
+            return 'future';
+        }
+
+        function updateTimeline() {
+            const container = document.getElementById('timeline-container');
+            const currentMinutes = getCurrentTimeMinutes();
+            
+            container.innerHTML = '';
+            nextEventIndex = -1;
+            
+            timelineEvents.forEach((event, index) => {
+                const eventMinutes = timeToMinutes(event.time);
+                const state = getEventState(event.time);
+                
+                // Find next event
+                if (nextEventIndex === -1 && eventMinutes >= currentMinutes) {
+                    nextEventIndex = index;
+                }
+                
+                const eventDiv = document.createElement('div');
+                eventDiv.className = `timeline-event ${state}`;
+                eventDiv.onclick = () => window.open(event.url, '_blank');
+                
+                eventDiv.innerHTML = `
+                    <div class="timeline-time">${event.time}</div>
+                    <div class="timeline-connector">
+                        <div class="timeline-dot"></div>
+                        ${index < timelineEvents.length - 1 ? '<div class="timeline-line"></div>' : ''}
+                    </div>
+                    <div class="timeline-info">
+                        <div class="timeline-store store-${event.store.toLowerCase().replace(' ', '')}">${event.store}</div>
+                        <div class="timeline-phase phase-${event.phase}">${event.type}</div>
+                        <div class="timeline-status">${event.status}</div>
+                    </div>
+                `;
+                
+                container.appendChild(eventDiv);
+            });
+            
+            updateNextEventInfo();
+        }
+
+        function updateNextEventInfo() {
+            const nextEventElement = document.getElementById('next-event');
+            const timeToNextElement = document.getElementById('time-to-next');
+            
+            if (nextEventIndex >= 0 && nextEventIndex < timelineEvents.length) {
+                const nextEvent = timelineEvents[nextEventIndex];
+                nextEventElement.textContent = `${nextEvent.store} ${nextEvent.type}`;
+                
+                const currentMinutes = getCurrentTimeMinutes();
+                const eventMinutes = timeToMinutes(nextEvent.time);
+                const diffMinutes = eventMinutes - currentMinutes;
+                
+                if (diffMinutes > 0) {
+                    const hours = Math.floor(diffMinutes / 60);
+                    const minutes = diffMinutes % 60;
+                    timeToNextElement.textContent = `T-${hours}:${minutes.toString().padStart(2, '0')}:00`;
+                } else {
+                    timeToNextElement.textContent = 'NOW';
+                }
+            } else {
+                nextEventElement.textContent = 'Mission Complete';
+                timeToNextElement.textContent = 'T+00:00:00';
+            }
+        }
+
+        function scrollToNext() {
+            if (nextEventIndex >= 0) {
+                const container = document.getElementById('timeline-container');
+                const events = container.querySelectorAll('.timeline-event');
+                if (events[nextEventIndex]) {
+                    events[nextEventIndex].scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }
+        }
+
+        function resetTimeline() {
+            const container = document.getElementById('timeline-container');
+            container.scrollTop = 0;
+        }
 
         // Mission countdown timer
         function updateCountdown() {
@@ -787,11 +1148,15 @@
         
         // Update timers every second
         setInterval(() => {
+            updateCurrentTime();
+            updateTimeline();
             updateCountdown();
             updateUptime();
         }, 1000);
         
         // Initial updates
+        updateCurrentTime();
+        updateTimeline();
         updateCountdown();
         updateUptime();
 
@@ -813,7 +1178,7 @@
 
         function collapseAll() {
             const panels = [
-                'timer-content', 'annapolis-content', 'stock-content', 
+                'timeline-content', 'timer-content', 'annapolis-content', 'stock-content', 
                 'social-content', 'log-content', 'system-content'
             ];
             
@@ -832,7 +1197,7 @@
 
         function expandAll() {
             const panels = [
-                'timer-content', 'annapolis-content', 'stock-content', 
+                'timeline-content', 'timer-content', 'annapolis-content', 'stock-content', 
                 'social-content', 'log-content', 'system-content'
             ];
             
@@ -850,10 +1215,10 @@
         }
 
         function focusMode() {
-            // Collapse all except timer
+            // Collapse all except timeline
             collapseAll();
-            const content = document.getElementById('timer-content');
-            const indicator = document.getElementById('timer-indicator');
+            const content = document.getElementById('timeline-content');
+            const indicator = document.getElementById('timeline-indicator');
             content.classList.remove('collapsed');
             content.classList.add('expanded');
             indicator.classList.remove('collapsed');
@@ -983,6 +1348,7 @@
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             addLogEntry('Enhanced NASA Mission Control initialized');
+            addLogEntry('Tactical Timeline operational');
             document.getElementById('last-check').textContent = new Date().toLocaleTimeString();
             document.getElementById('social-last-update').textContent = new Date().toLocaleTimeString();
         });
