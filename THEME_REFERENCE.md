@@ -11,7 +11,7 @@
 6. **MISSION LOG** (Position 6: 📋)
 7. **SYSTEM STATUS** (Position 7: ⚡)
 
-### Color Scheme (NASA/LCARS Theme):
+### Color Scheme (NASA Mission Control Theme):
 ```css
 :root {
     --nasa-blue: #0B3D91;

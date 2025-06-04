@@ -43,7 +43,7 @@ switchCommand/
 - Full-width EXPAND button in header
 
 ### Theme Requirements:
-- **ALWAYS use NASA/LCARS colors** from THEME_REFERENCE.md
+- **ALWAYS use NASA colors** from THEME_REFERENCE.md
 - **NEVER change panel order** - Timeline MUST be first
 - **Maintain Google Maps integration** in position 2
 - **Preserve all working navigation features**
