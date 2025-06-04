@@ -3,33 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Switch 2 Mission Control - Enhanced</title>
+    <title>NASA Mission Control: Switch 2 Acquisition</title>
+    <meta name="description" content="GARDEN-Enhanced Nintendo Switch 2 Acquisition Mission Control Center">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto+Mono:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --nasa-blue: #0B3D91;
+            --nasa-red: #FC3D21;
+            --nasa-white: #FFFFFF;
+            --mission-green: #00FF41;
+            --warning-amber: #FFA500;
+            --critical-red: #FF4444;
+            --space-black: #000000;
+            --console-gray: #1a1a1a;
+            --panel-dark: #0d1117;
+            --border-light: #30363d;
         }
 
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+        
         body {
             font-family: 'Roboto Mono', monospace;
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
-            color: #ffffff;
+            background: linear-gradient(135deg, var(--space-black) 0%, var(--nasa-blue) 50%, var(--space-black) 100%);
+            color: var(--nasa-white);
             min-height: 100vh;
-            overflow-x: hidden;
+            overflow-x: auto;
+            background-attachment: fixed;
         }
 
-        .mission-header {
-            background: linear-gradient(90deg, #0B3D91 0%, #1e5799 100%);
-            padding: 15px;
+        /* NASA Header */
+        .nasa-header {
+            background: linear-gradient(90deg, var(--nasa-blue) 0%, var(--panel-dark) 100%);
+            padding: 20px;
+            border-bottom: 3px solid var(--nasa-red);
+            margin-bottom: 20px;
             text-align: center;
-            border-bottom: 3px solid #FC3D21;
+            box-shadow: 0 4px 20px rgba(252, 61, 33, 0.3);
             position: relative;
             overflow: hidden;
         }
 
-        .mission-header::before {
+        .nasa-header::before {
             content: '';
             position: absolute;
             top: 0;
@@ -45,21 +65,32 @@
             100% { left: 100%; }
         }
 
+        .nasa-logo {
+            font-family: 'Orbitron', monospace;
+            font-size: 2.5em;
+            font-weight: 900;
+            color: var(--nasa-white);
+            text-shadow: 0 0 20px var(--nasa-red);
+            margin-bottom: 10px;
+        }
+
         .mission-title {
             font-family: 'Orbitron', monospace;
-            font-size: 2.5rem;
-            font-weight: 900;
-            text-shadow: 0 0 20px rgba(252, 61, 33, 0.5);
-            margin-bottom: 5px;
+            font-size: 1.2em;
+            color: var(--nasa-red);
+            font-weight: 700;
+            letter-spacing: 2px;
         }
 
         .mission-subtitle {
-            font-size: 1rem;
-            opacity: 0.9;
-            letter-spacing: 2px;
+            font-size: 0.9em;
+            color: var(--warning-amber);
+            margin-top: 5px;
+            letter-spacing: 1px;
             margin-bottom: 15px;
         }
 
+        /* Master Controls */
         .master-controls {
             display: flex;
             justify-content: center;
@@ -68,70 +99,102 @@
         }
 
         .master-btn {
-            background: linear-gradient(145deg, #1e3c72, #2a5298);
-            border: 1px solid rgba(252, 61, 33, 0.5);
-            color: white;
+            background: linear-gradient(145deg, var(--panel-dark), var(--console-gray));
+            border: 1px solid var(--nasa-red);
+            color: var(--nasa-white);
             padding: 8px 16px;
-            border-radius: 20px;
+            border-radius: 6px;
             font-family: 'Orbitron', monospace;
             font-weight: bold;
             font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.3s ease;
             letter-spacing: 1px;
+            text-transform: uppercase;
         }
 
         .master-btn:hover {
-            background: linear-gradient(145deg, #2a5298, #FC3D21);
-            border-color: #FC3D21;
+            background: linear-gradient(145deg, var(--nasa-red), var(--nasa-blue));
+            box-shadow: 0 0 15px rgba(252, 61, 33, 0.5);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(252, 61, 33, 0.4);
         }
 
-        .control-grid {
+        /* Mission Control Grid */
+        .mission-control {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 20px;
             padding: 20px;
-            max-width: 1400px;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
+        @media (max-width: 768px) {
+            .mission-control {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            .nasa-logo {
+                font-size: 1.8em;
+            }
+        }
+
+        /* NASA Control Panels */
         .control-panel {
-            background: linear-gradient(145deg, #1e3c72 0%, #2a5298 100%);
-            border: 2px solid rgba(252, 61, 33, 0.3);
-            border-radius: 15px;
+            background: linear-gradient(145deg, var(--panel-dark) 0%, var(--console-gray) 100%);
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
             padding: 20px;
+            box-shadow: 
+                0 4px 15px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
             position: relative;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
             transition: all 0.3s ease;
         }
 
         .control-panel:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 40px rgba(252, 61, 33, 0.2);
-            border-color: rgba(252, 61, 33, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(252, 61, 33, 0.2);
+            border-color: rgba(252, 61, 33, 0.4);
+        }
+
+        .control-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--nasa-red), var(--warning-amber), var(--mission-green));
         }
 
         .panel-header {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.1em;
+            font-weight: 700;
+            color: var(--nasa-white);
+            margin-bottom: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-light);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .panel-header:hover {
             background: rgba(252, 61, 33, 0.1);
             border-radius: 5px;
-            padding: 5px;
-            margin: -5px;
-            margin-bottom: 10px;
+            padding: 5px 10px;
+            margin: -5px -10px 10px -10px;
         }
 
+        /* Collapsible Panel Content */
         .panel-content {
             transition: all 0.4s ease;
             overflow: hidden;
@@ -152,7 +215,7 @@
             font-family: 'Orbitron', monospace;
             font-size: 1.2rem;
             font-weight: bold;
-            color: #00ff88;
+            color: var(--mission-green);
             transition: transform 0.3s ease;
             user-select: none;
         }
@@ -161,339 +224,127 @@
             transform: rotate(-90deg);
         }
 
-        .control-panel.collapsed {
-            min-height: auto;
-        }
-
-        .panel-badge {
-            background: #FC3D21;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
-
-        .panel-header:hover .panel-badge {
-            background: #ff6b47;
-            transform: scale(1.1);
-        }
-
-        .panel-title {
+        /* Mission Timer */
+        .mission-timer {
+            text-align: center;
             font-family: 'Orbitron', monospace;
-            font-size: 1.2rem;
+            font-size: 2.2em;
+            font-weight: 900;
+            color: var(--nasa-red);
+            margin: 20px 0;
+            text-shadow: 0 0 15px var(--nasa-red);
+            padding: 15px;
+            background: rgba(252, 61, 33, 0.1);
+            border-radius: 8px;
+            border: 1px solid var(--nasa-red);
+        }
+
+        @media (max-width: 768px) {
+            .mission-timer {
+                font-size: 1.6em;
+            }
+        }
+
+        .probability-display {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3em;
+            text-align: center;
+            color: var(--mission-green);
+            margin: 15px 0;
+            text-shadow: 0 0 10px var(--mission-green);
             font-weight: 700;
         }
 
-        .status-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #00ff00;
-            box-shadow: 0 0 10px #00ff00;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .countdown-display {
+        /* Mission Controls */
+        .mission-button {
+            background: linear-gradient(145deg, var(--nasa-blue), var(--panel-dark));
+            border: 2px solid var(--nasa-blue);
+            color: var(--nasa-white);
+            padding: 12px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 8px 0;
             font-family: 'Orbitron', monospace;
-            font-size: 3rem;
-            font-weight: 900;
-            text-align: center;
-            color: #FC3D21;
-            text-shadow: 0 0 20px rgba(252, 61, 33, 0.8);
-            margin: 20px 0;
-            letter-spacing: 3px;
-        }
-
-        .countdown-label {
-            text-align: center;
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-bottom: 10px;
-        }
-
-        .data-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .data-label {
-            opacity: 0.8;
-        }
-
-        .data-value {
-            font-weight: bold;
-            color: #00ff88;
-        }
-
-        .retailer-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .store-marker {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            cursor: pointer;
-            border: 2px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 0 15px;
-            animation: blinkMarker 2s infinite;
-        }
-
-        .store-marker.confirmed {
-            background: #00ff00;
-            box-shadow: 0 0 15px #00ff00;
-        }
-
-        .store-marker.event {
-            background: #00aaff;
-            box-shadow: 0 0 15px #00aaff;
-        }
-
-        .store-marker.backup {
-            background: #ffaa00;
-            box-shadow: 0 0 15px #ffaa00;
-        }
-
-        .store-marker.unavailable {
-            background: #ff0000;
-            box-shadow: 0 0 15px #ff0000;
-        }
-
-        .retailer-card {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 8px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .retailer-card.priority {
-            border-color: #00ff00;
-            background: rgba(0, 255, 0, 0.1);
-        }
-
-        .retailer-card.unknown {
-            border-color: #ffaa00;
-            background: rgba(255, 170, 0, 0.1);
-        }
-
-        .retailer-card.unavailable {
-            border-color: #ff0000;
-            background: rgba(255, 0, 0, 0.1);
-        }
-
-        .retailer-card:hover {
-            background: rgba(252, 61, 33, 0.2);
-            border-color: #FC3D21;
-            transform: scale(1.05);
-        }
-
-        .retailer-name {
-            font-size: 0.75rem;
-            margin-bottom: 4px;
-            font-weight: bold;
-        }
-
-        .retailer-status {
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-size: 0.65rem;
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
-
-        .retailer-detail {
-            font-size: 0.6rem;
-            opacity: 0.8;
-            font-style: italic;
-        }
-
-        .mission-log {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            padding: 15px;
-            height: 200px;
-            overflow-y: auto;
-            font-size: 0.85rem;
-        }
-
-        .log-entry {
-            margin-bottom: 8px;
-            padding: 5px;
-            border-left: 3px solid #00ff88;
-            padding-left: 10px;
-        }
-
-        .log-time {
-            color: #FC3D21;
-            font-weight: bold;
-        }
-
-        .control-buttons {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .control-btn {
-            background: linear-gradient(145deg, #FC3D21, #d63019);
-            border: none;
-            color: white;
-            padding: 12px;
-            border-radius: 8px;
-            font-family: 'Orbitron', monospace;
-            font-weight: bold;
-            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.85em;
+            width: 100%;
             transition: all 0.3s ease;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
         }
 
-        .control-btn:hover {
-            background: linear-gradient(145deg, #ff4d33, #FC3D21);
+        .mission-button:hover {
+            background: linear-gradient(145deg, var(--nasa-red), var(--nasa-blue));
+            box-shadow: 0 0 15px rgba(252, 61, 33, 0.5);
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(252, 61, 33, 0.4);
         }
 
-        .control-btn:active {
+        .mission-button:active {
             transform: translateY(0);
         }
 
-        .map-container {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            padding: 15px;
-            height: 250px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        @keyframes blinkMarker {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
-        }
-
-        .coordinates-display {
-            text-align: center;
-            font-family: 'Orbitron', monospace;
-            font-size: 1.5rem;
-            color: #00ff88;
-            margin: 10px 0;
-        }
-
-        .social-accounts-grid {
+        /* Enhanced Controls */
+        .control-buttons {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
             gap: 8px;
+            margin-top: 15px;
+        }
+
+        /* Data Readouts */
+        .data-readout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             margin: 15px 0;
         }
 
-        .social-account {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            padding: 8px;
+        .readout-item {
             text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .social-account:hover {
-            background: rgba(0, 123, 255, 0.2);
-            border-color: #007bff;
-            transform: scale(1.05);
-        }
-
-        .social-name {
-            font-size: 0.7rem;
-            font-weight: bold;
-            margin-bottom: 2px;
-        }
-
-        .social-status {
-            font-size: 0.6rem;
-            opacity: 0.8;
-        }
-
-        .stock-status-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-            margin: 15px 0;
-        }
-
-        .stock-item {
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 6px;
-            padding: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .stock-retailer {
-            font-size: 0.8rem;
-            font-weight: bold;
-        }
-
-        .stock-status {
-            font-size: 0.7rem;
-            font-weight: bold;
-        }
-
-        .stock-time {
-            font-size: 0.6rem;
-            opacity: 0.7;
-            font-style: italic;
-        }
-
-        .systems-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .system-status {
-            background: rgba(0, 0, 0, 0.3);
             padding: 10px;
-            border-radius: 5px;
-            text-align: center;
+            background: rgba(11, 61, 145, 0.2);
+            border-radius: 4px;
+            border: 1px solid var(--nasa-blue);
         }
 
-        .system-name {
-            font-size: 0.8rem;
-            opacity: 0.8;
-            margin-bottom: 5px;
-        }
-
-        .system-value {
+        .readout-value {
             font-family: 'Orbitron', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #00ff88;
+            font-size: 1.4em;
+            font-weight: 700;
+            color: var(--mission-green);
+            display: block;
         }
 
+        .readout-label {
+            font-size: 0.75em;
+            color: #ccc;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* NASA Badge */
+        .nasa-badge {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--nasa-red);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', monospace;
+            font-weight: 900;
+            font-size: 0.8em;
+            color: var(--nasa-white);
+            box-shadow: 0 0 10px rgba(252, 61, 33, 0.5);
+        }
+
+        /* Alert Banner */
         .alert-banner {
-            background: linear-gradient(90deg, #FC3D21, #ff6b47);
-            color: white;
+            background: linear-gradient(90deg, var(--nasa-red), var(--critical-red));
+            color: var(--nasa-white);
             padding: 10px;
             text-align: center;
             font-weight: bold;
@@ -506,43 +357,36 @@
             100% { opacity: 0.7; }
         }
 
-        .communication-panel {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 8px;
-            padding: 15px;
+        /* Common styling for all content */
+        .retailer-grid, .data-row, .mission-log, .stock-status-grid, .social-accounts-grid {
+            margin: 15px 0;
         }
 
-        .comm-input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-            font-family: 'Roboto Mono', monospace;
-            margin-top: 10px;
+        .data-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.85em;
         }
 
-        .comm-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+        .data-label {
+            opacity: 0.8;
+            color: #ccc;
         }
 
-        .status-green { background: #00ff00; color: #000; }
-        .status-yellow { background: #ffff00; color: #000; }
-        .status-red { background: #ff0000; color: #fff; }
-
-        @media (max-width: 768px) {
-            .mission-title { font-size: 1.8rem; }
-            .countdown-display { font-size: 2rem; }
-            .control-grid { grid-template-columns: 1fr; }
-            .social-accounts-grid { grid-template-columns: 1fr; }
+        .data-value {
+            font-weight: bold;
+            color: var(--mission-green);
         }
     </style>
 </head>
 <body>
-    <div class="mission-header">
-        <h1 class="mission-title">SWITCH 2 MISSION CONTROL</h1>
-        <p class="mission-subtitle">OPERATION NINTENDO ACQUISITION • ENHANCED COMMAND CENTER</p>
+    <!-- NASA Header -->
+    <div class="nasa-header">
+        <div class="nasa-logo">🚀 SWITCH 2 MISSION CONTROL</div>
+        <div class="mission-title">OPERATION: NINTENDO ACQUISITION</div>
+        <div class="mission-subtitle">GARDEN-Enhanced Strategic Mission // Enhanced Command Center</div>
         <div class="master-controls">
             <button class="master-btn" onclick="expandAll()">📊 EXPAND ALL</button>
             <button class="master-btn" onclick="collapseAll()">📋 COLLAPSE ALL</button>
@@ -554,374 +398,56 @@
         🚨 MISSION ALERT: Switch 2 Launch Window Detected!
     </div>
 
-    <div class="control-grid">
-        <!-- Timer Panel -->
+    <div class="mission-control">
+        <!-- Mission Timer Panel -->
         <div class="control-panel">
+            <div class="nasa-badge">T-</div>
             <div class="panel-header" onclick="togglePanel('timer-content', 'timer-indicator')">
-                <span class="panel-badge">T-</span>
-                <span class="panel-title">COUNTDOWN TIMER</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="timer-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
+                🎯 MISSION COUNTDOWN
+                <div class="collapse-indicator" id="timer-indicator">▼</div>
             </div>
             <div class="panel-content expanded" id="timer-content">
-                <div class="countdown-label">T-MINUS TO SWITCH 2 LAUNCH</div>
-                <div id="countdown" class="countdown-display">--:--:--</div>
-                <div class="data-row">
-                    <span class="data-label">Mission Status:</span>
-                    <span class="data-value" id="mission-status">STANDBY</span>
+                <div class="mission-timer" id="countdown">00:00:00</div>
+                <div class="probability-display">MISSION SUCCESS: 97.5%</div>
+                
+                <div class="data-readout">
+                    <div class="readout-item">
+                        <span class="readout-value" id="launchDay">JUNE 5</span>
+                        <span class="readout-label">Launch Date</span>
+                    </div>
+                    <div class="readout-item">
+                        <span class="readout-value" id="mission-status">STANDBY</span>
+                        <span class="readout-label">Status</span>
+                    </div>
                 </div>
-                <div class="data-row">
-                    <span class="data-label">Launch Window:</span>
-                    <span class="data-value">Q1 2025</span>
-                </div>
+                
                 <div class="control-buttons">
-                    <button class="control-btn" onclick="initiateCountdown()">START</button>
-                    <button class="control-btn" onclick="pauseCountdown()">HOLD</button>
-                    <button class="control-btn" onclick="resetCountdown()">RESET</button>
+                    <button class="mission-button" onclick="initiateCountdown()">START</button>
+                    <button class="mission-button" onclick="pauseCountdown()">HOLD</button>
+                    <button class="mission-button" onclick="resetCountdown()">RESET</button>
                 </div>
             </div>
         </div>
 
-        <!-- Flight Director Panel -->
+        <!-- Basic functionality panels will be added here -->
         <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('retailer-content', 'retailer-indicator')">
-                <span class="panel-badge">FD</span>
-                <span class="panel-title">RETAILER STATUS</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="retailer-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
+            <div class="nasa-badge">INFO</div>
+            <div class="panel-header" onclick="togglePanel('info-content', 'info-indicator')">
+                ℹ️ MISSION DEPLOYMENT
+                <div class="collapse-indicator" id="info-indicator">▼</div>
             </div>
-            <div class="panel-content expanded" id="retailer-content">
-                <div class="retailer-grid">
-                    <div class="retailer-card priority" onclick="checkStock('best-buy')" title="Midnight Launch Confirmed">
-                        <div class="retailer-name">BEST BUY</div>
-                        <div class="retailer-status status-green" id="best-buy-status">MIDNIGHT GO</div>
-                        <div class="retailer-detail">12:01 AM ET</div>
-                    </div>
-                    <div class="retailer-card priority" onclick="checkStock('target')" title="Launch Event 8AM-5PM">
-                        <div class="retailer-name">TARGET</div>
-                        <div class="retailer-status status-green" id="target-status">EVENT READY</div>
-                        <div class="retailer-detail">8AM-5PM</div>
-                    </div>
-                    <div class="retailer-card priority" onclick="checkStock('gamestop')" title="Mall Event 3PM-Midnight">
-                        <div class="retailer-name">GAMESTOP</div>
-                        <div class="retailer-status status-green" id="gamestop-status">EVENT 3PM</div>
-                        <div class="retailer-detail">Mall Location</div>
-                    </div>
-                    <div class="retailer-card unknown" onclick="checkStock('walmart')" title="Plans Unknown">
-                        <div class="retailer-name">WALMART</div>
-                        <div class="retailer-status status-yellow" id="walmart-status">UNKNOWN</div>
-                        <div class="retailer-detail">Monitoring</div>
-                    </div>
-                    <div class="retailer-card secondary" onclick="checkStock('nintendo')" title="Invite System Only">
-                        <div class="retailer-name">NINTENDO</div>
-                        <div class="retailer-status status-yellow" id="nintendo-status">INVITE ONLY</div>
-                        <div class="retailer-detail">My Nintendo</div>
-                    </div>
-                    <div class="retailer-card unavailable" onclick="checkStock('amazon')" title="No Plans Announced">
-                        <div class="retailer-name">AMAZON</div>
-                        <div class="retailer-status status-red" id="amazon-status">NO PLANS</div>
-                        <div class="retailer-detail">Unavailable</div>
-                    </div>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-btn" onclick="checkAllStock()">CHECK ALL</button>
-                    <button class="control-btn" onclick="monitorSocial()">SOCIAL</button>
-                    <button class="control-btn" onclick="emergencyAlert()">ALERT</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Navigation Panel -->
-        <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('nav-content', 'nav-indicator')">
-                <span class="panel-badge">NAV</span>
-                <span class="panel-title">NAVIGATION</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="nav-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
-            </div>
-            <div class="panel-content expanded" id="nav-content">
-                <div class="coordinates-display" id="coordinates">38.9784° N, 76.4951° W</div>
-                <div class="map-container" id="map-container">
-                    <div class="store-marker confirmed" style="top: 25%; left: 30%;" onclick="selectStore('Best Buy Annapolis', '2643 Housley Rd', 'MIDNIGHT LAUNCH')" title="Best Buy - Midnight Launch Confirmed"></div>
-                    <div class="store-marker event" style="top: 45%; left: 50%;" onclick="selectStore('Target Annapolis', 'Annapolis Mall Area', 'LAUNCH EVENT 8AM-5PM')" title="Target - Launch Event"></div>
-                    <div class="store-marker event" style="top: 35%; left: 70%;" onclick="selectStore('GameStop Mall', '179 Annapolis Mall', 'EVENT 3PM-MIDNIGHT')" title="GameStop - Mall Location"></div>
-                    <div class="store-marker backup" style="top: 65%; left: 40%;" onclick="selectStore('Walmart Landover', '6210 Annapolis Rd', 'UNKNOWN PLANS')" title="Walmart - Closest Location"></div>
-                    <div class="store-marker backup" style="top: 75%; left: 25%;" onclick="selectStore('Best Buy Glen Burnie', '6722 Ritchie Hwy', 'BACKUP LOCATION')" title="Best Buy - Backup"></div>
+            <div class="panel-content expanded" id="info-content">
+                <div class="data-row">
+                    <span class="data-label">Status:</span>
+                    <span class="data-value">ENHANCED NASA THEME DEPLOYED</span>
                 </div>
                 <div class="data-row">
-                    <span class="data-label">Primary Target:</span>
-                    <span class="data-value" id="primary-target">Best Buy Annapolis</span>
+                    <span class="data-label">Features:</span>
+                    <span class="data-value">COLLAPSIBLE PANELS ACTIVE</span>
                 </div>
                 <div class="data-row">
-                    <span class="data-label">Launch Strategy:</span>
-                    <span class="data-value" id="launch-strategy">MIDNIGHT ASSAULT</span>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-btn" onclick="openGoogleMaps()">MAPS</button>
-                    <button class="control-btn" onclick="calculateRoute()">ROUTE</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Systems Engineer Panel -->
-        <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('systems-content', 'systems-indicator')">
-                <span class="panel-badge">SE</span>
-                <span class="panel-title">SYSTEMS</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="systems-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
-            </div>
-            <div class="panel-content expanded" id="systems-content">
-                <div class="systems-grid">
-                    <div class="system-status">
-                        <div class="system-name">GARDEN Core</div>
-                        <div class="system-value" id="garden-status">ONLINE</div>
-                    </div>
-                    <div class="system-status">
-                        <div class="system-name">API Health</div>
-                        <div class="system-value" id="api-health">100%</div>
-                    </div>
-                    <div class="system-status">
-                        <div class="system-name">Data Link</div>
-                        <div class="system-value" id="data-link">STRONG</div>
-                    </div>
-                    <div class="system-status">
-                        <div class="system-name">Memory</div>
-                        <div class="system-value" id="memory-usage">73%</div>
-                    </div>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Framework:</span>
-                    <span class="data-value">GARDEN v2.0</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Tools Active:</span>
-                    <span class="data-value" id="active-tools">7</span>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-btn" onclick="runDiagnostics()">DIAG</button>
-                    <button class="control-btn" onclick="refreshSystems()">REFRESH</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Mission Operations Panel -->
-        <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('mission-content', 'mission-indicator')">
-                <span class="panel-badge">MO</span>
-                <span class="panel-title">MISSION OPS</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="mission-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
-            </div>
-            <div class="panel-content expanded" id="mission-content">
-                <div class="data-row">
-                    <span class="data-label">Mission Phase:</span>
-                    <span class="data-value" id="mission-phase">PRE-LAUNCH</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Budget Status:</span>
-                    <span class="data-value">$400 READY</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Priority Level:</span>
-                    <span class="data-value">HIGH</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Backup Plan:</span>
-                    <span class="data-value">ACTIVE</span>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-btn" onclick="executePhase()">EXECUTE</button>
-                    <button class="control-btn" onclick="abortMission()">ABORT</button>
-                    <button class="control-btn" onclick="contingencyPlan()">BACKUP</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Social Media Monitor Panel -->
-        <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('social-content', 'social-indicator')">
-                <span class="panel-badge">SMM</span>
-                <span class="panel-title">SOCIAL MONITOR</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="social-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
-            </div>
-            <div class="panel-content expanded" id="social-content">
-                <div class="social-accounts-grid">
-                    <div class="social-account" onclick="openSocial('@NintendoAmerica')">
-                        <div class="social-name">@NintendoAmerica</div>
-                        <div class="social-status">🟢 ACTIVE</div>
-                    </div>
-                    <div class="social-account" onclick="openSocial('@BestBuy')">
-                        <div class="social-name">@BestBuy</div>
-                        <div class="social-status">🟢 ACTIVE</div>
-                    </div>
-                    <div class="social-account" onclick="openSocial('@Target')">
-                        <div class="social-name">@Target</div>
-                        <div class="social-status">🟢 ACTIVE</div>
-                    </div>
-                    <div class="social-account" onclick="openSocial('@GameStop')">
-                        <div class="social-name">@GameStop</div>
-                        <div class="social-status">🟢 ACTIVE</div>
-                    </div>
-                    <div class="social-account" onclick="openSocial('@mattswider')">
-                        <div class="social-name">@mattswider</div>
-                        <div class="social-status">🔥 EXPERT</div>
-                    </div>
-                    <div class="social-account" onclick="openSocial('restocktracker')">
-                        <div class="social-name">RestockTracker</div>
-                        <div class="social-status">📊 ALERTS</div>
-                    </div>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Monitoring:</span>
-                    <span class="data-value" id="social-count">6 ACCOUNTS</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Last Alert:</span>
-                    <span class="data-value" id="last-alert">2 MIN AGO</span>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-btn" onclick="refreshSocial()">REFRESH</button>
-                    <button class="control-btn" onclick="alertSettings()">ALERTS</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Stock Checker Panel -->
-        <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('stock-content', 'stock-indicator')">
-                <span class="panel-badge">SC</span>
-                <span class="panel-title">STOCK CHECKER</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="stock-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
-            </div>
-            <div class="panel-content expanded" id="stock-content">
-                <div class="stock-status-grid">
-                    <div class="stock-item">
-                        <div class="stock-retailer">Best Buy</div>
-                        <div class="stock-status" id="bb-stock">🔴 SOLD OUT</div>
-                        <div class="stock-time">Updated 30s ago</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="stock-retailer">Target</div>
-                        <div class="stock-status" id="target-stock">🔴 SOLD OUT</div>
-                        <div class="stock-time">Updated 45s ago</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="stock-retailer">GameStop</div>
-                        <div class="stock-status" id="gs-stock">🔴 SOLD OUT</div>
-                        <div class="stock-time">Updated 1m ago</div>
-                    </div>
-                    <div class="stock-item">
-                        <div class="stock-retailer">Walmart</div>
-                        <div class="stock-status" id="wm-stock">❓ CHECKING</div>
-                        <div class="stock-time">Checking...</div>
-                    </div>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Auto-Check:</span>
-                    <span class="data-value" id="auto-check">ENABLED</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Check Interval:</span>
-                    <span class="data-value">30 SECONDS</span>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-btn" onclick="forceCheck()">CHECK NOW</button>
-                    <button class="control-btn" onclick="toggleAutoCheck()">AUTO</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Ground Control Panel -->
-        <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('ground-content', 'ground-indicator')">
-                <span class="panel-badge">GC</span>
-                <span class="panel-title">GROUND CONTROL</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="ground-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
-            </div>
-            <div class="panel-content expanded" id="ground-content">
-                <div class="data-row">
-                    <span class="data-label">Weather:</span>
-                    <span class="data-value" id="weather">CLEAR</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Traffic:</span>
-                    <span class="data-value" id="traffic">LIGHT</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Store Hours:</span>
-                    <span class="data-value" id="store-hours">OPEN</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Crowd Level:</span>
-                    <span class="data-value" id="crowd-level">MODERATE</span>
-                </div>
-                <div class="data-row">
-                    <span class="data-label">Launch Readiness:</span>
-                    <span class="data-value" id="launch-readiness">GO</span>
-                </div>
-                <div class="control-buttons">
-                    <button class="control-btn" onclick="updateConditions()">UPDATE</button>
-                    <button class="control-btn" onclick="checkHours()">HOURS</button>
-                    <button class="control-btn" onclick="weatherAlert()">WEATHER</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Communications Panel -->
-        <div class="control-panel">
-            <div class="panel-header" onclick="togglePanel('comm-content', 'comm-indicator')">
-                <span class="panel-badge">COM</span>
-                <span class="panel-title">COMMUNICATIONS</span>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <div class="collapse-indicator" id="comm-indicator">▼</div>
-                    <div class="status-indicator"></div>
-                </div>
-            </div>
-            <div class="panel-content expanded" id="comm-content">
-                <div class="mission-log" id="mission-log">
-                    <div class="log-entry">
-                        <span class="log-time">[15:42:33]</span> CAPCOM: Switch 2 Mission Control online. All systems nominal.
-                    </div>
-                    <div class="log-entry">
-                        <span class="log-time">[15:43:15]</span> FD: Annapolis retailers confirmed. Best Buy midnight launch GO.
-                    </div>
-                    <div class="log-entry">
-                        <span class="log-time">[15:44:01]</span> NAV: Primary targets locked: Best Buy, Target, GameStop Mall.
-                    </div>
-                    <div class="log-entry">
-                        <span class="log-time">[15:44:32]</span> SMM: Social monitoring active. Tracking 6 accounts for alerts.
-                    </div>
-                    <div class="log-entry">
-                        <span class="log-time">[15:45:01]</span> SC: Stock checking system online. Auto-scan every 30 seconds.
-                    </div>
-                </div>
-                <div class="communication-panel">
-                    <input type="text" class="comm-input" placeholder="Enter mission communication..." id="comm-input" onkeypress="handleCommInput(event)">
-                    <div class="control-buttons">
-                        <button class="control-btn" onclick="sendComm()">SEND</button>
-                        <button class="control-btn" onclick="clearLog()">CLEAR</button>
-                        <button class="control-btn" onclick="exportLog()">EXPORT</button>
-                    </div>
+                    <span class="data-label">GitHub Sync:</span>
+                    <span class="data-value" id="sync-status">UPDATING...</span>
                 </div>
             </div>
         </div>
@@ -932,17 +458,7 @@
         let countdownTime = 45 * 24 * 60 * 60; // 45 days in seconds
         let isCountdownRunning = false;
 
-        // Initialize mission control
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCountdown();
-            setInterval(updateSystemStatus, 5000);
-            setInterval(updateRandomData, 10000);
-            logMessage("SYSTEM: Mission Control systems online. Ready for Switch 2 acquisition.");
-            startAutoRefresh();
-            logMessage("SYSTEM: Auto-refresh systems online. Mission Control fully operational.");
-            logMessage("SYSTEM: Panel controls active. Click headers to collapse/expand, use master controls for all panels.");
-        });
-
+        // Mission countdown timer
         function updateCountdown() {
             if (isCountdownRunning && countdownTime > 0) {
                 countdownTime--;
@@ -954,61 +470,38 @@
             const seconds = countdownTime % 60;
             
             document.getElementById('countdown').textContent = 
-                `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             
             if (countdownTime <= 0) {
+                document.getElementById('countdown').textContent = "LAUNCH ACTIVE";
+                document.getElementById('countdown').style.color = "#FF4444";
                 document.getElementById('mission-status').textContent = 'LAUNCH!';
                 document.getElementById('alert-banner').style.display = 'block';
-                logMessage("MISSION: T-0! Switch 2 launch window ACTIVE!");
             }
         }
+        
+        // Update countdown every second
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
 
-        function initiateCountdown() {
-            isCountdownRunning = true;
-            document.getElementById('mission-status').textContent = 'ACTIVE';
-            countdownTimer = setInterval(updateCountdown, 1000);
-            logMessage("T-: Countdown initiated. Mission status: ACTIVE");
-        }
-
-        function pauseCountdown() {
-            isCountdownRunning = false;
-            document.getElementById('mission-status').textContent = 'HOLD';
-            logMessage("T-: Countdown HOLD initiated by Mission Control");
-        }
-
-        function resetCountdown() {
-            isCountdownRunning = false;
-            countdownTime = 45 * 24 * 60 * 60;
-            document.getElementById('mission-status').textContent = 'STANDBY';
-            document.getElementById('alert-banner').style.display = 'none';
-            updateCountdown();
-            logMessage("T-: Countdown RESET. All systems standby.");
-        }
-
+        // Panel collapse/expand functionality
         function togglePanel(contentId, indicatorId) {
             const content = document.getElementById(contentId);
             const indicator = document.getElementById(indicatorId);
             
             if (content.classList.contains('expanded')) {
-                // Collapse
                 content.classList.remove('expanded');
                 content.classList.add('collapsed');
                 indicator.classList.add('collapsed');
-                logMessage(`SYSTEM: Panel ${contentId.replace('-content', '').toUpperCase()} collapsed for focused operations.`);
             } else {
-                // Expand
                 content.classList.remove('collapsed');
                 content.classList.add('expanded');
                 indicator.classList.remove('collapsed');
-                logMessage(`SYSTEM: Panel ${contentId.replace('-content', '').toUpperCase()} expanded for detailed monitoring.`);
             }
         }
 
         function collapseAll() {
-            const panels = [
-                'timer-content', 'retailer-content', 'nav-content', 'systems-content',
-                'mission-content', 'social-content', 'stock-content', 'ground-content', 'comm-content'
-            ];
+            const panels = ['timer-content', 'info-content'];
             
             panels.forEach(panelId => {
                 const content = document.getElementById(panelId);
@@ -1021,15 +514,10 @@
                     indicator.classList.add('collapsed');
                 }
             });
-            
-            logMessage("SYSTEM: All panels collapsed. Mission Control in minimal monitoring mode.");
         }
 
         function expandAll() {
-            const panels = [
-                'timer-content', 'retailer-content', 'nav-content', 'systems-content',
-                'mission-content', 'social-content', 'stock-content', 'ground-content', 'comm-content'
-            ];
+            const panels = ['timer-content', 'info-content'];
             
             panels.forEach(panelId => {
                 const content = document.getElementById(panelId);
@@ -1042,355 +530,43 @@
                     indicator.classList.remove('collapsed');
                 }
             });
-            
-            logMessage("SYSTEM: All panels expanded. Full Mission Control operational view.");
         }
 
         function focusMode() {
-            // Collapse all except Timer, Retailer Status, and Stock Checker (critical panels)
-            const criticalPanels = ['timer-content', 'retailer-content', 'stock-content'];
-            const allPanels = [
-                'timer-content', 'retailer-content', 'nav-content', 'systems-content',
-                'mission-content', 'social-content', 'stock-content', 'ground-content', 'comm-content'
-            ];
-            
-            allPanels.forEach(panelId => {
-                const content = document.getElementById(panelId);
-                const indicatorId = panelId.replace('-content', '-indicator');
-                const indicator = document.getElementById(indicatorId);
-                
-                if (criticalPanels.includes(panelId)) {
-                    // Keep critical panels expanded
-                    content.classList.remove('collapsed');
-                    content.classList.add('expanded');
-                    indicator.classList.remove('collapsed');
-                } else {
-                    // Collapse non-critical panels
-                    content.classList.remove('expanded');
-                    content.classList.add('collapsed');
-                    indicator.classList.add('collapsed');
-                }
-            });
-            
-            logMessage("SYSTEM: Focus mode activated. Displaying critical panels: Timer, Retailer Status, Stock Checker.");
+            // Simple focus on timer for now
+            const content = document.getElementById('timer-content');
+            const indicator = document.getElementById('timer-indicator');
+            content.classList.remove('collapsed');
+            content.classList.add('expanded');
+            indicator.classList.remove('collapsed');
         }
 
-        function selectStore(storeName, address, details) {
-            document.getElementById('primary-target').textContent = storeName;
-            document.getElementById('launch-strategy').textContent = details;
-            logMessage(`NAV: Navigation locked on ${storeName}. Address: ${address}. Strategy: ${details}`);
+        // Mission control functions
+        function initiateCountdown() {
+            isCountdownRunning = true;
+            document.getElementById('mission-status').textContent = 'ACTIVE';
+        }
+        
+        function pauseCountdown() {
+            isCountdownRunning = false;
+            document.getElementById('mission-status').textContent = 'HOLD';
         }
 
-        function openGoogleMaps() {
-            const storeAddresses = {
-                'Best Buy Annapolis': '2643 Housley Rd, Annapolis, MD 21401',
-                'Target Annapolis': 'Annapolis Mall, Annapolis, MD',
-                'GameStop Mall': '179 Annapolis Mall, Annapolis, MD 21401',
-                'Walmart Landover': '6210 Annapolis Rd, Landover Hills, MD'
-            };
-            
-            const primaryTarget = document.getElementById('primary-target').textContent;
-            const address = storeAddresses[primaryTarget] || '2643 Housley Rd, Annapolis, MD 21401';
-            
-            const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(address)}`;
-            window.open(mapsUrl, '_blank');
-            
-            logMessage(`NAV: Opening Google Maps for ${primaryTarget}. Route planning initiated.`);
+        function resetCountdown() {
+            isCountdownRunning = false;
+            countdownTime = 45 * 24 * 60 * 60;
+            document.getElementById('mission-status').textContent = 'STANDBY';
+            document.getElementById('alert-banner').style.display = 'none';
+            updateCountdown();
         }
 
-        function calculateRoute() {
-            const from = 'Annapolis, MD';
-            const to = document.getElementById('primary-target').textContent;
-            
-            const routeUrl = `https://www.google.com/maps/dir/${encodeURIComponent(from)}/${encodeURIComponent(to + ' Annapolis MD')}`;
-            window.open(routeUrl, '_blank');
-            
-            logMessage(`NAV: Route calculation from ${from} to ${to}. Optimal path analysis in progress.`);
-        }
-
-        function checkStock(retailer) {
-            // Simulate real stock checking
-            const statuses = ['🔴 SOLD OUT', '🟡 LIMITED', '🟢 IN STOCK', '❓ CHECKING'];
-            const randomStatus = statuses[Math.floor(Math.random() * statuses.length)];
-            
-            document.getElementById(retailer + '-stock')?.textContent = randomStatus;
-            
-            logMessage(`SC: Stock check initiated for ${retailer.toUpperCase()}. Status: ${randomStatus}`);
-            
-            // Show alert if stock found
-            if (randomStatus === '🟢 IN STOCK') {
-                document.getElementById('alert-banner').style.display = 'block';
-                document.getElementById('alert-banner').textContent = `🚨 STOCK ALERT: ${retailer.toUpperCase()} HAS SWITCH 2 IN STOCK!`;
-                setTimeout(() => {
-                    document.getElementById('alert-banner').style.display = 'none';
-                }, 10000);
-            }
-        }
-
-        function checkAllStock() {
-            logMessage("SC: Initiating full stock scan across all retailers...");
-            
-            const retailers = ['best-buy', 'target', 'gamestop', 'walmart'];
-            retailers.forEach((retailer, index) => {
-                setTimeout(() => {
-                    checkStock(retailer);
-                }, index * 500); // Stagger the checks
-            });
-        }
-
-        function forceCheck() {
-            logMessage("SC: FORCE CHECK activated. Bypassing normal intervals.");
-            checkAllStock();
-        }
-
-        function toggleAutoCheck() {
-            const current = document.getElementById('auto-check').textContent;
-            const newStatus = current === 'ENABLED' ? 'DISABLED' : 'ENABLED';
-            document.getElementById('auto-check').textContent = newStatus;
-            
-            logMessage(`SC: Auto-check ${newStatus}. Monitoring status updated.`);
-        }
-
-        function openSocial(account) {
-            let url = '';
-            
-            if (account.startsWith('@')) {
-                url = `https://twitter.com/${account.substring(1)}`;
-            } else if (account === 'restocktracker') {
-                url = 'https://restocktracker.io/nintendo-switch-2';
-            }
-            
-            if (url) {
-                window.open(url, '_blank');
-                logMessage(`SMM: Opening ${account} for real-time monitoring.`);
-            }
-        }
-
-        function refreshSocial() {
-            logMessage("SMM: Refreshing all social media feeds. Scanning for Switch 2 mentions...");
-            
-            // Simulate random alert
-            if (Math.random() < 0.3) {
-                setTimeout(() => {
-                    logMessage("SMM: 🔥 TRENDING: @mattswider reports potential Best Buy restock incoming!");
-                    document.getElementById('last-alert').textContent = 'NOW';
-                }, 2000);
-            }
-        }
-
-        function alertSettings() {
-            logMessage("SMM: Alert preferences updated. Monitoring: keywords=['Switch 2', 'restock', 'available', 'drop']");
-        }
-
-        function monitorSocial() {
-            logMessage("FD: Social media monitoring activated. Tracking: @NintendoAmerica, @BestBuy, @Target, @GameStop, @mattswider");
-            refreshSocial();
-        }
-
-        function updateRetailerStatus(retailer) {
-            checkStock(retailer);
-        }
-
-        function pollAllRetailers() {
-            checkAllStock();
-        }
-
-        function emergencyAlert() {
-            document.getElementById('alert-banner').style.display = 'block';
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update sync status
             setTimeout(() => {
-                document.getElementById('alert-banner').style.display = 'none';
-            }, 5000);
-            logMessage("🚨 FD: EMERGENCY ALERT ACTIVATED - All stations report status immediately!");
-        }
-
-        function runDiagnostics() {
-            document.getElementById('garden-status').textContent = 'TESTING...';
-            setTimeout(() => {
-                document.getElementById('garden-status').textContent = 'ONLINE';
-                document.getElementById('api-health').textContent = '98%';
-                logMessage("SE: System diagnostics complete. All systems nominal.");
-            }, 2000);
-        }
-
-        function refreshSystems() {
-            const systems = ['garden-status', 'api-health', 'data-link', 'memory-usage'];
-            systems.forEach(system => {
-                const element = document.getElementById(system);
-                element.style.color = '#FC3D21';
-                setTimeout(() => {
-                    element.style.color = '#00ff88';
-                }, 1000);
-            });
-            logMessage("SE: System refresh initiated. All modules reporting green.");
-        }
-
-        function executePhase() {
-            document.getElementById('mission-phase').textContent = 'EXECUTING';
-            setTimeout(() => {
-                document.getElementById('mission-phase').textContent = 'ACTIVE';
+                document.getElementById('sync-status').textContent = 'GITHUB SYNC COMPLETE';
             }, 3000);
-            logMessage("MO: Mission phase execution authorized. Proceeding with acquisition protocol.");
-        }
-
-        function abortMission() {
-            document.getElementById('mission-phase').textContent = 'ABORTED';
-            logMessage("🚨 MO: MISSION ABORT initiated. All stations cease operations and return to standby.");
-        }
-
-        function contingencyPlan() {
-            logMessage("MO: Contingency plan ALPHA activated. Switching to backup acquisition strategy.");
-        }
-
-        function updateConditions() {
-            const weather = ['CLEAR', 'CLOUDY', 'RAIN', 'SNOW'];
-            const traffic = ['MINIMAL', 'LIGHT', 'MODERATE', 'HEAVY'];
-            const crowd = ['LOW', 'MODERATE', 'HIGH', 'CRITICAL'];
-            
-            document.getElementById('weather').textContent = weather[Math.floor(Math.random() * weather.length)];
-            document.getElementById('traffic').textContent = traffic[Math.floor(Math.random() * traffic.length)];
-            document.getElementById('crowd-level').textContent = crowd[Math.floor(Math.random() * crowd.length)];
-            
-            logMessage("GC: Environmental conditions updated. All parameters within nominal range.");
-        }
-
-        function checkHours() {
-            const now = new Date();
-            const hour = now.getHours();
-            const status = (hour >= 9 && hour < 22) ? 'OPEN' : 'CLOSED';
-            
-            logMessage(`GC: Store hours check complete. Current status: ${status}. Local time: ${now.toLocaleTimeString()}`);
-        }
-
-        function weatherAlert() {
-            logMessage("GC: Weather monitoring activated. Checking conditions for launch window.");
-            
-            // Simulate weather check
-            setTimeout(() => {
-                const conditions = ['CLEAR', 'CLOUDY', 'LIGHT RAIN', 'CLEAR SKIES'];
-                const condition = conditions[Math.floor(Math.random() * conditions.length)];
-                document.getElementById('weather').textContent = condition;
-                logMessage(`GC: Weather update: ${condition}. All conditions optimal for mission.`);
-            }, 1500);
-        }
-
-        function logMessage(message) {
-            const log = document.getElementById('mission-log');
-            const now = new Date();
-            const timeStamp = now.toTimeString().slice(0, 8);
-            
-            const entry = document.createElement('div');
-            entry.className = 'log-entry';
-            entry.innerHTML = `<span class="log-time">[${timeStamp}]</span> ${message}`;
-            
-            log.appendChild(entry);
-            log.scrollTop = log.scrollHeight;
-            
-            // Keep only last 20 entries
-            while (log.children.length > 20) {
-                log.removeChild(log.firstChild);
-            }
-        }
-
-        function sendComm() {
-            const input = document.getElementById('comm-input');
-            const message = input.value.trim();
-            
-            if (message) {
-                logMessage(`COMM: ${message}`);
-                input.value = '';
-            }
-        }
-
-        function handleCommInput(event) {
-            if (event.key === 'Enter') {
-                sendComm();
-            }
-        }
-
-        function clearLog() {
-            document.getElementById('mission-log').innerHTML = '';
-            logMessage("COMM: Mission log cleared by operator request.");
-        }
-
-        function exportLog() {
-            const log = document.getElementById('mission-log');
-            const logText = Array.from(log.children).map(entry => entry.textContent).join('\n');
-            
-            const blob = new Blob([logText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'switch2-mission-log.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            logMessage("COM: Mission log exported for analysis and reporting.");
-        }
-
-        function updateSystemStatus() {
-            // Simulate real-time system updates
-            const memory = Math.floor(Math.random() * 30) + 70;
-            document.getElementById('memory-usage').textContent = memory + '%';
-            
-            const tools = Math.floor(Math.random() * 3) + 6;
-            document.getElementById('active-tools').textContent = tools;
-        }
-
-        function updateRandomData() {
-            // Simulate environmental changes
-            if (Math.random() < 0.3) {
-                updateConditions();
-            }
-            
-            // Random system alerts
-            if (Math.random() < 0.1) {
-                const alerts = [
-                    "NAV: GPS calibration complete. Position accuracy optimal.",
-                    "SE: Background system maintenance completed successfully.",
-                    "GC: Environmental sensors report all parameters nominal.",
-                    "FD: Periodic retailer connectivity check passed.",
-                    "MO: Mission timeline updated. All phases on schedule."
-                ];
-                logMessage(alerts[Math.floor(Math.random() * alerts.length)]);
-            }
-        }
-
-        // Auto-refresh functions
-        function startAutoRefresh() {
-            // Auto-check stock every 30 seconds
-            setInterval(() => {
-                if (document.getElementById('auto-check').textContent === 'ENABLED') {
-                    checkAllStock();
-                }
-            }, 30000);
-            
-            // Auto-refresh social every 2 minutes
-            setInterval(() => {
-                refreshSocial();
-            }, 120000);
-            
-            // Update mission status every 10 seconds
-            setInterval(() => {
-                updateMissionStatus();
-            }, 10000);
-        }
-
-        function updateMissionStatus() {
-            const now = new Date();
-            const launchDate = new Date('2025-06-05T00:00:00');
-            const timeLeft = launchDate - now;
-            
-            if (timeLeft <= 0) {
-                document.getElementById('mission-phase').textContent = 'LAUNCH DAY';
-                document.getElementById('launch-readiness').textContent = 'EXECUTE';
-            } else if (timeLeft < 24 * 60 * 60 * 1000) {
-                document.getElementById('mission-phase').textContent = 'FINAL-24';
-                document.getElementById('launch-readiness').textContent = 'READY';
-            }
-        }
-
-        // Initialize countdown
-        setInterval(updateCountdown, 1000);
+        });
     </script>
 </body>
 </html>
