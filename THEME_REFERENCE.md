@@ -3,67 +3,87 @@
 ## 🚨 CRITICAL: This is the ONLY correct theme for Switch 2 Mission Control
 
 ### Panel Order (MUST BE EXACTLY THIS ORDER):
-1. **TACTICAL TIMELINE** (Position 1: Top-Left) ⏰
-2. **TACTICAL NAVIGATION** (Position 2: Top-Right) 📍
-3. **MISSION COUNTDOWN** (Position 3: Bottom-Left) ⏱️
-4. **ANNAPOLIS MISSION INTEL** (Position 4: Bottom-Right) 📊
-5. **STOCK MONITORING** (Position 5: Bottom-Left) 📈
-6. **SOCIAL INTELLIGENCE** (Position 6: Bottom-Right) 📱
+1. **TACTICAL TIMELINE** (Position 1: ⏰) - ALWAYS FIRST
+2. **MISSION COUNTDOWN** (Position 2: 🎯)
+3. **ANNAPOLIS MISSION INTEL** (Position 3: 📍)
+4. **STOCK MONITORING** (Position 4: 📈)
+5. **SOCIAL INTELLIGENCE** (Position 5: 📱)
+6. **MISSION LOG** (Position 6: 📋)
+7. **SYSTEM STATUS** (Position 7: ⚡)
 
 ### Color Scheme (NASA/LCARS Theme):
 ```css
 :root {
     --nasa-blue: #0B3D91;
     --nasa-red: #FC3D21;
-    --mission-green: #00ff41;
-    --warning-orange: #FF8C42;
-    --status-yellow: #FFD23F;
-    --deep-space: #000814;
-    --panel-dark: #001D3D;
-    --text-cyan: #00F5FF;
-    --accent-purple: #9A48D0;
+    --nasa-white: #FFFFFF;
+    --mission-green: #00FF41;
+    --warning-amber: #FFA500;
+    --critical-red: #FF4444;
+    --space-black: #000000;
+    --console-gray: #1a1a1a;
+    --panel-dark: #0d1117;
+    --border-light: #30363d;
+    --timeline-past: rgba(255, 255, 255, 0.3);
+    --timeline-future: #00FF41;
+    --timeline-active: #FFA500;
 }
 ```
 
-### Panel Headers:
-- **Background**: `linear-gradient(90deg, var(--nasa-red), var(--warning-orange))`
-- **Text Color**: `white`
-- **Font**: `Orbitron, monospace`
-
-### Panel Content Areas:
-- **Background**: `linear-gradient(145deg, var(--panel-dark), rgba(11, 61, 145, 0.3))`
-- **Border**: `2px solid var(--text-cyan)`
-- **Border Radius**: `10px`
-
-### Body Background:
-- **Background**: `linear-gradient(135deg, var(--deep-space) 0%, var(--nasa-blue) 100%)`
-
 ### Typography:
-- **Primary Font**: `'Orbitron', monospace`
-- **Mission Title**: `2.5em`, `font-weight: 900`, `color: var(--text-cyan)`
-- **Mission Subtitle**: `1.2em`, `color: var(--nasa-red)`
+- **Primary Font**: `'Orbitron', monospace` for headers and controls
+- **Secondary Font**: `'Roboto Mono', monospace` for body text
+- **NASA Logo**: `2.5em`, `font-weight: 900`, Orbitron
+- **Mission Title**: `1.2em`, `color: var(--nasa-red)`, Orbitron
 
-### Status Colors (Stock Status Coloring):
-- 🟢 **HIGH STOCK**: `#00ff41` (Mission Green)
-- 🟡 **MEDIUM STOCK**: `#FFD23F` (Status Yellow)  
-- 🔴 **LOW STOCK**: `#FC3D21` (NASA Red)
-- 🔵 **BACKUP/READY**: `#00F5FF` (Text Cyan)
-- 🟣 **HOME/COMMAND**: `#9A48D0` (Accent Purple)
+### Layout System:
+- **Body Background**: `linear-gradient(135deg, var(--space-black) 0%, var(--nasa-blue) 50%, var(--space-black) 100%)`
+- **Panel Background**: `linear-gradient(145deg, var(--panel-dark) 0%, var(--console-gray) 100%)`
+- **Grid System**: `repeat(auto-fit, minmax(350px, 1fr))`
+
+### Panel Structure:
+- **NASA Badge**: Circular red badge with emoji icon in top-right
+- **Panel Header**: Red-to-amber gradient with Orbitron font
+- **Color Bar**: 3px top border with red-amber-green gradient
+- **Collapsible Content**: Smooth expand/collapse with indicators
+
+### Interactive Elements:
+- **Master Controls**: Red border, dark gradient background
+- **Mission Buttons**: Blue gradient with red hover states
+- **Timeline Events**: Color-coded by store, clickable with hover effects
+- **Status Indicators**: Mission green for operational, amber for warnings
+
+### NASA Header Features:
+- **Sweep Animation**: Light sweep across header every 3 seconds
+- **Text Shadow**: Glowing effects on titles with NASA red
+- **Three-tier Title Structure**: Logo, Mission Title, Subtitle
 
 ### ❌ WHAT NOT TO DO:
-- Never change the panel order
-- Never use different gradient directions
-- Never modify the NASA color scheme
-- Never change the Orbitron font family
-- Never alter the border styling
+- Never change the panel order (Timeline MUST be first)
+- Never modify the NASA color scheme variables
+- Never change from Orbitron/Roboto Mono fonts
+- Never alter the gradient directions or compositions
+- Never remove the NASA badges or color bars
+- Never change the grid system minmax values
 
-### ✅ FEATURES IMPLEMENTED:
-- ✅ Panel collapsible functionality
-- ✅ Full-width navigation expansion
-- ✅ Google Maps integration with tactical styling
-- ✅ Stock-status color coding for locations
-- ✅ Real-time GPS tracking with trails
-- ✅ Shared viewing capability
-- ✅ GrubHub/DoorDash app integration
+### ✅ VERIFIED WORKING FEATURES:
+- ✅ Collapsible panels with smooth animations
+- ✅ Real-time tactical timeline with state indicators
+- ✅ Mission countdown timer with day/hour/minute display
+- ✅ Interactive timeline events with Google Maps links
+- ✅ Auto-refresh stock monitoring simulation
+- ✅ Mission log with export capabilities
+- ✅ System diagnostic functions
+- ✅ Master controls (Expand All, Collapse All, Focus Mode)
+
+### Current Live Version:
+This theme reference matches the EXACT version currently deployed on Vercel at:
+https://switch-command.vercel.app
+
+### Version Control:
+- **Last Updated**: June 4, 2025
+- **Current Version**: NASA Mission Control v2.0
+- **Status**: ✅ LIVE AND CONFIRMED
 
 This theme reference must be consulted before making ANY changes to prevent theme drift.
+All future development must maintain this exact aesthetic and functionality.
