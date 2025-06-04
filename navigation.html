@@ -254,12 +254,31 @@
             background: #8e44ad;
         }
         
+        .nav-button.center {
+            background: #27ae60;
+        }
+        
+        .nav-button.center:hover {
+            background: #229954;
+        }
+        
+        .nav-button.traffic {
+            background: #16a085;
+        }
+        
+        .nav-button.traffic:hover {
+            background: #138d75;
+        }
+        
+        .nav-button.traffic.active {
+            background: #e67e22;
+            box-shadow: 0 0 10px #e67e22;
+        }
+        
         .nav-button.track.active {
             background: #e74c3c;
             animation: trackingButton 2s infinite;
         }
-        
-        .nav-button.disabled {
             background: #7f8c8d;
             cursor: not-allowed;
             opacity: 0.6;
@@ -649,10 +668,14 @@
         </div>
         
         <div class="control-buttons">
-            <button class="nav-button" onclick="openMaps()">MAPS</button>
-            <button class="nav-button" onclick="plotRoute()">ROUTE</button>
-            <button class="nav-button legend" onclick="showLegend()">LEGEND</button>
+            <button class="nav-button center" onclick="centerMap()">CENTER</button>
+            <button class="nav-button" id="routeButton" onclick="plotRoute()">ROUTE</button>
+            <button class="nav-button traffic" id="trafficButton" onclick="toggleTraffic()">TRAFFIC</button>
             <button class="nav-button track" id="trackButton" onclick="toggleTracking()">TRACK</button>
+        </div>
+        
+        <div style="text-align: center; margin-top: 10px;">
+            <button class="nav-button legend" onclick="showLegend()" title="Show tactical legend" style="width: 120px; padding: 8px; font-size: 14px;">➕ LEGEND</button>
         </div>
     </div>
 
@@ -877,6 +900,12 @@
         let movementTrail = [];
         let trailPolyline = null;
         let lastPosition = null;
+        let targetLocation = null; // For intelligent routing
+        let trafficLayer = null;
+        let trafficEnabled = false;
+        let routeDisplayed = false;
+        let currentDirectionsRenderer = null;
+
         let isOwner = true; // This would be determined by URL params or auth in real implementation
         let sharedData = null;
         const MOVEMENT_THRESHOLD = 0.0001; // ~10 meters
@@ -896,6 +925,9 @@
                 clickableIcons: false,
                 keyboardShortcuts: false
             });
+
+            // Initialize traffic layer
+            trafficLayer = new google.maps.TrafficLayer();
 
             // Add location markers with enhanced styling
             Object.keys(locations).forEach(key => {
@@ -920,6 +952,10 @@
 
                 // Add enhanced click listener for location details
                 marker.addListener('click', () => {
+                    // Set as target for intelligent routing
+                    targetLocation = location;
+                    updateRouteButton();
+                    
                     showLocationDetail(location);
                     
                     // Add tactical highlighting effect
@@ -1020,6 +1056,10 @@
             document.getElementById('trackButton').classList.add('disabled');
             document.getElementById('trackButton').textContent = 'VIEW ONLY';
             document.getElementById('trackButton').onclick = null;
+            
+            // Disable other owner-only buttons
+            document.getElementById('routeButton').classList.add('disabled');
+            document.getElementById('routeButton').onclick = null;
             
             // Show shared indicator
             document.getElementById('sharedLight').style.display = 'block';
@@ -1349,20 +1389,61 @@
             window.open(`tel:${phone}`);
         }
 
-        function navigateToLocation(lat, lng) {
-            if (!isOwner) return;
-            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
-            window.open(url, '_blank');
+        // New enhanced functions
+        function centerMap() {
+            if (userLocation) {
+                map.setCenter(userLocation);
+                map.setZoom(16);
+            } else if (sharedData && sharedData.currentLocation) {
+                map.setCenter(sharedData.currentLocation);
+                map.setZoom(16);
+            } else {
+                // Default to Best Buy if no location available
+                map.setCenter(locations.bestBuy.coords);
+                map.setZoom(14);
+            }
         }
 
-        function openMaps() {
-            if (!isOwner) return;
-            const bestBuy = locations.bestBuy;
-            navigateToLocation(bestBuy.coords.lat, bestBuy.coords.lng);
+        function toggleTraffic() {
+            const button = document.getElementById('trafficButton');
+            
+            if (!trafficEnabled) {
+                trafficLayer.setMap(map);
+                button.classList.add('active');
+                button.textContent = 'HIDE TRAFFIC';
+                trafficEnabled = true;
+            } else {
+                trafficLayer.setMap(null);
+                button.classList.remove('active');
+                button.textContent = 'TRAFFIC';
+                trafficEnabled = false;
+            }
+        }
+
+        function updateRouteButton() {
+            const button = document.getElementById('routeButton');
+            if (targetLocation) {
+                button.textContent = `ROUTE TO ${targetLocation.name.split(' ')[0].toUpperCase()}`;
+                button.style.background = '#27ae60';
+            } else {
+                button.textContent = 'ROUTE';
+                button.style.background = '#e74c3c';
+            }
         }
 
         function plotRoute() {
             if (!isOwner) return;
+            
+            // Clear existing route
+            if (currentDirectionsRenderer) {
+                currentDirectionsRenderer.setMap(null);
+            }
+
+            if (!targetLocation) {
+                alert('Click on a location marker first to set your destination!');
+                return;
+            }
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
                     const current = {
@@ -1371,7 +1452,7 @@
                     };
                     
                     const directionsService = new google.maps.DirectionsService();
-                    const directionsRenderer = new google.maps.DirectionsRenderer({
+                    currentDirectionsRenderer = new google.maps.DirectionsRenderer({
                         polylineOptions: {
                             strokeColor: '#e74c3c',
                             strokeWeight: 4,
@@ -1381,19 +1462,47 @@
                         preserveViewport: false
                     });
                     
-                    directionsRenderer.setMap(map);
+                    currentDirectionsRenderer.setMap(map);
                     
                     directionsService.route({
                         origin: current,
-                        destination: locations.bestBuy.coords,
+                        destination: targetLocation.coords,
                         travelMode: google.maps.TravelMode.DRIVING
                     }, (result, status) => {
                         if (status === 'OK') {
-                            directionsRenderer.setDirections(result);
+                            currentDirectionsRenderer.setDirections(result);
+                            routeDisplayed = true;
+                            
+                            // Update button to show clear option
+                            const button = document.getElementById('routeButton');
+                            button.textContent = 'CLEAR ROUTE';
+                            button.style.background = '#e67e22';
+                            button.onclick = clearRoute;
                         }
                     });
+                }, (error) => {
+                    alert('Unable to get your current location for routing.');
                 });
             }
+        }
+
+        function clearRoute() {
+            if (currentDirectionsRenderer) {
+                currentDirectionsRenderer.setMap(null);
+                currentDirectionsRenderer = null;
+                routeDisplayed = false;
+                
+                // Reset button
+                const button = document.getElementById('routeButton');
+                button.onclick = plotRoute;
+                updateRouteButton();
+            }
+        }
+
+        function navigateToLocation(lat, lng) {
+            if (!isOwner) return;
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}&travelmode=driving`;
+            window.open(url, '_blank');
         }
 
         // Legend functions
@@ -1404,9 +1513,6 @@
         function hideLegend() {
             document.getElementById('legendOverlay').style.display = 'none';
         }
-
-        // Update coordinates display
-        function updateCoordinates() {
             if (isOwner && navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition((position) => {
                     const lat = position.coords.latitude.toFixed(4);
