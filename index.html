@@ -1,42 +1,271 @@
-        function findNextEventIndex() {
-            const now = new Date();
-            const currentTimeString = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
-            
-            for (let i = 0; i < timelineEvents.length; i++) {
-                const eventTime = timelineEvents[i].time;
-                // Handle midnight times (00:xx) as next day
-                if (eventTime.startsWith('00:') || eventTime >= currentTimeString) {
-                    return i;
-                }
-            }
-            return 0; // Default to first event if all are past
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Switch 2 Mission Control</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #000000 0%, #0B3D91 50%, #000000 100%);
+            color: #FFFFFF;
+            min-height: 100vh;
         }
-
-        function calculateTimeToEvent(eventTime) {
-            const now = new Date();
-            const [hours, minutes] = eventTime.split(':').map(Number);
-            
-            let eventDate = new Date();
-            eventDate.setHours(hours, minutes, 0, 0);
-            
-            // If event time has passed today, it's tomorrow (for midnight events)
-            if (eventDate <= now && hours < 12) {
-                eventDate.setDate(eventDate.getDate() + 1);
-            }
-            
-            const timeDiff = eventDate - now;
-            const hoursLeft = Math.floor(timeDiff / (1000 * 60 * 60));
-            const minutesLeft = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
-            
-            if (hoursLeft > 0) {
-                return `${hoursLeft}h ${minutesLeft}m`;
-            } else {
-                return `${minutesLeft}m`;
-            }
+        
+        .header {
+            background: linear-gradient(90deg, #0B3D91 0%, #1a1a1a 100%);
+            padding: 20px;
+            text-align: center;
+            border-bottom: 3px solid #FC3D21;
         }
-
-        // Mission countdown timer
+        
+        .logo {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #FC3D21;
+            font-size: 1.2em;
+        }
+        
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .panel {
+            background: linear-gradient(145deg, #0d1117 0%, #1a1a1a 100%);
+            border: 2px solid #30363d;
+            border-radius: 8px;
+            margin: 20px 0;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #FC3D21, #FFA500, #00FF41);
+        }
+        
+        .panel-title {
+            font-size: 1.3em;
+            color: #00FF41;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+        
+        .countdown {
+            font-size: 3em;
+            color: #FC3D21;
+            text-align: center;
+            margin: 20px 0;
+            text-shadow: 0 0 10px #FC3D21;
+        }
+        
+        .timeline {
+            background: #000;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #00FF41;
+        }
+        
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+        }
+        
+        .time {
+            font-weight: bold;
+            color: #FFA500;
+            width: 80px;
+        }
+        
+        .event-details {
+            flex: 1;
+            margin-left: 20px;
+        }
+        
+        .store {
+            font-weight: bold;
+            color: #FFFFFF;
+        }
+        
+        .strategy {
+            color: #00FF41;
+            font-size: 0.9em;
+        }
+        
+        .button {
+            background: linear-gradient(145deg, #0B3D91, #1a1a1a);
+            border: 2px solid #00FF41;
+            color: #FFFFFF;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-family: inherit;
+            text-transform: uppercase;
+        }
+        
+        .button:hover {
+            background: linear-gradient(145deg, #FC3D21, #0B3D91);
+            box-shadow: 0 0 15px #FC3D21;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .status-item {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid #00FF41;
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .status-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .live-time {
+            background: #000;
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #00FF41;
+            border-radius: 4px;
+            font-size: 1.5em;
+            color: #00FF41;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">🚀 NASA MISSION CONTROL</div>
+        <div class="subtitle">SWITCH 2 ACQUISITION OPERATION</div>
+    </div>
+    
+    <div class="container">
+        <div class="panel">
+            <div class="panel-title">🎯 Mission Countdown</div>
+            <div class="countdown" id="countdown">Loading...</div>
+            <div style="text-align: center; color: #FFA500;">Until Nintendo Switch 2 Launch</div>
+        </div>
+        
+        <div class="panel">
+            <div class="panel-title">⏰ Tactical Timeline</div>
+            <div class="live-time" id="current-time">Loading...</div>
+            <div class="timeline">
+                <div class="timeline-event">
+                    <div class="time">11:00</div>
+                    <div class="event-details">
+                        <div class="store">Blackbird Salon (DC)</div>
+                        <div class="strategy">Strategic positioning - Geographic advantage</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="time">23:30</div>
+                    <div class="event-details">
+                        <div class="store">Best Buy Annapolis</div>
+                        <div class="strategy">Queue for midnight launch - PRIMARY TARGET</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="time">00:01</div>
+                    <div class="event-details">
+                        <div class="store">Best Buy Launch</div>
+                        <div class="strategy">EXECUTE MISSION - Store opens</div>
+                    </div>
+                </div>
+                <div class="timeline-event">
+                    <div class="time">07:30</div>
+                    <div class="event-details">
+                        <div class="store">Target Backup</div>
+                        <div class="strategy">Secondary target - Ticket system</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="grid">
+            <div class="panel">
+                <div class="panel-title">📍 Store Intelligence</div>
+                <div class="status-item">
+                    <div class="status-name">🟢 Best Buy Annapolis</div>
+                    <div>2643 Housley Rd • Midnight launch confirmed</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">🟡 Target Annapolis</div>
+                    <div>Annapolis Mall • Ticket system launch</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">🟡 GameStop Mall</div>
+                    <div>179 Annapolis Mall • 3PM event</div>
+                </div>
+                <button class="button" onclick="openMaps()">🗺️ Google Maps</button>
+            </div>
+            
+            <div class="panel">
+                <div class="panel-title">📱 Social Monitoring</div>
+                <div class="status-item">
+                    <div class="status-name">@NintendoAmerica</div>
+                    <div>Official updates</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">@mattswider</div>
+                    <div>Expert tracker - 10,000+ helped</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">RestockTracker.io</div>
+                    <div>Real-time inventory alerts</div>
+                </div>
+                <button class="button" onclick="refreshSocial()">📡 Refresh Feeds</button>
+            </div>
+        </div>
+        
+        <div class="panel">
+            <div class="panel-title">🚀 Mission Status</div>
+            <div class="grid">
+                <div class="status-item">
+                    <div class="status-name">Success Probability</div>
+                    <div style="color: #00FF41; font-size: 1.5em;">97%</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">Target Budget</div>
+                    <div style="color: #FFA500; font-size: 1.5em;">$450</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">Strategic Advantage</div>
+                    <div style="color: #00FF41;">DC haircut positioning</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">Mission Ready</div>
+                    <div style="color: #00FF41; font-size: 1.5em;">GO</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
         function updateCountdown() {
+            const launchDate = new Date('2025-06-05T00:01:00-04:00');
             const now = new Date();
             const timeLeft = launchDate - now;
             
@@ -49,620 +278,32 @@
                 document.getElementById('countdown').textContent = 
                     `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             } else {
-                document.getElementById('countdown').textContent = "LAUNCH ACTIVE";
-                document.getElementById('countdown').style.color = "#FF4444";
-                document.getElementById('mission-status').textContent = 'EXECUTING';
-                document.getElementById('alert-banner').style.display = 'block';
+                document.getElementById('countdown').textContent = 'LAUNCH ACTIVE';
             }
-        }
-
-        // Initialize Google Maps
-        function initMap() {
-            const center = { lat: 38.9784, lng: -76.4951 }; // Best Buy Annapolis
-            
-            map = new google.maps.Map(document.getElementById('map'), {
-                zoom: 12,
-                center: center,
-                styles: [
-                    { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
-                    { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
-                    { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
-                    { featureType: "road", elementType: "geometry", stylers: [{ color: "#38414e" }] },
-                    { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#FFA500" }] },
-                    { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#FC3D21" }] },
-                    { featureType: "water", elementType: "geometry", stylers: [{ color: "#0B3D91" }] }
-                ],
-                mapTypeId: 'roadmap'
-            });
-
-            // Add store markers
-            annapolisStores.forEach(store => {
-                const marker = new google.maps.Marker({
-                    position: store.coords,
-                    map: map,
-                    title: store.name,
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        scale: 12,
-                        fillColor: store.color,
-                        fillOpacity: 1,
-                        strokeWeight: 3,
-                        strokeColor: '#FFFFFF'
-                    }
-                });
-
-                const infoWindow = new google.maps.InfoWindow({
-                    content: `
-                        <div style="color: #000; font-family: Orbitron, monospace; min-width: 250px;">
-                            <strong style="color: #0B3D91;">${store.name}</strong><br>
-                            <strong>Address:</strong> ${store.address}<br>
-                            <strong>Strategy:</strong> ${store.strategy}<br>
-                            <strong>Priority:</strong> ${store.priority}<br>
-                            <strong>Intel:</strong> ${store.intel}<br><br>
-                            <button onclick="window.open('https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(store.address)}', '_blank')" 
-                                    style="background: #0B3D91; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">
-                                🗺️ GET DIRECTIONS
-                            </button>
-                        </div>
-                    `
-                });
-
-                marker.addListener('click', () => {
-                    infoWindow.open(map, marker);
-                });
-            });
-
-            // Get user location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(position => {
-                    userLocation = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    
-                    new google.maps.Marker({
-                        position: userLocation,
-                        map: map,
-                        title: "Your Current Location",
-                        icon: {
-                            path: google.maps.SymbolPath.CIRCLE,
-                            scale: 10,
-                            fillColor: '#FFFFFF',
-                            fillOpacity: 1,
-                            strokeWeight: 3,
-                            strokeColor: '#FC3D21',
-                            animation: google.maps.Animation.BOUNCE
-                        }
-                    });
-                    
-                    addLogEntry("[NAV] Current location acquired and marked on tactical map");
-                });
-            }
-        }
-
-        // Panel collapse/expand functionality
-        function togglePanel(contentId, indicatorId) {
-            const content = document.getElementById(contentId);
-            const indicator = document.getElementById(indicatorId);
-            
-            if (content.classList.contains('expanded')) {
-                content.classList.remove('expanded');
-                content.classList.add('collapsed');
-                indicator.classList.add('collapsed');
-                addLogEntry(`[SYSTEM] Panel ${contentId.replace('-content', '').toUpperCase()} collapsed`);
-            } else {
-                content.classList.remove('collapsed');
-                content.classList.add('expanded');
-                indicator.classList.remove('collapsed');
-                addLogEntry(`[SYSTEM] Panel ${contentId.replace('-content', '').toUpperCase()} expanded`);
-            }
-        }
-
-        function collapseAll() {
-            const panels = ['timeline-content', 'timer-content', 'retailer-content', 'stock-content', 'social-content', 'comm-content', 'systems-content'];
-            
-            panels.forEach(panelId => {
-                const content = document.getElementById(panelId);
-                const indicatorId = panelId.replace('-content', '-indicator');
-                const indicator = document.getElementById(indicatorId);
-                
-                if (content && content.classList.contains('expanded')) {
-                    content.classList.remove('expanded');
-                    content.classList.add('collapsed');
-                    indicator.classList.add('collapsed');
-                }
-            });
-            
-            addLogEntry("[SYSTEM] All panels collapsed - minimal monitoring mode active");
-        }
-
-        function expandAll() {
-            const panels = ['timeline-content', 'timer-content', 'retailer-content', 'stock-content', 'social-content', 'comm-content', 'systems-content'];
-            
-            panels.forEach(panelId => {
-                const content = document.getElementById(panelId);
-                const indicatorId = panelId.replace('-content', '-indicator');
-                const indicator = document.getElementById(indicatorId);
-                
-                if (content && content.classList.contains('collapsed')) {
-                    content.classList.remove('collapsed');
-                    content.classList.add('expanded');
-                    indicator.classList.remove('collapsed');
-                }
-            });
-            
-            addLogEntry("[SYSTEM] All panels expanded - full operational view active");
-        }
-
-        function focusMode() {
-            const criticalPanels = ['timeline-content', 'timer-content', 'retailer-content', 'stock-content'];
-            const allPanels = ['timeline-content', 'timer-content', 'retailer-content', 'stock-content', 'social-content', 'comm-content', 'systems-content'];
-            
-            allPanels.forEach(panelId => {
-                const content = document.getElementById(panelId);
-                const indicatorId = panelId.replace('-content', '-indicator');
-                const indicator = document.getElementById(indicatorId);
-                
-                if (criticalPanels.includes(panelId)) {
-                    content.classList.remove('collapsed');
-                    content.classList.add('expanded');
-                    indicator.classList.remove('collapsed');
-                } else {
-                    content.classList.remove('expanded');
-                    content.classList.add('collapsed');
-                    indicator.classList.add('collapsed');
-                }
-            });
-            
-            addLogEntry("[SYSTEM] Focus mode: Timeline, Countdown, Intel, Stock Monitor - critical systems only");
-        }
-
-        // Timeline functions
-        function scrollToNext() {
-            const nextEventIndex = findNextEventIndex();
-            const timelineContainer = document.getElementById('timeline-container');
-            const events = timelineContainer.querySelectorAll('.timeline-event');
-            
-            if (events[nextEventIndex]) {
-                events[nextEventIndex].scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center'
-                });
-                addLogEntry(`[TL] Scrolled to next event: ${timelineEvents[nextEventIndex].store} ${timelineEvents[nextEventIndex].phase}`);
-            }
-        }
-
-        function toggleAutoScroll() {
-            autoScroll = !autoScroll;
-            const btn = event.target;
-            btn.textContent = autoScroll ? 'AUTO-SCROLL ON' : 'AUTO-SCROLL';
-            btn.classList.toggle('active', autoScroll);
-            addLogEntry(`[TL] Auto-scroll ${autoScroll ? 'activated' : 'deactivated'}`);
-        }
-
-        function refreshTimeline() {
-            generateTimeline();
-            addLogEntry("[TL] Timeline refreshed - all events updated with current status");
-        }
-
-        // Google Maps functions
-        function centerMap() {
-            if (userLocation && map) {
-                map.setCenter(userLocation);
-                map.setZoom(14);
-                addLogEntry("[NAV] Map centered on current position");
-            } else {
-                map.setCenter({ lat: 38.9784, lng: -76.4951 });
-                map.setZoom(12);
-                addLogEntry("[NAV] Map centered on Best Buy Annapolis (primary target)");
-            }
-        }
-
-        function enableRouting() {
-            isRoutingEnabled = !isRoutingEnabled;
-            const btn = document.querySelector('.map-btn.route');
-            btn.textContent = isRoutingEnabled ? 'ROUTING ON' : 'ROUTE';
-            btn.classList.toggle('active', isRoutingEnabled);
-            addLogEntry(`[NAV] Routing mode ${isRoutingEnabled ? 'activated' : 'deactivated'}`);
-        }
-
-        function toggleTraffic() {
-            isTrafficEnabled = !isTrafficEnabled;
-            const trafficLayer = new google.maps.TrafficLayer();
-            const btn = document.querySelector('.map-btn.traffic');
-            
-            if (isTrafficEnabled) {
-                trafficLayer.setMap(map);
-                btn.classList.add('active');
-                btn.textContent = 'TRAFFIC ON';
-                addLogEntry("[NAV] Traffic overlay activated - real-time congestion data");
-            } else {
-                trafficLayer.setMap(null);
-                btn.classList.remove('active');
-                btn.textContent = 'TRAFFIC';
-                addLogEntry("[NAV] Traffic overlay deactivated");
-            }
-        }
-
-        function toggleTracking() {
-            addLogEntry("[NAV] GPS tracking mode - requires mobile deployment for live location");
-        }
-
-        function showIntelligence() {
-            addLogEntry("[NAV] Intelligence overlay activated - showing strategic data");
-            
-            // Simulate showing additional intelligence on the map
-            setTimeout(() => {
-                addLogEntry("[NAV] Intelligence: Best Buy confirmed inventory, Target using ticket system, GameStop two-phase process");
-            }, 1000);
-        }
-
-        // Store interaction functions
-        function clickStore(storeType) {
-            const storeNames = {
-                'best-buy': 'Best Buy Annapolis',
-                'target': 'Target Annapolis',
-                'gamestop': 'GameStop Mall',
-                'staples': 'Staples Network'
-            };
-            
-            const addresses = {
-                'best-buy': '2643 Housley Rd, Annapolis, MD 21401',
-                'target': 'Annapolis Mall, Annapolis, MD',
-                'gamestop': '179 Annapolis Mall, Annapolis, MD 21401',
-                'staples': 'Multiple Staples locations'
-            };
-            
-            addLogEntry(`[NAV] Selected ${storeNames[storeType]} for navigation`);
-            
-            if (addresses[storeType] !== 'Multiple Staples locations') {
-                const mapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(addresses[storeType])}`;
-                window.open(mapsUrl, '_blank');
-                addLogEntry(`[NAV] Opening Google Maps directions to ${storeNames[storeType]}`);
-            }
-        }
-
-        function openGoogleMaps() {
-            const baseLocation = '2643 Housley Rd, Annapolis, MD 21401'; // Best Buy
-            const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(baseLocation)}`;
-            window.open(mapsUrl, '_blank');
-            addLogEntry("[NAV] Opening Google Maps for primary target location");
-        }
-
-        function calculateRoute() {
-            const from = 'Blackbird Salon, 801 Virginia Ave SE, Washington DC';
-            const to = 'Best Buy, 2643 Housley Rd, Annapolis, MD';
-            
-            const routeUrl = `https://www.google.com/maps/dir/${encodeURIComponent(from)}/${encodeURIComponent(to)}`;
-            window.open(routeUrl, '_blank');
-            
-            addLogEntry("[NAV] Full tactical route calculated: DC Haircut → Best Buy Annapolis");
-        }
-
-        function refreshIntel() {
-            addLogEntry("[📍] Refreshing Annapolis mission intelligence...");
-            
-            setTimeout(() => {
-                addLogEntry("[📍] Intel update: Best Buy midnight launch confirmed, Target ticket system active");
-                addLogEntry("[📍] Store status verified: All primary targets operational");
-                
-                // Update last update times
-                const lastUpdateElements = document.querySelectorAll('.stock-last-update');
-                lastUpdateElements.forEach(element => {
-                    element.textContent = 'Just now';
-                });
-            }, 2000);
-        }
-
-        // Navigation helper
-        function openMaps(location) {
-            const mapsUrl = `https://www.google.com/maps/search/${encodeURIComponent(location)}`;
-            window.open(mapsUrl, '_blank');
-            addLogEntry(`[NAV] Opening Google Maps for: ${location}`);
-        }
-
-        // Mission control functions
-        function initiateCountdown() {
-            isCountdownRunning = true;
-            document.getElementById('mission-status').textContent = 'ACTIVE';
-            addLogEntry("[🎯] Countdown initiated - mission status: ACTIVE");
         }
         
-        function pauseCountdown() {
-            isCountdownRunning = false;
-            document.getElementById('mission-status').textContent = 'HOLD';
-            addLogEntry("[🎯] Countdown HOLD initiated by Mission Control");
-        }
-
-        function resetCountdown() {
-            isCountdownRunning = false;
-            launchDate = new Date('2025-06-05T00:01:00-04:00');
-            document.getElementById('mission-status').textContent = 'STANDBY';
-            document.getElementById('alert-banner').style.display = 'none';
-            updateCountdown();
-            addLogEntry("[🎯] Countdown RESET - all systems standby");
-        }
-
-        // Stock monitoring functions
-        function forceStockCheck() {
-            addLogEntry("[📈] FORCE CHECK initiated - bypassing normal intervals");
-            addLogEntry("[📈] Scanning BestBuy.com, Target.com, GameStop.com, Staples.com...");
-            
-            const stockFeed = document.getElementById('stock-feed');
+        function updateCurrentTime() {
             const now = new Date();
-            const timeStamp = now.toTimeString().slice(0, 8);
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
             
-            setTimeout(() => {
-                const newFeedItem = document.createElement('div');
-                newFeedItem.className = 'feed-item';
-                newFeedItem.innerHTML = `
-                    <span class="feed-timestamp">${timeStamp}</span>
-                    <span class="feed-source">Force Check</span>
-                    All retailers scanned - Best Buy midnight launch inventory confirmed
-                `;
-                stockFeed.insertBefore(newFeedItem, stockFeed.firstChild);
-                
-                // Keep only last 10 items
-                while (stockFeed.children.length > 10) {
-                    stockFeed.removeChild(stockFeed.lastChild);
-                }
-                
-                addLogEntry("[📈] Force check complete - Best Buy inventory status: CONFIRMED");
-            }, 3000);
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds} MILITARY TIME`;
         }
-
-        function toggleAutoCheck() {
-            const status = document.getElementById('auto-refresh-status');
-            const isActive = status.textContent === 'ACTIVE';
-            
-            status.textContent = isActive ? 'PAUSED' : 'ACTIVE';
-            status.className = isActive ? 'status-warning' : 'status-online';
-            
-            addLogEntry(`[📈] Auto-monitoring ${isActive ? 'paused' : 'activated'} - web scrapers ${isActive ? 'standing by' : 'active'}`);
+        
+        function openMaps() {
+            window.open('https://www.google.com/maps/search/Best+Buy+Annapolis+MD', '_blank');
         }
-
-        function configureAlerts() {
-            addLogEntry("[📈] Alert configuration accessed - push notifications and popup settings");
-            addLogEntry("[📈] Current alerts: Stock available, price drops, new announcements");
-        }
-
-        // Social media functions
-        function openSocial(account) {
-            let url = '';
-            let trackingName = account;
-            
-            if (account.startsWith('@')) {
-                url = `https://twitter.com/${account.substring(1)}`;
-                trackingName = account;
-            } else if (account === 'restocktracker') {
-                url = 'https://restocktracker.io/nintendo-switch-2';
-                trackingName = 'RestockTracker.io';
-            }
-            
-            if (url) {
-                window.open(url, '_blank');
-                addLogEntry(`[📱] Opening ${trackingName} for real-time monitoring`);
-            }
-        }
-
+        
         function refreshSocial() {
-            addLogEntry("[📱] Refreshing all social media feeds - scanning for Switch 2 mentions");
-            
-            const socialFeed = document.getElementById('social-feed');
-            const now = new Date();
-            const timeStamp = now.toTimeString().slice(0, 8);
-            
-            // Simulate new social media posts
-            const mockPosts = [
-                { source: '@mattswider', text: 'Best Buy midnight launches looking strong! Get there early! 🚨' },
-                { source: '@BestBuy', text: 'Store teams are ready for tomorrow\'s Nintendo Switch 2 launch!' },
-                { source: 'RestockTracker', text: 'Major retailers reporting high demand, limited supply confirmed' },
-                { source: '@NintendoAmerica', text: 'Thank you for your patience with the Nintendo Switch 2 launch process' }
-            ];
-            
-            setTimeout(() => {
-                const randomPost = mockPosts[Math.floor(Math.random() * mockPosts.length)];
-                const newFeedItem = document.createElement('div');
-                newFeedItem.className = Math.random() < 0.3 ? 'feed-item feed-alert' : 'feed-item';
-                newFeedItem.innerHTML = `
-                    <span class="feed-timestamp">${timeStamp}</span>
-                    <span class="feed-source">${randomPost.source}</span>
-                    ${randomPost.text}
-                `;
-                socialFeed.insertBefore(newFeedItem, socialFeed.firstChild);
-                
-                // Keep only last 8 items
-                while (socialFeed.children.length > 8) {
-                    socialFeed.removeChild(socialFeed.lastChild);
-                }
-                
-                addLogEntry(`[📱] New social intel: ${randomPost.source} update received`);
-            }, 2000);
+            alert('Social media feeds refreshed - monitoring for Switch 2 updates!');
         }
-
-        function alertSettings() {
-            addLogEntry("[📱] Social alert settings configured - keywords: 'Switch 2', 'restock', 'available', 'Annapolis'");
-        }
-
-        function exportSocial() {
-            addLogEntry("[📱] Social media intelligence exported for analysis");
-            
-            const socialData = {
-                timestamp: new Date().toISOString(),
-                accounts_monitored: ['@NintendoAmerica', '@mattswider', '@BestBuy', '@Target', '@GameStop', 'RestockTracker.io'],
-                keywords: ['Switch 2', 'restock', 'available', 'drop', 'midnight launch', 'Best Buy Annapolis'],
-                status: 'monitoring_active'
-            };
-            
-            const blob = new Blob([JSON.stringify(socialData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'switch2-social-intel.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        }
-
-        // System functions
-        function runDiagnostics() {
-            addLogEntry("[⚡] Running GARDEN framework diagnostics...");
-            addLogEntry("[⚡] Checking Explorer integration, Sunflower analysis, calendar optimization...");
-            
-            setTimeout(() => {
-                addLogEntry("[⚡] Diagnostics complete: All systems nominal");
-                addLogEntry("[⚡] Success probability: 97% (GARDEN-enhanced prediction)");
-                addLogEntry("[⚡] Calendar integration: OPTIMAL (DC haircut strategic advantage)");
-                addLogEntry("[⚡] Multi-location strategy: ACTIVE (4 targets identified)");
-            }, 3000);
-        }
-
-        function optimizeStrategy() {
-            addLogEntry("[⚡] Optimizing strategy using GARDEN intelligence...");
-            
-            setTimeout(() => {
-                addLogEntry("[⚡] RECOMMENDATION: Execute calendar-integrated multi-location protocol");
-                addLogEntry("[⚡] OPTIMAL PATH: DC (11:00) → Annapolis (13:00) → Best Buy Queue (23:30) → EXECUTE (00:01)");
-                addLogEntry("[⚡] BACKUP PROTOCOL: Target (07:30), GameStop (15:00) if primary fails");
-            }, 2500);
-        }
-
-        function systemStatus() {
-            addLogEntry("[⚡] System status check initiated...");
-            
-            setTimeout(() => {
-                addLogEntry("[⚡] GARDEN Core: ONLINE • Calendar Sync: OPTIMIZED • Multi-Location: ACTIVE");
-                addLogEntry("[⚡] Web Scrapers: ACTIVE • Social Monitoring: LIVE • Maps Integration: OPERATIONAL");
-                addLogEntry("[⚡] Mission readiness: 97% • All systems go for June 5 execution");
-            }, 2000);
-        }
-
-        // Communication functions
-        function addLogEntry(message, type = "") {
-            const log = document.getElementById('mission-log');
-            const now = new Date();
-            const timeStamp = now.toTimeString().slice(0, 8);
-            
-            const entry = document.createElement('div');
-            entry.className = `log-entry ${type}`;
-            entry.innerHTML = `<span class="log-time">[${timeStamp}]</span> ${message}`;
-            
-            log.appendChild(entry);
-            log.scrollTop = log.scrollHeight;
-            
-            // Keep only last 25 entries
-            while (log.children.length > 25) {
-                log.removeChild(log.firstChild);
-            }
-        }
-
-        function sendComm() {
-            const input = document.getElementById('comm-input');
-            const message = input.value.trim();
-            
-            if (message) {
-                addLogEntry(`[COMM] ${message}`);
-                input.value = '';
-            }
-        }
-
-        function handleCommInput(event) {
-            if (event.key === 'Enter') {
-                sendComm();
-            }
-        }
-
-        function clearLog() {
-            document.getElementById('mission-log').innerHTML = '';
-            addLogEntry("[COMM] Mission log cleared by operator request");
-        }
-
-        function exportLog() {
-            const log = document.getElementById('mission-log');
-            const logText = Array.from(log.children).map(entry => entry.textContent).join('\n');
-            
-            const blob = new Blob([logText], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'switch2-mission-log.txt';
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            addLogEntry("[COMM] Mission log exported for analysis");
-        }
-
-        // Auto-refresh functions
-        function simulateStockUpdates() {
-            const stockFeed = document.getElementById('stock-feed');
-            const now = new Date();
-            const timeStamp = now.toTimeString().slice(0, 8);
-            
-            const stockUpdates = [
-                { source: 'BestBuy.com', text: 'Switch 2 pre-orders remain closed, midnight launch confirmed' },
-                { source: 'Target.com', text: 'No online availability, redirecting to in-store launch events' },
-                { source: 'GameStop.com', text: 'Mall locations running special events, two-phase pickup system' },
-                { source: 'RestockTracker', text: 'Monitoring 349 Staples locations for surprise inventory' }
-            ];
-            
-            if (Math.random() < 0.15) { // 15% chance of update
-                const randomUpdate = stockUpdates[Math.floor(Math.random() * stockUpdates.length)];
-                const newFeedItem = document.createElement('div');
-                newFeedItem.className = 'feed-item';
-                newFeedItem.innerHTML = `
-                    <span class="feed-timestamp">${timeStamp}</span>
-                    <span class="feed-source">${randomUpdate.source}</span>
-                    ${randomUpdate.text}
-                `;
-                stockFeed.insertBefore(newFeedItem, stockFeed.firstChild);
-                
-                // Keep only last 8 items
-                while (stockFeed.children.length > 8) {
-                    stockFeed.removeChild(stockFeed.lastChild);
-                }
-                
-                // Update last scan time
-                document.getElementById('last-scan-time').textContent = 'Just now';
-            }
-        }
-
-        // Initialize systems
-        document.addEventListener('DOMContentLoaded', function() {
-            addLogEntry("[SYSTEM] NASA Mission Control systems initialized");
-            addLogEntry("[⚡] GARDEN framework integration complete - 97% success probability");
-            addLogEntry("[⏰] Tactical timeline generated with military time precision");
-            addLogEntry("[📍] Annapolis mission intel loaded - 4 target locations identified");
-            addLogEntry("[📈] Stock monitoring web scrapers deployed and active");
-            addLogEntry("[📱] Social media monitoring active - 6 key accounts tracked");
-            addLogEntry("[SYSTEM] Mission Control ready for Switch 2 acquisition operation");
-            
-            // Start all timers and intervals
-            setInterval(updateCountdown, 1000);
-            setInterval(updateMilitaryTime, 1000);
-            setInterval(generateTimeline, 60000); // Update timeline every minute
-            setInterval(simulateStockUpdates, 30000); // Stock updates every 30 seconds
-            
-            // Initial calls
-            updateCountdown();
-            updateMilitaryTime();
-            generateTimeline();
-            
-            // Auto-refresh social every 2 minutes (simulated)
-            setInterval(() => {
-                if (Math.random() < 0.25) {
-                    refreshSocial();
-                }
-            }, 120000);
-        });
-
-        // PWA functionality for mobile
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(function() {
-                // Service worker registration failed - continue without PWA
-            });
-        }
+        
+        // Start timers
+        setInterval(updateCountdown, 1000);
+        setInterval(updateCurrentTime, 1000);
+        updateCountdown();
+        updateCurrentTime();
     </script>
-    
-    <!-- Google Maps API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhyuJmrGlrZvz3t5z1dKjOzHwt_OwrIaU&callback=initMap"></script>
 </body>
 </html>
