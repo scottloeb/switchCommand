@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navigation Console</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #00ff41;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .navigation-console {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border: 3px solid #e74c3c;
+            border-radius: 20px;
+            margin: 0;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 20px;
+        }
+        
+        .nav-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .nav-title {
+            font-size: 28px;
+            font-weight: 900;
+            color: #ecf0f1;
+            letter-spacing: 3px;
+        }
+        
+        .status-indicators {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .status-light {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #27ae60;
+            box-shadow: 0 0 10px #27ae60;
+        }
+        
+        .status-light.warning {
+            background: #f39c12;
+            box-shadow: 0 0 10px #f39c12;
+        }
+        
+        .coordinates {
+            font-size: 24px;
+            color: #27ae60;
+            text-align: center;
+            margin: 20px 0;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 400px;
+            background: #1a252f;
+            border: 2px solid #34495e;
+            border-radius: 10px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            border-radius: 8px;
+        }
+        
+        .location-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        
+        .location-dot {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+            pointer-events: all;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .location-dot:hover {
+            transform: scale(1.5);
+            box-shadow: 0 0 15px rgba(255,255,255,0.8);
+        }
+        
+        .location-dot.best-buy { background: #27ae60; }
+        .location-dot.target { background: #e74c3c; }
+        .location-dot.walmart { background: #f39c12; }
+        .location-dot.home { background: #3498db; }
+        .location-dot.current { 
+            background: #fff;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 10px #fff; }
+            50% { box-shadow: 0 0 20px #fff, 0 0 30px #fff; }
+            100% { box-shadow: 0 0 10px #fff; }
+        }
+        
+        .mission-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .info-panel {
+            background: rgba(52, 73, 94, 0.3);
+            border: 1px solid #34495e;
+            border-radius: 10px;
+            padding: 15px;
+        }
+        
+        .info-label {
+            font-size: 14px;
+            color: #bdc3c7;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 18px;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .control-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .nav-button {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Orbitron', monospace;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+        }
+        
+        .nav-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+        }
+        
+        .nav-button:active {
+            transform: translateY(0);
+        }
+        
+        /* Add loading state for map */
+        .map-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navigation-console">
+        <div class="nav-header">
+            <div class="nav-badge">NAV</div>
+            <div class="nav-title">NAVIGATION</div>
+            <div class="status-indicators">
+                <div class="status-light warning"></div>
+                <div class="status-light"></div>
+            </div>
+        </div>
+        
+        <div class="coordinates">
+            38.9784° N, 76.4951° W
+        </div>
+        
+        <div class="map-container">
+            <div id="map">
+                <div class="map-loading">
+                    INITIALIZING TACTICAL DISPLAY...
+                </div>
+            </div>
+            <div class="location-overlay" id="locationOverlay">
+                <!-- Location dots will be positioned here -->
+            </div>
+        </div>
+        
+        <div class="mission-info">
+            <div class="info-panel">
+                <div class="info-label">Primary Target:</div>
+                <div class="info-value">Best Buy Annapolis</div>
+            </div>
+            <div class="info-panel">
+                <div class="info-label">Launch Strategy:</div>
+                <div class="info-value">MIDNIGHT ASSAULT</div>
+            </div>
+        </div>
+        
+        <div class="control-buttons">
+            <button class="nav-button" onclick="openMaps()">MAPS</button>
+            <button class="nav-button" onclick="plotRoute()">ROUTE</button>
+        </div>
+    </div>
+
+    <script>
+        // Store locations with their coordinates and info
+        const locations = {
+            bestBuy: {
+                name: 'Best Buy Annapolis',
+                coords: { lat: 38.9784, lng: -76.4951 },
+                address: '2021 Annapolis Mall, Annapolis, MD 21401',
+                type: 'best-buy',
+                status: 'Open until 10 PM',
+                distance: '0.8 miles'
+            },
+            target: {
+                name: 'Target Annapolis',
+                coords: { lat: 38.9820, lng: -76.5020 },
+                address: '1905 Towne Centre Blvd, Annapolis, MD 21401',
+                type: 'target',
+                status: 'Open until 11 PM',
+                distance: '1.2 miles'
+            },
+            walmart: {
+                name: 'Walmart Supercenter',
+                coords: { lat: 38.9750, lng: -76.4800 },
+                address: '1131 Annapolis Mall Rd, Annapolis, MD 21401',
+                type: 'walmart',
+                status: 'Open 24 hours',
+                distance: '1.5 miles'
+            },
+            home: {
+                name: 'Home Base',
+                coords: { lat: 38.9800, lng: -76.4900 },
+                address: 'Classified Location',
+                type: 'home',
+                status: 'Secure',
+                distance: '0 miles'
+            }
+        };
+
+        let map;
+        let markers = {};
+
+        // Initialize Google Map with NASA/space theme
+        function initMap() {
+            const center = { lat: 38.9784, lng: -76.4951 };
+            
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 14,
+                center: center,
+                mapTypeId: google.maps.MapTypeId.SATELLITE,
+                styles: [
+                    {
+                        "featureType": "all",
+                        "elementType": "labels",
+                        "stylers": [{"visibility": "off"}]
+                    },
+                    {
+                        "featureType": "road",
+                        "elementType": "geometry",
+                        "stylers": [
+                            {"color": "#2c3e50"},
+                            {"weight": 1}
+                        ]
+                    },
+                    {
+                        "featureType": "water",
+                        "elementType": "geometry",
+                        "stylers": [{"color": "#1a252f"}]
+                    }
+                ],
+                disableDefaultUI: true,
+                gestureHandling: 'greedy'
+            });
+
+            // Add location markers
+            Object.keys(locations).forEach(key => {
+                const location = locations[key];
+                
+                const marker = new google.maps.Marker({
+                    position: location.coords,
+                    map: map,
+                    title: location.name,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillColor: getLocationColor(location.type),
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 2,
+                        scale: 8
+                    }
+                });
+
+                markers[key] = marker;
+
+                // Add click listener for location info
+                marker.addListener('click', () => {
+                    showLocationInfo(location);
+                });
+            });
+        }
+
+        function getLocationColor(type) {
+            const colors = {
+                'best-buy': '#27ae60',
+                'target': '#e74c3c',
+                'walmart': '#f39c12',
+                'home': '#3498db',
+                'current': '#ffffff'
+            };
+            return colors[type] || '#7f8c8d';
+        }
+
+        function showLocationInfo(location) {
+            alert(`${location.name}\n${location.address}\nStatus: ${location.status}\nDistance: ${location.distance}`);
+        }
+
+        function openMaps() {
+            const bestBuy = locations.bestBuy;
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${bestBuy.coords.lat},${bestBuy.coords.lng}&travelmode=driving`;
+            window.open(url, '_blank');
+        }
+
+        function plotRoute() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const current = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    
+                    const directionsService = new google.maps.DirectionsService();
+                    const directionsRenderer = new google.maps.DirectionsRenderer({
+                        polylineOptions: {
+                            strokeColor: '#e74c3c',
+                            strokeWeight: 3
+                        }
+                    });
+                    
+                    directionsRenderer.setMap(map);
+                    
+                    directionsService.route({
+                        origin: current,
+                        destination: locations.bestBuy.coords,
+                        travelMode: google.maps.TravelMode.DRIVING
+                    }, (result, status) => {
+                        if (status === 'OK') {
+                            directionsRenderer.setDirections(result);
+                        }
+                    });
+                });
+            }
+        }
+
+        // Update coordinates display
+        function updateCoordinates() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((position) => {
+                    const lat = position.coords.latitude.toFixed(4);
+                    const lng = position.coords.longitude.toFixed(4);
+                    document.querySelector('.coordinates').textContent = `${lat}° N, ${lng}° W`;
+                });
+            }
+        }
+
+        // Initialize when page loads
+        window.onload = function() {
+            updateCoordinates();
+            // Note: You'll need to add your Google Maps API key
+            if (typeof google !== 'undefined') {
+                initMap();
+            }
+        };
+    </script>
+    
+    <!-- Add Google Maps API - You'll need to add your API key -->
+    <script async defer 
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTdJQ1Pk-PdixNjh82D3k7_Xqmfhhj1I0&callback=initMap">
+</script>
+</body>
+</html>
