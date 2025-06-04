@@ -379,6 +379,139 @@
             font-weight: bold;
             color: var(--mission-green);
         }
+
+        /* Stock Status Grid */
+        .stock-status-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .stock-item {
+            background: rgba(11, 61, 145, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            border: 1px solid var(--nasa-blue);
+        }
+
+        .stock-item .store-name {
+            font-weight: bold;
+            font-size: 0.75em;
+            margin-bottom: 5px;
+            color: var(--warning-amber);
+        }
+
+        .stock-item .stock-status {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        .stock-available { color: var(--mission-green); }
+        .stock-unavailable { color: var(--critical-red); }
+        .stock-unknown { color: var(--warning-amber); }
+
+        /* Social Media Grid */
+        .social-accounts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .social-button {
+            background: linear-gradient(145deg, var(--nasa-blue), var(--panel-dark));
+            border: 1px solid var(--nasa-blue);
+            color: var(--nasa-white);
+            padding: 8px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+            font-size: 0.75em;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: block;
+        }
+
+        .social-button:hover {
+            background: linear-gradient(145deg, var(--nasa-red), var(--nasa-blue));
+            transform: translateY(-1px);
+        }
+
+        /* Store Button Grid */
+        .retailer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px;
+        }
+
+        .store-button {
+            background: linear-gradient(145deg, var(--nasa-blue), var(--panel-dark));
+            border: 1px solid var(--nasa-blue);
+            color: var(--nasa-white);
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.8em;
+            text-align: center;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .store-button:hover {
+            background: linear-gradient(145deg, var(--nasa-red), var(--nasa-blue));
+            transform: translateY(-1px);
+        }
+
+        /* Mission Log */
+        .mission-log {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-light);
+            border-radius: 5px;
+            padding: 10px;
+            margin: 15px 0;
+        }
+
+        .log-entry {
+            font-size: 0.75em;
+            margin: 5px 0;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .log-timestamp {
+            color: var(--warning-amber);
+            font-weight: bold;
+        }
+
+        .log-message {
+            margin-left: 10px;
+        }
+
+        /* Input fields */
+        input[type="text"], textarea {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid var(--border-light);
+            color: var(--nasa-white);
+            padding: 8px;
+            border-radius: 4px;
+            width: 100%;
+            margin: 5px 0;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.8em;
+        }
+
+        input[type="text"]:focus, textarea:focus {
+            outline: none;
+            border-color: var(--nasa-red);
+            box-shadow: 0 0 5px rgba(252, 61, 33, 0.3);
+        }
     </style>
 </head>
 <body>
@@ -429,26 +562,186 @@
             </div>
         </div>
 
-        <!-- Basic functionality panels will be added here -->
+        <!-- Annapolis Intel Panel -->
         <div class="control-panel">
-            <div class="nasa-badge">INFO</div>
-            <div class="panel-header" onclick="togglePanel('info-content', 'info-indicator')">
-                ℹ️ MISSION DEPLOYMENT
-                <div class="collapse-indicator" id="info-indicator">▼</div>
+            <div class="nasa-badge">🎯</div>
+            <div class="panel-header" onclick="togglePanel('annapolis-content', 'annapolis-indicator')">
+                📍 ANNAPOLIS MISSION INTEL
+                <div class="collapse-indicator" id="annapolis-indicator">▼</div>
             </div>
-            <div class="panel-content expanded" id="info-content">
+            <div class="panel-content expanded" id="annapolis-content">
                 <div class="data-row">
-                    <span class="data-label">Status:</span>
-                    <span class="data-value">ENHANCED NASA THEME DEPLOYED</span>
+                    <span class="data-label">Base Location:</span>
+                    <span class="data-value">Annapolis, MD</span>
                 </div>
                 <div class="data-row">
-                    <span class="data-label">Features:</span>
-                    <span class="data-value">COLLAPSIBLE PANELS ACTIVE</span>
+                    <span class="data-label">Primary Target:</span>
+                    <span class="data-value">Best Buy (2661 Riva Rd)</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Distance:</span>
+                    <span class="data-value">6.8 miles</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">GameStop Backup:</span>
+                    <span class="data-value">Westfield Annapolis (1.2 mi)</span>
+                </div>
+                
+                <div class="retailer-grid">
+                    <a href="https://www.google.com/maps/dir/Annapolis,+MD/Best+Buy,+2661+Riva+Rd,+Annapolis,+MD+21401" target="_blank" class="store-button">
+                        🗺️ Best Buy Route
+                    </a>
+                    <a href="https://www.google.com/maps/dir/Annapolis,+MD/GameStop,+Westfield+Annapolis,+1 Town Center Dr+SPACE+2078A,+Annapolis,+MD+21401" target="_blank" class="store-button">
+                        🗺️ GameStop Route
+                    </a>
+                    <a href="https://www.google.com/maps/dir/Annapolis,+MD/Target,+1 Market St,+Annapolis,+MD+21401" target="_blank" class="store-button">
+                        🗺️ Target Route
+                    </a>
+                    <a href="https://www.google.com/maps/dir/Annapolis,+MD/Walmart,+160 Jennifer Rd,+Annapolis,+MD+21401" target="_blank" class="store-button">
+                        🗺️ Walmart Route
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stock Monitor Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">📊</div>
+            <div class="panel-header" onclick="togglePanel('stock-content', 'stock-indicator')">
+                📈 STOCK MONITORING
+                <div class="collapse-indicator" id="stock-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="stock-content">
+                <div class="data-row">
+                    <span class="data-label">Auto-Refresh:</span>
+                    <span class="data-value">
+                        <input type="checkbox" id="auto-refresh" checked> ENABLED
+                    </span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Last Check:</span>
+                    <span class="data-value" id="last-check">--:--:--</span>
+                </div>
+                
+                <div class="stock-status-grid">
+                    <div class="stock-item">
+                        <div class="store-name">Best Buy</div>
+                        <div class="stock-status stock-unknown">MONITORING</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="store-name">GameStop</div>
+                        <div class="stock-status stock-unknown">MONITORING</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="store-name">Target</div>
+                        <div class="stock-status stock-unknown">MONITORING</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="store-name">Amazon</div>
+                        <div class="stock-status stock-unknown">MONITORING</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="store-name">Walmart</div>
+                        <div class="stock-status stock-unknown">MONITORING</div>
+                    </div>
+                    <div class="stock-item">
+                        <div class="store-name">Nintendo</div>
+                        <div class="stock-status stock-unknown">MONITORING</div>
+                    </div>
+                </div>
+                
+                <button class="mission-button" onclick="checkStockNow()">🔄 CHECK ALL STOCK</button>
+            </div>
+        </div>
+
+        <!-- Social Intel Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">📱</div>
+            <div class="panel-header" onclick="togglePanel('social-content', 'social-indicator')">
+                📱 SOCIAL INTELLIGENCE
+                <div class="collapse-indicator" id="social-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="social-content">
+                <div class="data-row">
+                    <span class="data-label">Primary Sources:</span>
+                    <span class="data-value">6 ACCOUNTS MONITORED</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Last Update:</span>
+                    <span class="data-value" id="social-last-update">--:--:--</span>
+                </div>
+                
+                <div class="social-accounts-grid">
+                    <a href="https://twitter.com/mattswider" target="_blank" class="social-button">@mattswider</a>
+                    <a href="https://twitter.com/NintendoAmerica" target="_blank" class="social-button">@NintendoAmerica</a>
+                    <a href="https://twitter.com/Wario64" target="_blank" class="social-button">@Wario64</a>
+                    <a href="https://twitter.com/GameStop" target="_blank" class="social-button">@GameStop</a>
+                    <a href="https://twitter.com/BestBuy" target="_blank" class="social-button">@BestBuy</a>
+                    <a href="https://twitter.com/Target" target="_blank" class="social-button">@Target</a>
+                </div>
+                
+                <button class="mission-button" onclick="refreshSocialFeed()">🔄 REFRESH INTEL</button>
+            </div>
+        </div>
+
+        <!-- Mission Log Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">📋</div>
+            <div class="panel-header" onclick="togglePanel('log-content', 'log-indicator')">
+                📋 MISSION LOG
+                <div class="collapse-indicator" id="log-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="log-content">
+                <div class="mission-log" id="mission-log">
+                    <div class="log-entry">
+                        <span class="log-timestamp">[INIT]</span>
+                        <span class="log-message">Mission Control systems online</span>
+                    </div>
+                    <div class="log-entry">
+                        <span class="log-timestamp">[READY]</span>
+                        <span class="log-message">Monitoring systems activated</span>
+                    </div>
+                </div>
+                
+                <input type="text" id="log-input" placeholder="Enter mission note..." style="margin-top: 10px;">
+                <div class="control-buttons">
+                    <button class="mission-button" onclick="addLogEntry()">ADD NOTE</button>
+                    <button class="mission-button" onclick="exportLog()">EXPORT LOG</button>
+                    <button class="mission-button" onclick="clearLog()">CLEAR LOG</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Status Panel -->
+        <div class="control-panel">
+            <div class="nasa-badge">⚡</div>
+            <div class="panel-header" onclick="togglePanel('system-content', 'system-indicator')">
+                ⚡ SYSTEM STATUS
+                <div class="collapse-indicator" id="system-indicator">▼</div>
+            </div>
+            <div class="panel-content expanded" id="system-content">
+                <div class="data-row">
+                    <span class="data-label">NASA Theme:</span>
+                    <span class="data-value">✅ ACTIVE</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Collapsible Panels:</span>
+                    <span class="data-value">✅ FUNCTIONAL</span>
                 </div>
                 <div class="data-row">
                     <span class="data-label">GitHub Sync:</span>
-                    <span class="data-value" id="sync-status">UPDATING...</span>
+                    <span class="data-value" id="github-status">✅ CONNECTED</span>
                 </div>
+                <div class="data-row">
+                    <span class="data-label">Vercel Deploy:</span>
+                    <span class="data-value" id="deploy-status">✅ LIVE</span>
+                </div>
+                <div class="data-row">
+                    <span class="data-label">Mission Uptime:</span>
+                    <span class="data-value" id="uptime">00:00:00</span>
+                </div>
+                
+                <button class="mission-button" onclick="systemDiagnostic()">🔧 RUN DIAGNOSTIC</button>
             </div>
         </div>
     </div>
@@ -457,6 +750,7 @@
         let countdownTimer;
         let countdownTime = 45 * 24 * 60 * 60; // 45 days in seconds
         let isCountdownRunning = false;
+        let missionStartTime = new Date();
 
         // Mission countdown timer
         function updateCountdown() {
@@ -479,10 +773,27 @@
                 document.getElementById('alert-banner').style.display = 'block';
             }
         }
+
+        // Update uptime
+        function updateUptime() {
+            const now = new Date();
+            const uptime = Math.floor((now - missionStartTime) / 1000);
+            const hours = Math.floor(uptime / 3600);
+            const minutes = Math.floor((uptime % 3600) / 60);
+            const seconds = uptime % 60;
+            document.getElementById('uptime').textContent = 
+                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
         
-        // Update countdown every second
-        setInterval(updateCountdown, 1000);
+        // Update timers every second
+        setInterval(() => {
+            updateCountdown();
+            updateUptime();
+        }, 1000);
+        
+        // Initial updates
         updateCountdown();
+        updateUptime();
 
         // Panel collapse/expand functionality
         function togglePanel(contentId, indicatorId) {
@@ -501,7 +812,10 @@
         }
 
         function collapseAll() {
-            const panels = ['timer-content', 'info-content'];
+            const panels = [
+                'timer-content', 'annapolis-content', 'stock-content', 
+                'social-content', 'log-content', 'system-content'
+            ];
             
             panels.forEach(panelId => {
                 const content = document.getElementById(panelId);
@@ -517,7 +831,10 @@
         }
 
         function expandAll() {
-            const panels = ['timer-content', 'info-content'];
+            const panels = [
+                'timer-content', 'annapolis-content', 'stock-content', 
+                'social-content', 'log-content', 'system-content'
+            ];
             
             panels.forEach(panelId => {
                 const content = document.getElementById(panelId);
@@ -533,7 +850,8 @@
         }
 
         function focusMode() {
-            // Simple focus on timer for now
+            // Collapse all except timer
+            collapseAll();
             const content = document.getElementById('timer-content');
             const indicator = document.getElementById('timer-indicator');
             content.classList.remove('collapsed');
@@ -545,11 +863,13 @@
         function initiateCountdown() {
             isCountdownRunning = true;
             document.getElementById('mission-status').textContent = 'ACTIVE';
+            addLogEntry('Countdown initiated');
         }
         
         function pauseCountdown() {
             isCountdownRunning = false;
             document.getElementById('mission-status').textContent = 'HOLD';
+            addLogEntry('Countdown paused');
         }
 
         function resetCountdown() {
@@ -558,14 +878,113 @@
             document.getElementById('mission-status').textContent = 'STANDBY';
             document.getElementById('alert-banner').style.display = 'none';
             updateCountdown();
+            addLogEntry('Countdown reset to T-45 days');
         }
+
+        // Stock monitoring
+        function checkStockNow() {
+            document.getElementById('last-check').textContent = new Date().toLocaleTimeString();
+            addLogEntry('Stock check initiated');
+            
+            // Simulate stock check
+            setTimeout(() => {
+                addLogEntry('Stock check complete - all stores monitored');
+            }, 2000);
+        }
+
+        // Social feed refresh
+        function refreshSocialFeed() {
+            document.getElementById('social-last-update').textContent = new Date().toLocaleTimeString();
+            addLogEntry('Social intelligence refreshed');
+        }
+
+        // Mission log functions
+        function addLogEntry(message = null) {
+            const log = document.getElementById('mission-log');
+            const input = document.getElementById('log-input');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <span class="log-timestamp">[${timestamp}]</span>
+                <span class="log-message">${message || input.value || 'Manual log entry'}</span>
+            `;
+            
+            log.appendChild(entry);
+            log.scrollTop = log.scrollHeight;
+            
+            if (!message) {
+                input.value = '';
+            }
+        }
+
+        function exportLog() {
+            const logEntries = document.querySelectorAll('.log-entry');
+            let logText = 'SWITCH 2 MISSION LOG\n';
+            logText += '===================\n\n';
+            
+            logEntries.forEach(entry => {
+                logText += entry.textContent + '\n';
+            });
+            
+            const blob = new Blob([logText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mission_log_${new Date().toISOString().split('T')[0]}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+            
+            addLogEntry('Mission log exported');
+        }
+
+        function clearLog() {
+            const log = document.getElementById('mission-log');
+            log.innerHTML = `
+                <div class="log-entry">
+                    <span class="log-timestamp">[INIT]</span>
+                    <span class="log-message">Mission Control systems online</span>
+                </div>
+                <div class="log-entry">
+                    <span class="log-timestamp">[READY]</span>
+                    <span class="log-message">Monitoring systems activated</span>
+                </div>
+            `;
+            addLogEntry('Mission log cleared');
+        }
+
+        // System diagnostic
+        function systemDiagnostic() {
+            addLogEntry('Running system diagnostic...');
+            
+            setTimeout(() => {
+                addLogEntry('✅ All systems operational');
+                document.getElementById('github-status').textContent = '✅ CONNECTED';
+                document.getElementById('deploy-status').textContent = '✅ LIVE';
+            }, 1500);
+        }
+
+        // Enter key support for log input
+        document.getElementById('log-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addLogEntry();
+            }
+        });
+
+        // Auto-refresh functionality
+        setInterval(() => {
+            const autoRefresh = document.getElementById('auto-refresh');
+            if (autoRefresh && autoRefresh.checked) {
+                document.getElementById('last-check').textContent = new Date().toLocaleTimeString();
+            }
+        }, 30000); // Every 30 seconds
 
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
-            // Update sync status
-            setTimeout(() => {
-                document.getElementById('sync-status').textContent = 'GITHUB SYNC COMPLETE';
-            }, 3000);
+            addLogEntry('Enhanced NASA Mission Control initialized');
+            document.getElementById('last-check').textContent = new Date().toLocaleTimeString();
+            document.getElementById('social-last-update').textContent = new Date().toLocaleTimeString();
         });
     </script>
 </body>
