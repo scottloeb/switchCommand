@@ -171,8 +171,8 @@
         
         .control-buttons {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 15px;
             margin-top: 20px;
         }
         
@@ -200,6 +200,14 @@
             transform: translateY(0);
         }
         
+        .nav-button.legend {
+            background: #f39c12;
+        }
+        
+        .nav-button.legend:hover {
+            background: #e67e22;
+        }
+        
         /* Add loading state for map */
         .map-loading {
             display: flex;
@@ -209,6 +217,152 @@
             color: #7f8c8d;
             font-size: 14px;
         }
+        
+        /* Legend Popup Styles */
+        .legend-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+        
+        .legend-panel {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            border: 3px solid #e74c3c;
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            animation: legendSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes legendSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+        
+        .legend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #34495e;
+        }
+        
+        .legend-title {
+            font-size: 24px;
+            font-weight: 900;
+            color: #ecf0f1;
+            letter-spacing: 2px;
+        }
+        
+        .legend-close {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .legend-close:hover {
+            background: #c0392b;
+            transform: rotate(90deg);
+        }
+        
+        .legend-content {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: rgba(52, 73, 94, 0.3);
+            border-radius: 8px;
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .legend-item:hover {
+            background: rgba(52, 73, 94, 0.5);
+            transform: translateX(5px);
+        }
+        
+        .legend-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            margin-right: 15px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.3);
+        }
+        
+        .legend-dot.best-buy { 
+            background: #27ae60; 
+            border-left-color: #27ae60;
+        }
+        .legend-dot.target { 
+            background: #e74c3c; 
+            border-left-color: #e74c3c;
+        }
+        .legend-dot.walmart { 
+            background: #f39c12; 
+            border-left-color: #f39c12;
+        }
+        .legend-dot.home { 
+            background: #3498db; 
+            border-left-color: #3498db;
+        }
+        .legend-dot.current { 
+            background: #fff; 
+            border-left-color: #fff;
+            animation: pulse 2s infinite;
+        }
+        
+        .legend-info {
+            flex: 1;
+        }
+        
+        .legend-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #ecf0f1;
+            margin-bottom: 4px;
+        }
+        
+        .legend-description {
+            font-size: 12px;
+            color: #bdc3c7;
+            line-height: 1.4;
+        }
+        
+        .legend-item.best-buy { border-left-color: #27ae60; }
+        .legend-item.target { border-left-color: #e74c3c; }
+        .legend-item.walmart { border-left-color: #f39c12; }
+        .legend-item.home { border-left-color: #3498db; }
+        .legend-item.current { border-left-color: #fff; }
     </style>
 </head>
 <body>
@@ -251,6 +405,54 @@
         <div class="control-buttons">
             <button class="nav-button" onclick="openMaps()">MAPS</button>
             <button class="nav-button" onclick="plotRoute()">ROUTE</button>
+            <button class="nav-button legend" onclick="showLegend()">LEGEND</button>
+        </div>
+    </div>
+
+    <!-- Legend Popup -->
+    <div class="legend-overlay" id="legendOverlay" onclick="hideLegend()">
+        <div class="legend-panel" onclick="event.stopPropagation()">
+            <div class="legend-header">
+                <div class="legend-title">TACTICAL LEGEND</div>
+                <button class="legend-close" onclick="hideLegend()">×</button>
+            </div>
+            <div class="legend-content">
+                <div class="legend-item best-buy">
+                    <div class="legend-dot best-buy"></div>
+                    <div class="legend-info">
+                        <div class="legend-name">Best Buy</div>
+                        <div class="legend-description">Electronics retailer - Primary mission target</div>
+                    </div>
+                </div>
+                <div class="legend-item target">
+                    <div class="legend-dot target"></div>
+                    <div class="legend-info">
+                        <div class="legend-name">Target</div>
+                        <div class="legend-description">General retailer - Secondary objective</div>
+                    </div>
+                </div>
+                <div class="legend-item walmart">
+                    <div class="legend-dot walmart"></div>
+                    <div class="legend-info">
+                        <div class="legend-name">Walmart</div>
+                        <div class="legend-description">Supercenter - Supply resupply point</div>
+                    </div>
+                </div>
+                <div class="legend-item home">
+                    <div class="legend-dot home"></div>
+                    <div class="legend-info">
+                        <div class="legend-name">Home Base</div>
+                        <div class="legend-description">Secure location - Command center</div>
+                    </div>
+                </div>
+                <div class="legend-item current">
+                    <div class="legend-dot current"></div>
+                    <div class="legend-info">
+                        <div class="legend-name">Current Position</div>
+                        <div class="legend-description">Real-time location tracking - Live GPS</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -405,6 +607,15 @@
             }
         }
 
+        // Legend functions
+        function showLegend() {
+            document.getElementById('legendOverlay').style.display = 'flex';
+        }
+
+        function hideLegend() {
+            document.getElementById('legendOverlay').style.display = 'none';
+        }
+
         // Update coordinates display
         function updateCoordinates() {
             if (navigator.geolocation) {
@@ -424,11 +635,18 @@
                 initMap();
             }
         };
+
+        // Close legend with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                hideLegend();
+            }
+        });
     </script>
     
     <!-- Add Google Maps API - You'll need to add your API key -->
     <script async defer 
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTdJQ1Pk-PdixNjh82D3k7_Xqmfhhj1I0&callback=initMap">
-</script>
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTdJQ1Pk-PdixNjh82D3k7_Xqmfhhj1I0&callback=initMap">
+    </script>
 </body>
 </html>
