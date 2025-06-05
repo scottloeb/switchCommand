@@ -1667,9 +1667,32 @@
         
         // Initialize Google Map with enhanced NASA/space theme
         function initMap() {
+            console.log('🗺️ Initializing Google Maps...');
+            
+            if (typeof google === 'undefined') {
+                console.error('Google Maps API not loaded');
+                document.getElementById('map').innerHTML = `
+                    <div style="
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 100%;
+                        color: #FC3D21;
+                        font-size: 14px;
+                        text-align: center;
+                        padding: 20px;
+                    ">
+                        ⚠️ GOOGLE MAPS API ERROR<br>
+                        <small>Check console for details</small>
+                    </div>
+                `;
+                return;
+            }
+            
             const center = { lat: 38.9784, lng: -76.4951 };
             
-            map = new google.maps.Map(document.getElementById('map'), {
+            try {
+                map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 14,
                 center: center,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -1800,6 +1823,27 @@
                     updateDistancesFromCurrentLocation();
                 });
             }
+            
+            console.log('✅ Google Maps initialized successfully!');
+            
+        } catch (error) {
+            console.error('❌ Google Maps initialization failed:', error);
+            document.getElementById('map').innerHTML = `
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 100%;
+                    color: #FC3D21;
+                    font-size: 14px;
+                    text-align: center;
+                    padding: 20px;
+                ">
+                    ❌ MAP INITIALIZATION FAILED<br>
+                    <small>${error.message}</small>
+                </div>
+            `;
+        }
         }
         
         function getStockStatusColor(stockStatus) {
@@ -2355,6 +2399,38 @@
             // Initialize Google Maps when ready
             if (typeof google !== 'undefined') {
                 initMap();
+            } else {
+                console.log('🔄 Waiting for Google Maps API to load...');
+                // Retry map initialization every 2 seconds for up to 10 seconds
+                let mapRetries = 0;
+                const mapRetryInterval = setInterval(() => {
+                    if (typeof google !== 'undefined') {
+                        console.log('✅ Google Maps API loaded, initializing map...');
+                        initMap();
+                        clearInterval(mapRetryInterval);
+                    } else {
+                        mapRetries++;
+                        if (mapRetries >= 5) {
+                            console.error('❌ Google Maps API failed to load after 10 seconds');
+                            clearInterval(mapRetryInterval);
+                            document.getElementById('map').innerHTML = `
+                                <div style="
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+                                    height: 100%;
+                                    color: #FC3D21;
+                                    font-size: 14px;
+                                    text-align: center;
+                                    padding: 20px;
+                                ">
+                                    ❌ GOOGLE MAPS TIMEOUT<br>
+                                    <small>API failed to load within 10 seconds</small>
+                                </div>
+                            `;
+                        }
+                    }
+                }, 2000);
             }
             
             // Update every second
@@ -2400,7 +2476,33 @@
     
     <!-- Google Maps API -->
     <script async defer 
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhyuJmrGlrZvz3t5z1dKjOzHwt_OwrIaU&callback=initMap">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhyuJmrGlrZvz3t5z1dKjOzHwt_OwrIaU&callback=initMap&loading=async">
+    </script>
+    
+    <!-- Fallback for Google Maps loading issues -->
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof google === 'undefined') {
+                    console.error('Google Maps failed to load');
+                    document.getElementById('map').innerHTML = `
+                        <div style="
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            height: 100%;
+                            color: #FC3D21;
+                            font-size: 14px;
+                            text-align: center;
+                            padding: 20px;
+                        ">
+                            ⚠️ MAP SYSTEM OFFLINE<br>
+                            <small>Navigation functions disabled</small>
+                        </div>
+                    `;
+                }
+            }, 5000);
+        });
     </script>
 </body>
 </html>
