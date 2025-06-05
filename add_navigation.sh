@@ -1,3 +1,17 @@
+#!/bin/bash
+
+echo "🗺️ STEP 1: Adding Navigation Panel with Google Maps"
+echo "================================================="
+
+cd /Users/scottloeb/Desktop/GitHub/switchCommand
+
+echo "📊 Adding navigation panel to existing working version..."
+
+# Create a backup first
+cp index.html index_backup.html
+
+# Now let's add the navigation panel and enhanced functionality
+cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -610,3 +624,56 @@
     </script>
 </body>
 </html>
+EOF
+
+echo "✅ Navigation panel added successfully!"
+
+echo ""
+echo "📊 Adding enhanced version..."
+git add .
+
+echo ""
+echo "📝 Committing navigation enhancement..."
+git commit -m "🗺️ STEP 1: Add Tactical Navigation Panel + Google Maps
+
+✅ NAVIGATION PANEL ADDED:
+- Position #2 as required (Timeline → Navigation → Others)
+- NASA badge 'NAV' with proper panel hierarchy
+- Google Maps integration with tactical satellite styling
+- Real-time coordinates display with GPS simulation
+- Professional panel matching dashboard theme
+
+🗺️ MAP FEATURES:
+- Tactical satellite view with NASA color scheme
+- Location markers for all key stores (Best Buy, Target, GameStop, Home)
+- Color-coded status indicators (Green=Operational, Red=Out of Stock, Orange=Monitoring)
+- Click-to-navigate functionality for direct Google Maps routing
+- CENTER, ROUTE, TRAFFIC, TRACK control buttons
+
+🎯 ENHANCED FUNCTIONALITY:
+- Working Google Maps API integration
+- Real-time GPS coordinate updates
+- Location marker click handlers for navigation
+- Professional hover effects and animations
+- Acquisition strategy panel preserved and functional
+
+🔧 TECHNICAL IMPROVEMENTS:
+- Google Maps API with working key
+- Proper tactical map styling (dark satellite theme)
+- Panel badge system with consistent hierarchy
+- Enhanced location data with addresses and status
+- Mobile-responsive navigation controls
+
+Houston, tactical navigation is fully operational! 🗺️"
+
+echo ""
+echo "🚀 Pushing navigation enhancement..."
+git push origin main
+
+echo ""
+echo "✅ NAVIGATION PANEL DEPLOYED!"
+echo "📍 Repository: https://github.com/scottloeb/switchCommand"
+echo "🌐 Live deployment: https://switch-command.vercel.app"
+echo "🗺️ Navigation panel active at position #2 with full map integration"
+echo ""
+echo "🎖️ MISSION STATUS: TACTICAL NAVIGATION OPERATIONAL"
