@@ -1,3 +1,14 @@
+#!/bin/bash
+
+echo "🚨 INTEGRATED MISSION CONTROL + POST-MISSION STORY"
+echo "================================================="
+
+cd /Users/scottloeb/Desktop/GitHub/switchCommand
+
+echo "📊 Integrating story elements into existing mission control dashboard..."
+
+# Create the integrated version - mission control with story elements
+cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1436,3 +1447,69 @@
     </script>
 </body>
 </html>
+EOF
+
+echo "✅ Integrated mission control with post-mission story elements created!"
+
+echo ""
+echo "📊 Adding integrated mission control deployment..."
+git add .
+
+echo ""
+echo "📝 Committing integrated mission control with story elements..."
+git commit -m "🚨 INTEGRATED MISSION CONTROL: Story Elements + Dashboard Combined
+
+🎯 STRATEGIC PANEL ORDERING FOR STORY FLOW:
+1. MISSION STATUS (MS) - Shows outcome unknown, last contact, critical events
+2. TACTICAL TIMELINE (TL) - Shows planned vs actual with medical delays
+3. COMMUNICATIONS LOG (CL) - Full story chronologically (Brandy surgery recovery)
+4. Navigation, Social, Stock - Supporting context with post-mission status
+
+🚨 FLASHING ALERT BANNER:
+- Red flashing banner: 'FIELD AGENT COMMUNICATIONS LOST'
+- Positioned at top, adjusts all content below
+- Creates immediate dramatic impact for Zach
+
+📡 INTEGRATED STORY ELEMENTS:
+- Mission Status: STATUS UNKNOWN, Last Contact 21:11 EST
+- Communications Log: Full story from haircut → Brandy complications → blackout
+- Timeline: Shows COMPLETED ✅, MISSED - MEDICAL PRIORITY ❌, STATUS UNKNOWN ❓
+- Strategy Panel: All locations now show 'Status Unknown'
+- Stock Monitoring: All locations show mission failure states
+
+🐕 BRANDY MEDICAL CONTEXT:
+- Post-surgery complications requiring medical priority
+- Family first protocol properly established
+- Recovery confirmed before Best Buy departure
+- Appropriate medical concern without scary details
+
+📊 DASHBOARD INTEGRATION:
+- All original mission control features preserved
+- Story elements woven naturally into existing panels
+- Master controls (Expand/Collapse/Focus) work with story panels
+- Strategy side panel updated for post-mission context
+
+🎮 PERFECT STORY ARC FOR ZACH:
+1. Flashing alert gets attention immediately
+2. Mission Status shows the outcome mystery
+3. Timeline reveals what went wrong when
+4. Communications tells the full Brandy story
+5. All other panels support the post-mission context
+
+Ready for Zach's dramatic wake-up discovery! 🚨"
+
+echo ""
+echo "🚀 Pushing integrated mission control to GitHub..."
+git push origin main
+
+echo ""
+echo "✅ INTEGRATED MISSION CONTROL DEPLOYED!"
+echo "📍 Repository: https://github.com/scottloeb/switchCommand"
+echo "🌐 Live deployment: https://switch-command.vercel.app"
+echo "🚨 Complete story integrated into mission control dashboard!"
+echo ""
+echo "🎖️ STORY STATUS: READY FOR ZACH'S DISCOVERY"
+echo "📡 Panel flow: Status → Timeline → Communications → Context"
+echo "🚨 Alert system: Immediate attention-grabbing banner"
+echo "🐕 Medical context: Appropriate post-surgery priority story"
+echo "🎮 Mission mystery: Perfect setup for your real debrief!"
