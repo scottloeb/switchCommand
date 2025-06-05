@@ -1,0 +1,110 @@
+    <div class="container">
+        <!-- TACTICAL TIMELINE - FIRST POSITION -->
+        <div class="panel timeline-panel" id="panel-timeline">
+            <div class="panel-title" onclick="togglePanel('timeline')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">TL</span>
+                    ⏰ TACTICAL TIMELINE
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            
+            <div class="panel-content">
+                <div class="current-time-display" id="current-time">
+                    Loading...
+                </div>
+                
+                <div class="timeline-container" id="timeline-container">
+                    <!-- Timeline events will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- ENHANCED SOCIAL INTELLIGENCE -->
+        <div class="panel social-panel" id="panel-social">
+            <div class="panel-title" onclick="togglePanel('social')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">SI</span>
+                    📡 SOCIAL INTELLIGENCE
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            <div class="panel-content">
+                <div class="auto-refresh">
+                    <div class="refresh-indicator"></div>
+                    <span class="refresh-text">🔴 LIVE MONITORING: Twitter, Reddit, News, Retail</span>
+                    <button class="button" onclick="forceRefreshSocial()" style="margin: 0; padding: 5px 10px; font-size: 0.7em;">🔍 GATHER INTEL</button>
+                </div>
+                
+                <div class="social-feed" id="social-feed">
+                    <!-- Social feed will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
+        <!-- STOCK MONITORING -->
+        <div class="panel" id="panel-stock">
+            <div class="panel-title" onclick="togglePanel('stock')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">SC</span>
+                    📈 STOCK MONITORING
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            <div class="panel-content">
+                <div class="auto-refresh">
+                    <div class="refresh-indicator"></div>
+                    <span class="refresh-text">Checking every 15 seconds</span>
+                    <button class="button" onclick="forceStockCheck()" style="margin: 0; padding: 5px 10px; font-size: 0.7em;">🔄 FORCE</button>
+                </div>
+                
+                <div class="grid">
+                    <div class="status-item">
+                        <div class="status-name">Best Buy</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 2 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Target</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 3 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">GameStop</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 5 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Staples</div>
+                        <div style="color: #FFA500;">MONITORING</div>
+                        <div style="font-size: 0.8em; color: #FFA500;">349 locations tracked</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NEXT EVENT INFO -->
+        <div class="panel" id="panel-next-event">
+            <div class="panel-title" onclick="togglePanel('next-event')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">NE</span>
+                    🎯 NEXT EVENT
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            <div class="panel-content">
+                <div id="next-event-details" style="text-align: center; padding: 20px;">
+                    <div style="font-size: 1.5em; color: #00FF41; margin-bottom: 10px;">
+                        <span id="next-event-name">Loading...</span>
+                    </div>
+                    <div style="color: #FFA500; margin-bottom: 15px;">
+                        <span id="next-event-action">Loading...</span>
+                    </div>
+                    <div style="font-size: 2.5em; color: #FC3D21; margin: 20px 0; font-family: 'Courier New', monospace;">
+                        <span id="next-event-time-remaining">--:--:--</span>
+                    </div>
+                    <button class="button" onclick="navigateToNextEvent()" id="next-event-nav-button">🗺️ NAVIGATE</button>
+                </div>
+            </div>
+        </div>
+    </div>
