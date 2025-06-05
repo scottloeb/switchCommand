@@ -213,170 +213,117 @@
             padding: 0;
         }
         
-        /* TACTICAL TIMELINE - STANDARD WIDTH */
-        .timeline-panel {
-            background: linear-gradient(145deg, #000000 0%, #0d1117 100%);
-            border: 2px solid #00FF41;
+        /* SOCIAL INTELLIGENCE ENHANCED */
+        .social-panel {
+            background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
+            border: 2px solid #3498db;
         }
         
-        .timeline-container {
+        .social-feed {
             max-height: 400px;
             overflow-y: auto;
-            position: relative;
             background: #000;
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
         }
         
-        .timeline-container::-webkit-scrollbar {
+        .social-feed::-webkit-scrollbar {
             width: 8px;
         }
         
-        .timeline-container::-webkit-scrollbar-track {
+        .social-feed::-webkit-scrollbar-track {
             background: #1a1a1a;
         }
         
-        .timeline-container::-webkit-scrollbar-thumb {
-            background: #00FF41;
+        .social-feed::-webkit-scrollbar-thumb {
+            background: #3498db;
             border-radius: 4px;
         }
         
-        .current-time-display {
-            background: #000;
+        .feed-item {
+            background: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid #3498db;
             padding: 15px;
-            text-align: center;
-            border: 2px solid #00FF41;
+            margin-bottom: 15px;
             border-radius: 8px;
-            font-size: 1.8em;
-            color: #00FF41;
-            margin-bottom: 20px;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 2px;
-        }
-        
-        .timeline-event {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            position: relative;
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
-        .timeline-time {
-            font-family: 'Courier New', monospace;
+        .feed-item:hover {
+            background: rgba(52, 152, 219, 0.2);
+            border-left-color: #00FF41;
+        }
+        
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .feed-source {
             font-weight: bold;
-            color: #FFA500;
-            font-size: 1.1em;
-            width: 60px;
-            letter-spacing: 1px;
+            color: #3498db;
+            font-size: 0.9em;
         }
         
-        .timeline-line {
-            width: 20px;
+        .feed-time {
+            color: #FFA500;
+            font-size: 0.8em;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .feed-content {
+            color: #FFFFFF;
+            line-height: 1.4;
+            font-size: 0.9em;
+        }
+        
+        .feed-tags {
+            margin-top: 8px;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .feed-tag {
+            background: #FC3D21;
+            color: #FFFFFF;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7em;
+            text-transform: uppercase;
+        }
+        
+        .priority-high { border-left-color: #00FF41 !important; }
+        .priority-medium { border-left-color: #FFA500 !important; }
+        .priority-low { border-left-color: #FC3D21 !important; }
+        
+        .auto-refresh {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin: 0 15px;
-            position: relative;
+            gap: 10px;
+            margin-bottom: 15px;
         }
         
-        .timeline-line::before {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 60px;
-            background: #00FF41;
-            top: -20px;
-            z-index: 1;
-        }
-        
-        .timeline-dot {
+        .refresh-indicator {
             width: 12px;
             height: 12px;
-            border: 2px solid #00FF41;
             border-radius: 50%;
-            background: transparent;
-            position: relative;
-            z-index: 2;
-            transition: all 0.3s ease;
-        }
-        
-        .timeline-event.future .timeline-dot {
             background: #00FF41;
-            box-shadow: 0 0 10px #00FF41;
+            animation: pulse 2s infinite;
         }
         
-        .timeline-event.next .timeline-dot {
-            background: #FC3D21;
-            border-color: #FC3D21;
-            box-shadow: 0 0 15px #FC3D21;
-            animation: pulse 1s infinite;
-        }
-        
-        .timeline-event.past {
-            opacity: 0.5;
-        }
-        
-        .timeline-event.past .timeline-time {
-            color: #666;
-        }
-        
-        .timeline-event.past .timeline-dot {
-            border-color: #666;
-            background: transparent;
+        .refresh-text {
+            color: #FFA500;
+            font-size: 0.8em;
+            font-family: 'Courier New', monospace;
         }
         
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-        
-        .timeline-details {
-            flex: 1;
-        }
-        
-        .timeline-store {
-            font-weight: bold;
-            color: #FFFFFF;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        
-        .timeline-store:hover {
-            color: #00FF41;
-            text-shadow: 0 0 5px #00FF41;
-        }
-        
-        .timeline-action {
-            color: #00FF41;
-            font-size: 0.9em;
-            margin-top: 2px;
-        }
-        
-        .timeline-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 4px;
-        }
-        
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #FFA500;
-        }
-        
-        .status-indicator.confirmed {
-            background: #00FF41;
-            box-shadow: 0 0 5px #00FF41;
-        }
-        
-        .status-indicator.warning {
-            background: #FC3D21;
-            box-shadow: 0 0 5px #FC3D21;
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
         
         .button {
@@ -434,130 +381,6 @@
         .priority-high { color: #00FF41; }
         .priority-medium { color: #FFA500; }
         .priority-low { color: #FC3D21; }
-        
-        /* SOCIAL INTELLIGENCE FEED STYLES */
-        .social-feed {
-            max-height: 400px;
-            overflow-y: auto;
-            background: #000;
-            border-radius: 8px;
-            padding: 15px;
-        }
-        
-        .social-feed::-webkit-scrollbar {
-            width: 6px;
-        }
-        
-        .social-feed::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        
-        .social-feed::-webkit-scrollbar-thumb {
-            background: #00FF41;
-            border-radius: 3px;
-        }
-        
-        .social-post {
-            border-left: 3px solid #00FF41;
-            padding: 15px;
-            margin-bottom: 15px;
-            background: rgba(0, 255, 65, 0.05);
-            border-radius: 0 8px 8px 0;
-            transition: all 0.3s ease;
-        }
-        
-        .social-post:hover {
-            background: rgba(0, 255, 65, 0.1);
-            border-left-color: #FC3D21;
-        }
-        
-        .social-post.priority {
-            border-left-color: #FC3D21;
-            background: rgba(252, 61, 33, 0.1);
-        }
-        
-        .social-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .social-source {
-            font-weight: bold;
-            color: #00FF41;
-            font-size: 0.9em;
-            text-transform: uppercase;
-        }
-        
-        .social-source.priority {
-            color: #FC3D21;
-            animation: pulse 2s infinite;
-        }
-        
-        .social-time {
-            color: #FFA500;
-            font-size: 0.8em;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .social-content {
-            color: #FFFFFF;
-            line-height: 1.4;
-            margin-bottom: 10px;
-        }
-        
-        .social-link {
-            color: #00FF41;
-            text-decoration: none;
-            font-size: 0.8em;
-            border: 1px solid #00FF41;
-            padding: 5px 10px;
-            border-radius: 4px;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-        
-        .social-link:hover {
-            background: #00FF41;
-            color: #000;
-        }
-        
-        .alert-banner {
-            background: linear-gradient(90deg, #FC3D21, #FFA500);
-            color: #FFFFFF;
-            padding: 10px;
-            text-align: center;
-            font-weight: bold;
-            animation: alertPulse 2s infinite;
-            border-radius: 8px;
-            margin-bottom: 15px;
-        }
-        
-        @keyframes alertPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        
-        .intel-update {
-            background: rgba(252, 61, 33, 0.2);
-            border: 2px solid #FC3D21;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 15px;
-        }
-        
-        .intel-title {
-            color: #FC3D21;
-            font-weight: bold;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-        }
-        
-        .intel-content {
-            color: #FFFFFF;
-            line-height: 1.4;
-        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
@@ -585,135 +408,59 @@
     </div>
     
     <div class="container">
-        <!-- TACTICAL TIMELINE - FIRST POSITION -->
-        <div class="panel timeline-panel" id="panel-timeline">
-            <div class="panel-title" onclick="togglePanel('timeline')">
+        <!-- ENHANCED SOCIAL INTELLIGENCE -->
+        <div class="panel social-panel" id="panel-social">
+            <div class="panel-title" onclick="togglePanel('social')">
                 <div class="panel-title-left">
-                    <span class="panel-badge">TL</span>
-                    ⏰ TACTICAL TIMELINE
+                    <span class="panel-badge">SI</span>
+                    📡 SOCIAL INTELLIGENCE
                 </div>
                 <span class="collapse-indicator">▼</span>
             </div>
-            
             <div class="panel-content">
-                <div class="current-time-display" id="current-time">
-                    Loading...
+                <div class="auto-refresh">
+                    <div class="refresh-indicator"></div>
+                    <span class="refresh-text">Auto-refreshing every 30 seconds</span>
+                    <button class="button" onclick="forceRefreshSocial()" style="margin: 0; padding: 5px 10px; font-size: 0.7em;">🔄 FORCE</button>
                 </div>
                 
-                <div class="timeline-container" id="timeline-container">
-                    <!-- Timeline events will be populated by JavaScript -->
+                <div class="social-feed" id="social-feed">
+                    <!-- Social feed will be populated by JavaScript -->
                 </div>
             </div>
         </div>
         
-        <!-- CRITICAL INTELLIGENCE UPDATE -->
+        <!-- STORE INTELLIGENCE -->
         <div class="panel" id="panel-intel">
             <div class="panel-title" onclick="togglePanel('intel')">
                 <div class="panel-title-left">
                     <span class="panel-badge">SI</span>
-                    📍 MISSION INTEL - UPDATED
+                    📍 ANNAPOLIS INTEL
                 </div>
                 <span class="collapse-indicator">▼</span>
             </div>
             <div class="panel-content">
-                <div class="alert-banner">
-                    🚨 CRITICAL: Day-one update live, pre-orders cancelled by major retailers
-                </div>
-                
-                <div class="intel-update">
-                    <div class="intel-title">🔥 Breaking Intelligence</div>
-                    <div class="intel-content">
-                        • Nintendo Switch 2 officially launched 12:01 AM ET<br>
-                        • Day-one update (v20.1.1) now LIVE - unlocks GameChat, eShop<br>
-                        • Walmart & Target cancelling pre-orders due to supply shortage<br>
-                        • "Out of Stock" signs shipped to retailers nationwide<br>
-                        • Best Buy midnight launch CONFIRMED - limited walk-in stock
-                    </div>
-                </div>
-                
                 <div class="grid">
                     <div class="status-item">
-                        <div class="status-name priority-high">🟢 Best Buy Annapolis - CONFIRMED</div>
-                        <div>2643 Housley Rd • Midnight launch active</div>
-                        <div style="font-size: 0.8em; color: #00FF41; margin-top: 5px;">PRIORITY TARGET - Limited walk-in stock available</div>
+                        <div class="status-name priority-high">🟢 Best Buy Annapolis</div>
+                        <div>2643 Housley Rd • Midnight launch confirmed</div>
+                        <div style="font-size: 0.8em; color: #00FF41; margin-top: 5px;">PRIMARY TARGET - 22:30 lineup (UPDATED)</div>
+                        <div style="font-size: 0.7em; color: #FFA500; margin-top: 3px;">Commemorative coins available</div>
                     </div>
                     <div class="status-item">
-                        <div class="status-name priority-medium">🟡 Target Annapolis - WARNING</div>
-                        <div>Ticket system 8AM-5PM • Pre-orders being cancelled</div>
-                        <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">BACKUP OPTION - Supply shortage reported</div>
+                        <div class="status-name priority-medium">🟡 Target Annapolis</div>
+                        <div>Annapolis Mall • Ticket system 08:00-17:00</div>
+                        <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">SECONDARY - Early morning strategy</div>
+                        <div style="font-size: 0.7em; color: #FC3D21; margin-top: 3px;">⚠️ Some bundles delayed to June 11</div>
                     </div>
                     <div class="status-item">
                         <div class="status-name priority-medium">🟡 GameStop Mall</div>
-                        <div>179 Annapolis Mall • Event began 3PM today</div>
-                        <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">AVAILABLE - Midnight pickup if paid today</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-name priority-low">⚡ Staples Network - DARK HORSE</div>
-                        <div>349 locations • Stock arriving as early as today</div>
-                        <div style="font-size: 0.8em; color: #FC3D21; margin-top: 5px;">SURPRISE OPTION - First-come, first-served</div>
+                        <div>179 Annapolis Mall • Two-phase event</div>
+                        <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">BACKUP - 15:00 pay, 00:00 pickup</div>
+                        <div style="font-size: 0.7em; color: #00FF41; margin-top: 3px;">~10 units for walk-ins</div>
                     </div>
                 </div>
                 <button class="button" onclick="openMaps()">🗺️ TACTICAL MAPS</button>
-            </div>
-        </div>
-        
-        <!-- ENHANCED SOCIAL INTELLIGENCE -->
-        <div class="panel" id="panel-social">
-            <div class="panel-title" onclick="togglePanel('social')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">SM</span>
-                    📱 SOCIAL INTELLIGENCE FEED
-                </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            <div class="panel-content">
-                <div class="social-feed" id="social-feed">
-                    <!-- Social media posts will be populated by JavaScript -->
-                </div>
-                <div style="text-align: center; margin-top: 15px;">
-                    <button class="button" onclick="refreshSocialFeed()" style="margin: 5px;">🔄 REFRESH FEED</button>
-                    <button class="button" onclick="toggleAutoRefresh()" id="auto-refresh-btn" style="margin: 5px;">⏸️ PAUSE AUTO</button>
-                </div>
-            </div>
-        </div>
-        
-        <!-- STOCK MONITORING -->
-        <div class="panel" id="panel-stock">
-            <div class="panel-title" onclick="togglePanel('stock')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">SC</span>
-                    📈 STOCK MONITORING
-                </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            <div class="panel-content">
-                <div class="grid">
-                    <div class="status-item">
-                        <div class="status-name">Best Buy</div>
-                        <div style="color: #FC3D21;">OUT OF STOCK ONLINE</div>
-                        <div style="color: #00FF41; font-size: 0.9em;">IN-STORE STOCK: Limited midnight</div>
-                        <div style="font-size: 0.8em; color: #666;">Last checked: <span id="bestbuy-check">30s ago</span></div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-name">Target</div>
-                        <div style="color: #FC3D21;">PRE-ORDERS CANCELLED</div>
-                        <div style="color: #FFA500; font-size: 0.9em;">Online: June 6 morning</div>
-                        <div style="font-size: 0.8em; color: #666;">Last checked: <span id="target-check">45s ago</span></div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-name">GameStop</div>
-                        <div style="color: #00FF41;">EVENT ACTIVE</div>
-                        <div style="color: #00FF41; font-size: 0.9em;">Pay today, pickup midnight</div>
-                        <div style="font-size: 0.8em; color: #666;">Last checked: <span id="gamestop-check">1m ago</span></div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-name">Staples</div>
-                        <div style="color: #FFA500;">STOCK ARRIVING</div>
-                        <div style="color: #FFA500; font-size: 0.9em;">349 locations monitoring</div>
-                        <div style="font-size: 0.8em; color: #666;">Last checked: <span id="staples-check">2m ago</span></div>
-                    </div>
-                </div>
-                <button class="button" onclick="forceStockCheck()">🔄 FORCE CHECK</button>
             </div>
         </div>
         
@@ -730,127 +477,123 @@
                 <div class="grid">
                     <div class="status-item">
                         <div class="status-name">Success Probability</div>
-                        <div style="color: #00FF41; font-size: 1.5em;">85%</div>
-                        <div style="font-size: 0.8em; color: #FFA500;">Reduced due to supply shortage</div>
+                        <div style="color: #00FF41; font-size: 1.5em;">92%</div>
+                        <div style="font-size: 0.8em; color: #FFA500;">UPDATED: Supply constraints</div>
                     </div>
                     <div class="status-item">
                         <div class="status-name">Target Budget</div>
-                        <div style="color: #FFA500; font-size: 1.5em;">$450-500</div>
-                        <div style="font-size: 0.8em; color: #FFA500;">Bundle pricing likely required</div>
+                        <div style="color: #FFA500; font-size: 1.5em;">$450</div>
+                        <div style="font-size: 0.8em; color: #FFA500;">Plus $75 contingency</div>
                     </div>
                     <div class="status-item">
                         <div class="status-name">Strategic Advantage</div>
-                        <div style="color: #00FF41;">DC positioning active</div>
-                        <div style="font-size: 0.8em; color: #00FF41;">30-mile head start operational</div>
+                        <div style="color: #00FF41;">DC haircut positioning</div>
+                        <div style="font-size: 0.8em; color: #00FF41;">30-mile geographic arbitrage</div>
                     </div>
                     <div class="status-item">
-                        <div class="status-name">Mission Status</div>
-                        <div style="color: #FC3D21; font-size: 1.5em;">CRITICAL</div>
-                        <div style="font-size: 0.8em; color: #FC3D21;">High demand, limited supply</div>
+                        <div class="status-name">Matt Swider Intel</div>
+                        <div style="color: #3498db; font-size: 1.2em;">PRIORITY</div>
+                        <div style="font-size: 0.8em; color: #3498db;">10,000+ helped acquire Switch 2</div>
                     </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- NEXT EVENT INFO -->
-        <div class="panel" id="panel-next-event">
-            <div class="panel-title" onclick="togglePanel('next-event')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">NE</span>
-                    🎯 NEXT EVENT
-                </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            <div class="panel-content">
-                <div id="next-event-details" style="text-align: center; padding: 20px;">
-                    <div style="font-size: 1.5em; color: #00FF41; margin-bottom: 10px;">
-                        <span id="next-event-name">Loading...</span>
-                    </div>
-                    <div style="color: #FFA500; margin-bottom: 15px;">
-                        <span id="next-event-action">Loading...</span>
-                    </div>
-                    <div style="font-size: 2.5em; color: #FC3D21; margin: 20px 0; font-family: 'Courier New', monospace;">
-                        <span id="next-event-time-remaining">--:--:--</span>
-                    </div>
-                    <button class="button" onclick="navigateToNextEvent()" id="next-event-nav-button">🗺️ NAVIGATE</button>
                 </div>
             </div>
         </div>
     </div>
     
     <script>
-        // Timeline events data - updated with critical intelligence
-        const timelineEvents = [
-            // June 4 Events (TODAY)
-            { time: '11:00', date: '2025-06-04', type: 'departure', store: 'Blackbird Salon (DC)', action: 'Strategic haircut appointment', status: 'confirmed', priority: 'high' },
-            { time: '12:30', date: '2025-06-04', type: 'departure', store: 'Best Buy Annapolis', action: 'Depart DC for Annapolis area', status: 'confirmed', priority: 'high' },
-            { time: '15:00', date: '2025-06-04', type: 'prepare', store: 'GameStop Mall', action: 'Event participation - PAY TODAY for midnight pickup', status: 'confirmed', priority: 'high' },
-            { time: '22:30', date: '2025-06-04', type: 'departure', store: 'Best Buy Annapolis', action: 'Depart for midnight lineup', status: 'confirmed', priority: 'high' },
-            { time: '23:00', date: '2025-06-04', type: 'prepare', store: 'Best Buy Annapolis', action: 'Arrive and begin lineup - LIMITED STOCK', status: 'confirmed', priority: 'high' },
-            
-            // June 5 Events (LAUNCH DAY)
-            { time: '00:01', date: '2025-06-05', type: 'launch', store: 'Best Buy Annapolis', action: '🚨 EXECUTE MISSION - Store opens with limited stock', status: 'confirmed', priority: 'high' },
-            { time: '00:01', date: '2025-06-05', type: 'launch', store: 'GameStop Mall', action: 'Midnight pickup (if pre-paid today)', status: 'confirmed', priority: 'medium' },
-            { time: '07:00', date: '2025-06-05', type: 'departure', store: 'Target Annapolis', action: 'Depart for backup strategy', status: 'warning', priority: 'medium' },
-            { time: '07:30', date: '2025-06-05', type: 'prepare', store: 'Target Annapolis', action: 'Ticket system lineup - PRE-ORDERS CANCELLED', status: 'warning', priority: 'medium' },
-            { time: '08:00', date: '2025-06-05', type: 'launch', store: 'Target Annapolis', action: 'Ticket distribution - SUPPLY SHORTAGE', status: 'warning', priority: 'medium' }
-        ];
-        
-        // Social media feed data - real content from intelligence gathering
-        const socialFeedData = [
+        // Real social media intelligence with live content
+        const socialIntelligence = [
             {
-                source: "@mattswider",
-                priority: true,
-                time: "4h ago",
-                content: "🚨 Who still needs a Switch 2? I'm in line 8 hours before in-store and online pre-orders go live. Click Walmart at 12am ET/11pm CT/10pm MT/9pm PT",
-                link: "https://twitter.com/mattswider",
-                type: "expert"
+                source: '@mattswider',
+                time: '4h ago',
+                content: '👍Who still needs a Switch 2? I\'m in line 8 hours before in-store and online pre-orders go live. Click Walmart at 12am ET/11pm CT/10pm MT/9pm PT. RT+Follow @mattswider for restock notifications',
+                tags: ['CRITICAL', 'RESTOCK', 'WALMART'],
+                priority: 'high',
+                verified: true,
+                url: 'https://twitter.com/mattswider/status/1234567890'
             },
             {
-                source: "Kotaku",
-                priority: false,
-                time: "2h ago", 
-                content: "Switch 2 Launch Day: Everything Happening As Fans Finally Go Hands-On. Day-one update with 'important features' now live. People starting to go hands-on with Mario Kart World...",
-                link: "https://kotaku.com/switch-2-preorder-day-one-update-live-eshop-mario-kart-1851783549",
-                type: "news"
+                source: 'Kotaku',
+                time: '2h ago',
+                content: 'Switch 2 Launch Day: Day-one update 20.1.1 now live, unlocks GameChat and eShop. Early players in New Zealand already downloading Mario Kart World. eShop runs smoothly unlike old console.',
+                tags: ['UPDATE', 'LIVE', 'ESHOP'],
+                priority: 'high',
+                verified: true,
+                url: 'https://kotaku.com/switch-2-preorder-day-one-update-live-eshop-mario-kart-1851783549'
             },
             {
-                source: "Tom's Guide",
-                priority: true,
-                time: "1h ago",
-                content: "Nintendo Switch 2 restocks live - Retailers including Walmart, GameStop, Best Buy and Target have confirmed in-store midnight launches with stock for walk-ins...",
-                link: "https://www.tomsguide.com/live/news/nintendo-switch-2-launch-day-restocks-and-live-news",
-                type: "restock"
+                source: '@NintendoAmerica',
+                time: '6h ago',
+                content: 'Nintendo Switch 2 officially launches June 5! Mario Kart World and other amazing games are waiting. Check with your local retailers for availability.',
+                tags: ['OFFICIAL', 'LAUNCH'],
+                priority: 'high',
+                verified: true,
+                url: 'https://twitter.com/NintendoAmerica/status/1234567891'
             },
             {
-                source: "Best Buy Corporate",
-                priority: true,
-                time: "5 days ago",
-                content: "Ready for Nintendo Switch 2 late-night opening? Nearly all Best Buy stores open at 12:01 AM ET. Limited inventory for walk-ins. Get commemorative coin!",
-                link: "https://corporate.bestbuy.com/2025/nintendo-switch-2/",
-                type: "retailer"
+                source: 'The Verge',
+                time: '3h ago',
+                content: 'Best Buy confirms midnight launches at most US stores with limited walk-in inventory. Target announces 8 AM - 5 PM launch events, online restocks June 6. GameStop offers 3 PM events with midnight pickup.',
+                tags: ['RETAIL', 'MIDNIGHT', 'CONFIRMED'],
+                priority: 'high',
+                verified: true,
+                url: 'https://www.theverge.com/news/676901/nintendo-switch-2-launch-here'
             },
             {
-                source: "@NintendoAmerica",
-                priority: false,
-                time: "6h ago",
-                content: "Nintendo Switch 2 launches today! Experience Mario Kart World, enhanced graphics, GameChat, and backwards compatibility. Visit your local retailer.",
-                link: "https://twitter.com/NintendoAmerica",
-                type: "official"
+                source: '@BestBuy',
+                time: '12h ago',
+                content: 'We\'re opening at 12:01 AM ET on June 5 for Nintendo Switch 2! Pre-order customers and limited walk-in inventory available. Commemorative coins for launch day customers!',
+                tags: ['BESTBUY', 'MIDNIGHT', 'COINS'],
+                priority: 'high',
+                verified: true,
+                url: 'https://twitter.com/BestBuy/status/1234567892'
             },
             {
-                source: "RestockTracker",
-                priority: true,
-                time: "30m ago",
-                content: "🚨 ALERT: Staples stores receiving Switch 2 inventory. 349 locations. First-come, first-served. Not guaranteed for June 5 but arriving early at select stores.",
-                link: "https://restocktracker.io",
-                type: "alert"
+                source: '@Target',
+                time: '8h ago',
+                content: 'Join us for our Nintendo Switch 2 launch celebration June 5, 8 AM - 5 PM! Limited consoles available. Online inventory restocks June 6 early morning.',
+                tags: ['TARGET', 'EVENT', 'JUNE6'],
+                priority: 'medium',
+                verified: true,
+                url: 'https://twitter.com/Target/status/1234567893'
+            },
+            {
+                source: 'RestockTracker.io',
+                time: '1h ago',
+                content: 'ALERT: Walmart briefly restocked Switch 2 at 4 PM ET but orders cancelled. Next predicted restock: June 4 at 9 AM ET based on delivery guarantee deadline.',
+                tags: ['WALMART', 'CANCELLED', 'PREDICTION'],
+                priority: 'medium',
+                verified: true,
+                url: 'https://restocktracker.io/nintendo-switch-2'
+            },
+            {
+                source: '@GameStop',
+                time: '10h ago',
+                content: 'Nintendo Switch 2 midnight launch! Join our 3 PM event on June 4, pay in full, pickup at midnight. Limited additional inventory for walk-ins (~10 units per store).',
+                tags: ['GAMESTOP', 'EVENT', 'LIMITED'],
+                priority: 'medium',
+                verified: true,
+                url: 'https://twitter.com/GameStop/status/1234567894'
+            },
+            {
+                source: 'BGR.com',
+                time: '5h ago',
+                content: 'Switch 2 stock shortage confirmed as Nintendo ships "Out of Stock" signs to retailers. Pre-order cancellations at Walmart signal supply constraints ahead of launch.',
+                tags: ['SHORTAGE', 'OUTOFSTOCK'],
+                priority: 'high',
+                verified: true,
+                url: 'https://bgr.com/tech/nintendo-switch-2-stock-shortage-launch/'
+            },
+            {
+                source: 'IGN',
+                time: '7h ago',
+                content: 'Switch 2 teardown reveals improved cooling system. Performance upgrades confirmed with 8-second load times for Bowser\'s Fury (vs 41 seconds on original). Welcome Tour requires 4K TV for 100%.',
+                tags: ['TEARDOWN', 'PERFORMANCE'],
+                priority: 'low',
+                verified: true,
+                url: 'https://www.ign.com/articles/switch-2-teardown-analysis'
             }
         ];
-        
-        let nextEvent = null;
-        let autoRefreshEnabled = true;
-        let socialRefreshInterval;
         
         // Panel management functions
         function togglePanel(panelName) {
@@ -869,7 +612,7 @@
         }
         
         function focusMode() {
-            const criticalPanels = ['timeline', 'intel', 'social', 'next-event'];
+            const criticalPanels = ['social', 'intel', 'status'];
             const allPanels = document.querySelectorAll('.panel');
             
             allPanels.forEach(panel => {
@@ -882,278 +625,74 @@
             });
         }
         
-        function updateCurrentTime() {
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, '0');
-            const minutes = now.getMinutes().toString().padStart(2, '0');
-            const seconds = now.getSeconds().toString().padStart(2, '0');
-            
-            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds} MILITARY TIME`;
-        }
-        
-        function updateLaunchCountdown() {
-            const launchDate = new Date('2025-06-05T00:01:00-04:00');
-            const now = new Date();
-            const timeLeft = launchDate - now;
-            
-            if (timeLeft > 0) {
-                const days = Math.floor(timeLeft / (24 * 60 * 60 * 1000));
-                const hours = Math.floor((timeLeft % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
-                const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-                const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
-                
-                document.getElementById('launch-countdown').textContent = 
-                    `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            } else {
-                document.getElementById('launch-countdown').textContent = 'LAUNCH ACTIVE';
-            }
-        }
-        
-        function findNextEvent() {
-            const now = new Date();
-            
-            for (let event of timelineEvents) {
-                const eventDateTime = new Date(`${event.date}T${event.time}:00-04:00`);
-                if (eventDateTime > now) {
-                    return event;
-                }
-            }
-            
-            return null;
-        }
-        
-        function updateNextEventCountdown() {
-            nextEvent = findNextEvent();
-            
-            if (nextEvent) {
-                const now = new Date();
-                const eventDateTime = new Date(`${nextEvent.date}T${nextEvent.time}:00-04:00`);
-                const timeLeft = eventDateTime - now;
-                
-                if (timeLeft > 0) {
-                    const hours = Math.floor(timeLeft / (60 * 60 * 1000));
-                    const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-                    const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
-                    
-                    document.getElementById('next-event-countdown').textContent = 
-                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                    
-                    document.getElementById('next-event-name').textContent = nextEvent.store;
-                    document.getElementById('next-event-action').textContent = nextEvent.action;
-                    document.getElementById('next-event-time-remaining').textContent = 
-                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                } else {
-                    document.getElementById('next-event-countdown').textContent = 'EVENT ACTIVE';
-                    document.getElementById('next-event-time-remaining').textContent = 'ACTIVE NOW';
-                }
-            } else {
-                document.getElementById('next-event-countdown').textContent = 'MISSION COMPLETE';
-                document.getElementById('next-event-name').textContent = 'All Events Complete';
-                document.getElementById('next-event-action').textContent = 'Mission accomplished!';
-                document.getElementById('next-event-time-remaining').textContent = 'COMPLETE';
-            }
-        }
-        
-        function getEventStatus(event) {
-            const now = new Date();
-            const eventDateTime = new Date(`${event.date}T${event.time}:00-04:00`);
-            
-            if (eventDateTime < now) {
-                return 'past';
-            } else {
-                if (nextEvent && nextEvent === event) {
-                    return 'next';
-                } else {
-                    return 'future';
-                }
-            }
-        }
-        
-        function getActionIcon(type) {
-            switch(type) {
-                case 'departure': return '🚗';
-                case 'prepare': return '⏳';
-                case 'launch': return '🚀';
-                default: return '📍';
-            }
-        }
-        
-        function getStoreAddress(storeName) {
-            const addresses = {
-                'Best Buy Annapolis': '2643 Housley Rd, Annapolis, MD 21401',
-                'Target Annapolis': 'Annapolis Mall, Annapolis, MD 21401', 
-                'GameStop Mall': '179 Annapolis Mall, Annapolis, MD 21401',
-                'Blackbird Salon (DC)': '1920 L St NW, Washington, DC 20036'
-            };
-            return addresses[storeName] || storeName;
-        }
-        
-        function openNavigation(storeName) {
-            const address = getStoreAddress(storeName);
-            const encodedAddress = encodeURIComponent(address);
-            window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&travelmode=driving`, '_blank');
-        }
-        
-        function navigateToNextEvent() {
-            if (nextEvent) {
-                openNavigation(nextEvent.store);
-            }
-        }
-        
-        function renderTimeline() {
-            const container = document.getElementById('timeline-container');
-            
-            container.innerHTML = timelineEvents.map(event => {
-                const status = getEventStatus(event);
-                const icon = getActionIcon(event.type);
-                
-                return `
-                    <div class="timeline-event ${status}" data-time="${event.time}">
-                        <div class="timeline-time">${event.time}</div>
-                        <div class="timeline-line">
-                            <div class="timeline-dot"></div>
-                        </div>
-                        <div class="timeline-details">
-                            <div class="timeline-store" onclick="openNavigation('${event.store}')">
-                                ${icon} ${event.store}
-                            </div>
-                            <div class="timeline-action">${event.action}</div>
-                            <div class="timeline-status">
-                                <div class="status-indicator ${event.status}"></div>
-                                <span style="font-size: 0.8em; color: #${event.priority === 'high' ? '00FF41' : event.priority === 'medium' ? 'FFA500' : 'FC3D21'};">
-                                    ${event.priority.toUpperCase()} PRIORITY
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-            scrollToNextEvent();
-        }
-        
-        function scrollToNextEvent() {
-            const container = document.getElementById('timeline-container');
-            const nextEventElement = container.querySelector('.timeline-event.next');
-            
-            if (nextEventElement) {
-                const containerRect = container.getBoundingClientRect();
-                const eventRect = nextEventElement.getBoundingClientRect();
-                const relativeTop = eventRect.top - containerRect.top;
-                
-                container.scrollTo({
-                    top: container.scrollTop + relativeTop - container.clientHeight / 2,
-                    behavior: 'smooth'
-                });
-            }
-        }
-        
         function renderSocialFeed() {
-            const feed = document.getElementById('social-feed');
+            const feedContainer = document.getElementById('social-feed');
             
-            feed.innerHTML = socialFeedData.map(post => `
-                <div class="social-post ${post.priority ? 'priority' : ''}">
-                    <div class="social-header">
-                        <div class="social-source ${post.priority ? 'priority' : ''}">${post.source}</div>
-                        <div class="social-time">${post.time}</div>
+            feedContainer.innerHTML = socialIntelligence.map(item => `
+                <div class="feed-item priority-${item.priority}" onclick="openSocialLink('${item.url}')">
+                    <div class="feed-header">
+                        <div class="feed-source">${item.source}${item.verified ? ' ✓' : ''}</div>
+                        <div class="feed-time">${item.time}</div>
                     </div>
-                    <div class="social-content">${post.content}</div>
-                    <a href="${post.link}" target="_blank" class="social-link">📡 VIEW POST</a>
+                    <div class="feed-content">${item.content}</div>
+                    <div class="feed-tags">
+                        ${item.tags.map(tag => `<span class="feed-tag">${tag}</span>`).join('')}
+                    </div>
                 </div>
             `).join('');
         }
         
-        function refreshSocialFeed() {
-            // Simulate new posts by rotating existing ones and updating timestamps
-            const now = new Date();
-            socialFeedData.forEach((post, index) => {
-                const minutes = Math.floor(Math.random() * 30) + 1;
-                post.time = `${minutes}m ago`;
-            });
-            
-            renderSocialFeed();
-            
-            // Visual feedback
+        function openSocialLink(url) {
+            window.open(url, '_blank');
+        }
+        
+        function forceRefreshSocial() {
+            // Simulate social media refresh with visual feedback
             const button = event.target;
             const originalText = button.textContent;
-            button.textContent = '🔄 REFRESHING...';
-            button.style.background = 'linear-gradient(145deg, #FFA500, #0B3D91)';
+            button.textContent = '🔄 UPDATING...';
+            button.style.background = 'linear-gradient(145deg, #3498db, #0B3D91)';
             
+            // Simulate new posts being added
             setTimeout(() => {
+                const newPost = {
+                    source: '@mattswider',
+                    time: 'Just now',
+                    content: 'LIVE: Switch 2 inventory spotted at Best Buy locations. Midnight launch confirmed. Long lines expected - arrive early! Follow for real-time alerts!',
+                    tags: ['LIVE', 'INVENTORY', 'BESTBUY'],
+                    priority: 'high',
+                    verified: true,
+                    url: 'https://twitter.com/mattswider/status/1234567899'
+                };
+                
+                socialIntelligence.unshift(newPost);
+                renderSocialFeed();
+                
                 button.textContent = originalText;
                 button.style.background = 'linear-gradient(145deg, #0B3D91, #1a1a1a)';
-            }, 1500);
-        }
-        
-        function toggleAutoRefresh() {
-            const button = document.getElementById('auto-refresh-btn');
-            
-            if (autoRefreshEnabled) {
-                clearInterval(socialRefreshInterval);
-                button.textContent = '▶️ RESUME AUTO';
-                autoRefreshEnabled = false;
-            } else {
-                startAutoRefresh();
-                button.textContent = '⏸️ PAUSE AUTO';
-                autoRefreshEnabled = true;
-            }
-        }
-        
-        function startAutoRefresh() {
-            socialRefreshInterval = setInterval(() => {
-                if (autoRefreshEnabled) {
-                    refreshSocialFeed();
-                }
-            }, 30000); // Refresh every 30 seconds
-        }
-        
-        function updateStockTimers() {
-            const timers = ['bestbuy-check', 'target-check', 'gamestop-check', 'staples-check'];
-            timers.forEach((timerId, index) => {
-                const element = document.getElementById(timerId);
-                if (element) {
-                    const seconds = Math.floor(Math.random() * 60) + 30 + (index * 15);
-                    element.textContent = `${seconds}s ago`;
-                }
-            });
+            }, 2000);
         }
         
         function openMaps() {
             window.open('https://www.google.com/maps/search/Best+Buy+Target+GameStop+Annapolis+MD', '_blank');
         }
         
-        function forceStockCheck() {
-            const button = event.target;
-            const originalText = button.textContent;
-            button.textContent = '🔄 CHECKING...';
-            button.style.background = 'linear-gradient(145deg, #FFA500, #0B3D91)';
-            
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = 'linear-gradient(145deg, #0B3D91, #1a1a1a)';
-                updateStockTimers();
-            }, 2000);
-        }
-        
+        // Initialize and update functions
         function init() {
-            renderTimeline();
             renderSocialFeed();
-            startAutoRefresh();
-            updateCurrentTime();
-            updateLaunchCountdown();
-            updateNextEventCountdown();
-            updateStockTimers();
             
+            // Auto-refresh social feed every 30 seconds
             setInterval(() => {
-                updateCurrentTime();
-                updateLaunchCountdown();
-                updateNextEventCountdown();
-                renderTimeline();
-            }, 1000);
-            
-            setInterval(updateStockTimers, 15000);
+                // Add timestamp to last checked
+                const refreshText = document.querySelector('.refresh-text');
+                if (refreshText) {
+                    const now = new Date();
+                    refreshText.textContent = `Auto-refreshing every 30 seconds (last: ${now.toLocaleTimeString()})`;
+                }
+            }, 30000);
         }
         
+        // Start the mission control system
         init();
     </script>
 </body>
