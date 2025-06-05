@@ -4,122 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NASA Mission Control: Switch 2 Acquisition</title>
-    <meta name="description" content="GARDEN-Enhanced Nintendo Switch 2 Acquisition Mission Control">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         body {
-            font-family: 'Orbitron', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-family: 'Orbitron', monospace;
             background: linear-gradient(135deg, #000000 0%, #0B3D91 50%, #000000 100%);
             color: #FFFFFF;
             min-height: 100vh;
         }
         
-        .header {
-            background: linear-gradient(90deg, #0B3D91 0%, #1a1a1a 100%);
-            padding: 20px;
-            text-align: center;
-            border-bottom: 3px solid #FC3D21;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: sweep 3s infinite;
-        }
-        
-        @keyframes sweep {
-            0% { left: -100%; }
-            100% { left: 100%; }
-        }
-        
-        .logo {
-            font-size: 2.5em;
-            font-weight: bold;
-            color: #FFFFFF;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #0B3D91;
-        }
-        
-        .subtitle {
-            color: #FC3D21;
-            font-size: 1.2em;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
-        
-        .master-controls {
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-            margin: 20px 0;
-        }
-        
-        .master-button {
+        /* Acquisition Strategy Side Panel */
+        .strategy-tab {
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%) rotate(-90deg);
             background: linear-gradient(145deg, #FC3D21, #0B3D91);
-            border: 1px solid #00FF41;
-            color: #FFFFFF;
+            color: white;
             padding: 8px 16px;
-            border-radius: 6px;
             cursor: pointer;
-            font-family: inherit;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-        
-        .master-button:hover {
-            background: linear-gradient(145deg, #00FF41, #0B3D91);
-            box-shadow: 0 0 10px #00FF41;
-        }
-        
-        .header-countdown {
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid #FC3D21;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 20px auto 0;
-            max-width: 600px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .countdown-section {
-            text-align: center;
-        }
-        
-        .countdown-label {
-            font-size: 0.9em;
-            color: #FFA500;
-            margin-bottom: 5px;
-            text-transform: uppercase;
+            border-radius: 8px 8px 0 0;
+            z-index: 1001;
+            font-weight: bold;
             letter-spacing: 1px;
         }
         
-        .countdown-value {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #FC3D21;
-            text-shadow: 0 0 5px #FC3D21;
-        }
-        
-        .countdown-value.next-event {
-            color: #00FF41;
-            text-shadow: 0 0 5px #00FF41;
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-</head>    <style>
-        /* ACQUISITION STRATEGY SIDE PANEL */
         .strategy-panel {
             position: fixed;
             top: 0;
@@ -138,327 +48,48 @@
             right: 0;
         }
         
-        .strategy-tab {
-            position: fixed;
-            top: 50%;
-            right: 0;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: right center;
-            background: linear-gradient(145deg, #FC3D21, #0B3D91);
-            color: #FFFFFF;
-            padding: 8px 16px;
-            cursor: pointer;
-            font-family: 'Orbitron', monospace;
-            font-weight: bold;
-            font-size: 14px;
-            letter-spacing: 1px;
-            border: none;
-            border-radius: 8px 8px 0 0;
-            z-index: 1001;
-            transition: all 0.3s ease;
-            white-space: nowrap;
-        }
-        
-        .strategy-tab:hover {
-            background: linear-gradient(145deg, #00FF41, #0B3D91);
-            box-shadow: 0 0 15px #00FF41;
-        }
-        
-        .strategy-tab.pulse {
-            animation: strategyPulse 2s infinite;
-        }
-        
-        @keyframes strategyPulse {
-            0%, 100% { box-shadow: 0 0 10px #FC3D21; }
-            50% { box-shadow: 0 0 25px #FC3D21, 0 0 35px #FC3D21; }
-        }
-        
-        .strategy-content {
-            padding-top: 20px;
-        }
-        
-        .strategy-title {
-            font-size: 1.8em;
-            color: #00FF41;
-            margin-bottom: 30px;
-            text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
         .success-probability {
             background: linear-gradient(145deg, #0B3D91, #1a1a1a);
             border: 2px solid #00FF41;
             border-radius: 12px;
             padding: 20px;
-            margin-bottom: 30px;
+            margin: 20px 0;
             text-align: center;
         }
         
         .success-rate {
-            font-size: 3.5em;
+            font-size: 3em;
             color: #00FF41;
             font-weight: bold;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #00FF41;
         }
         
-        .success-factors {
-            display: grid;
-            gap: 8px;
-            margin-top: 15px;
-            font-size: 0.9em;
-        }
-        
-        .factor {
-            display: flex;
-            justify-content: space-between;
-            padding: 5px 0;
-            border-bottom: 1px solid #30363d;
-        }
-        
-        .factor:last-child {
-            border-bottom: none;
-        }
-        
-        .factor-positive {
-            color: #00FF41;
-        }
-        
-        .factor-negative {
-            color: #FC3D21;
-        }
-        
-        .location-health {
-            margin-top: 30px;
-        }
-        
-        .location-health-title {
-            font-size: 1.4em;
-            color: #FFA500;
-            margin-bottom: 20px;
+        .header {
+            background: linear-gradient(90deg, #0B3D91 0%, #1a1a1a 100%);
+            padding: 20px;
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            border-bottom: 3px solid #FC3D21;
         }
         
-        .store-module {
-            background: rgba(52, 73, 94, 0.3);
-            border: 2px solid #30363d;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            transition: all 0.3s ease;
-        }
-        
-        .store-header {
-            padding: 15px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        
-        .store-header:hover {
-            background: rgba(52, 73, 94, 0.5);
-        }
-        
-        .store-name {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .logo {
+            font-size: 2.5em;
             font-weight: bold;
-        }
-        
-        .store-status {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 8px;
-        }
-        
-        .status-green {
-            background: #00FF41;
-            box-shadow: 0 0 8px #00FF41;
-        }
-        
-        .status-yellow {
-            background: #FFA500;
-            box-shadow: 0 0 8px #FFA500;
-        }
-        
-        .status-red {
-            background: #FC3D21;
-            box-shadow: 0 0 8px #FC3D21;
-        }
-        
-        .expand-indicator {
-            color: #00FF41;
-            transition: transform 0.3s ease;
-        }
-        
-        .store-module.collapsed .expand-indicator {
-            transform: rotate(-90deg);
-        }
-        
-        .store-details {
-            padding: 0 15px 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .store-module.collapsed .store-details {
-            max-height: 0;
-            padding: 0 15px;
-        }
-        
-        .store-info {
-            display: grid;
-            gap: 8px;
-            margin-bottom: 15px;
-            font-size: 0.9em;
-        }
-        
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 3px 0;
-        }
-        
-        .info-label {
-            color: #bdc3c7;
-        }
-        
-        .info-value {
             color: #FFFFFF;
+            margin-bottom: 10px;
         }
         
-        .analysis-button {
-            background: linear-gradient(145deg, #0B3D91, #1a1a1a);
-            border: 1px solid #00FF41;
-            color: #FFFFFF;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 0.8em;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        
-        .analysis-button:hover {
-            background: linear-gradient(145deg, #FC3D21, #0B3D91);
-            box-shadow: 0 0 10px #FC3D21;
-        }
-        
-        /* Analysis Modal */
-        .analysis-modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
-            border: 3px solid #e74c3c;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 700px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            color: white;
-            font-family: 'Orbitron', monospace;
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #34495e;
-        }
-        
-        .modal-title {
-            font-size: 24px;
-            font-weight: 900;
-            color: #ecf0f1;
+        .subtitle {
+            color: #FC3D21;
+            font-size: 1.2em;
             letter-spacing: 2px;
         }
         
-        .modal-close {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 35px;
-            height: 35px;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .modal-close:hover {
-            background: #c0392b;
-            transform: rotate(90deg);
-        }
-        
-        .analysis-section {
-            background: rgba(52, 73, 94, 0.3);
-            border-radius: 10px;
+        .container {
             padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .analysis-section-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #f39c12;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        @media (max-width: 768px) {
-            .strategy-panel {
-                width: 100%;
-                right: -100%;
-            }
-            
-            .strategy-tab {
-                font-size: 12px;
-                padding: 6px 12px;
-            }
-        }        .container {
-            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
             max-width: 1400px;
             margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        @media (min-width: 1200px) {
-            .container {
-                grid-template-columns: repeat(3, 1fr);
-            }
         }
         
         .panel {
@@ -466,8 +97,6 @@
             border: 2px solid #30363d;
             border-radius: 12px;
             padding: 20px;
-            position: relative;
-            transition: all 0.3s ease;
         }
         
         .panel::before {
@@ -486,550 +115,76 @@
             color: #00FF41;
             margin-bottom: 20px;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
         
-        .panel-title:hover {
-            color: #FFFFFF;
-            text-shadow: 0 0 5px #00FF41;
-        }
-        
-        .panel-title-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .panel-badge {
-            background: #FC3D21;
-            color: #FFFFFF;
-            padding: 4px 8px;
-            border-radius: 50%;
-            font-size: 0.7em;
-            font-weight: bold;
-        }
-        
-        .collapse-indicator {
-            color: #00FF41;
-            font-size: 1.2em;
-            transition: transform 0.3s ease;
-        }
-        
-        .panel.collapsed .collapse-indicator {
-            transform: rotate(-90deg);
-        }
-        
-        .panel-content {
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-        
-        .panel.collapsed .panel-content {
-            max-height: 0;
-            opacity: 0;
-            margin: 0;
-            padding: 0;
-        }        
-        /* TACTICAL TIMELINE */
         .timeline-panel {
             background: linear-gradient(145deg, #000000 0%, #0d1117 100%);
             border: 2px solid #00FF41;
         }
         
-        .timeline-container {
-            max-height: 400px;
-            overflow-y: auto;
-            position: relative;
-            background: #000;
-            border-radius: 8px;
-            padding: 20px;
-        }
-        
-        .timeline-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .timeline-container::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        
-        .timeline-container::-webkit-scrollbar-thumb {
-            background: #00FF41;
-            border-radius: 4px;
-        }
-        
-        .current-time-display {
-            background: #000;
-            padding: 15px;
-            text-align: center;
-            border: 2px solid #00FF41;
-            border-radius: 8px;
-            font-size: 1.8em;
-            color: #00FF41;
-            margin-bottom: 20px;
-            font-family: 'Courier New', monospace;
-            letter-spacing: 2px;
-        }
-        
-        .timeline-event {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            position: relative;
-            transition: all 0.3s ease;
-        }
-        
-        .timeline-time {
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
-            color: #FFA500;
-            font-size: 1.1em;
-            width: 60px;
-            letter-spacing: 1px;
-        }
-        
-        .timeline-line {
-            width: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 15px;
-            position: relative;
-        }
-        
-        .timeline-line::before {
-            content: '';
-            position: absolute;
-            width: 2px;
-            height: 60px;
-            background: #00FF41;
-            top: -20px;
-            z-index: 1;
-        }
-        
-        .timeline-dot {
-            width: 12px;
-            height: 12px;
-            border: 2px solid #00FF41;
-            border-radius: 50%;
-            background: transparent;
-            position: relative;
-            z-index: 2;
-            transition: all 0.3s ease;
-        }
-        
-        .timeline-event.future .timeline-dot {
-            background: #00FF41;
-            box-shadow: 0 0 10px #00FF41;
-        }
-        
-        .timeline-event.next .timeline-dot {
-            background: #FC3D21;
-            border-color: #FC3D21;
-            box-shadow: 0 0 15px #FC3D21;
-            animation: pulse 1s infinite;
-        }
-        
-        .timeline-event.past {
-            opacity: 0.5;
-        }
-        
-        .timeline-event.past .timeline-time {
-            color: #666;
-        }
-        
-        .timeline-event.past .timeline-dot {
-            border-color: #666;
-            background: transparent;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.3); }
-        }
-        
-        .timeline-details {
-            flex: 1;
-        }
-        
-        .timeline-store {
-            font-weight: bold;
-            color: #FFFFFF;
-            font-size: 1.1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        
-        .timeline-store:hover {
-            color: #00FF41;
-            text-shadow: 0 0 5px #00FF41;
-        }
-        
-        .timeline-action {
-            color: #00FF41;
-            font-size: 0.9em;
-            margin-top: 2px;
-        }
-        
-        .timeline-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 4px;
-        }
-        
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #FFA500;
-        }
-        
-        .status-indicator.confirmed {
-            background: #00FF41;
-            box-shadow: 0 0 5px #00FF41;
-        }
-        
-        .status-indicator.warning {
-            background: #FC3D21;
-            box-shadow: 0 0 5px #FC3D21;
-        }
-        
-        /* SOCIAL INTELLIGENCE ENHANCED */
         .social-panel {
             background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
             border: 2px solid #3498db;
         }
         
-        .social-feed {
-            max-height: 400px;
-            overflow-y: auto;
+        .current-time {
             background: #000;
-            border-radius: 8px;
             padding: 15px;
-        }
-        
-        .social-feed::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        .social-feed::-webkit-scrollbar-track {
-            background: #1a1a1a;
-        }
-        
-        .social-feed::-webkit-scrollbar-thumb {
-            background: #3498db;
-            border-radius: 4px;
-        }
-        
-        .feed-item.live-item {
-            background: rgba(0, 255, 65, 0.1);
-            border-left: 4px solid #00FF41;
-            animation: livePulse 3s infinite;
-        }
-        
-        @keyframes livePulse {
-            0%, 100% { border-left-color: #00FF41; }
-            50% { border-left-color: #FFA500; }
-        }
-        
-        .feed-item {
-            background: rgba(52, 152, 219, 0.1);
-            border-left: 4px solid #3498db;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-        
-        .feed-item:hover {
-            background: rgba(52, 152, 219, 0.2);
-            border-left-color: #00FF41;
-        }
-        
-        .feed-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .feed-source {
-            font-weight: bold;
-            color: #3498db;
-            font-size: 0.9em;
-        }
-        
-        .feed-time {
-            color: #FFA500;
-            font-size: 0.8em;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .feed-content {
-            color: #FFFFFF;
-            line-height: 1.4;
-            font-size: 0.9em;
-        }
-        
-        .feed-tags {
-            margin-top: 8px;
-            display: flex;
-            gap: 5px;
-            flex-wrap: wrap;
-        }
-        
-        .feed-tag {
-            background: #FC3D21;
-            color: #FFFFFF;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 0.7em;
-            text-transform: uppercase;
-        }
-        
-        .priority-high { border-left-color: #00FF41 !important; }
-        .priority-medium { border-left-color: #FFA500 !important; }
-        .priority-low { border-left-color: #FC3D21 !important; }
-        
-        .auto-refresh {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-        }
-        
-        .refresh-indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: #00FF41;
-            animation: pulse 2s infinite;
-        }
-        
-        .refresh-text {
-            color: #FFA500;
-            font-size: 0.8em;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .button {
-            background: linear-gradient(145deg, #0B3D91, #1a1a1a);
+            text-align: center;
             border: 2px solid #00FF41;
-            color: #FFFFFF;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 10px 5px;
-            font-family: inherit;
-            text-transform: uppercase;
-            transition: all 0.3s ease;
-        }
-        
-        .button:hover {
-            background: linear-gradient(145deg, #FC3D21, #0B3D91);
-            box-shadow: 0 0 15px #FC3D21;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 15px;
-        }
-        
-        @media (min-width: 600px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-        
-        .status-item {
-            background: rgba(0, 255, 65, 0.1);
-            border: 1px solid #00FF41;
-            padding: 15px;
             border-radius: 8px;
-            transition: all 0.3s ease;
+            font-size: 1.5em;
+            color: #00FF41;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
         }
-        
-        .status-item:hover {
-            background: rgba(0, 255, 65, 0.2);
-            border-color: #00FF41;
-            box-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
-        }
-        
-        .status-name {
-            font-weight: bold;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .priority-high { color: #00FF41; }
-        .priority-medium { color: #FFA500; }
-        .priority-low { color: #FC3D21; }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Acquisition Strategy Side Panel -->
-    <div class="strategy-tab" id="strategyTab" onclick="toggleStrategy()">
+    <!-- Strategy Panel -->
+    <div class="strategy-tab" onclick="toggleStrategy()">
         ACQUISITION STRATEGY
     </div>
     
     <div class="strategy-panel" id="strategyPanel">
-        <div class="strategy-content">
-            <div class="strategy-title">Mission Strategy</div>
-            
-            <!-- Success Probability Module -->
-            <div class="success-probability">
-                <div class="success-rate">92%</div>
-                <div style="color: #FFA500; font-size: 1.1em; margin-bottom: 15px;">
-                    SUCCESS PROBABILITY
-                </div>
-                <div class="success-factors">
-                    <div class="factor">
-                        <span>DC Positioning</span>
-                        <span class="factor-positive">+15%</span>
-                    </div>
-                    <div class="factor">
-                        <span>Multi-Location</span>
-                        <span class="factor-positive">+22%</span>
-                    </div>
-                    <div class="factor">
-                        <span>Supply Constraints</span>
-                        <span class="factor-negative">-5%</span>
-                    </div>
-                </div>
-                <div style="font-size: 0.8em; color: #bdc3c7; margin-top: 10px;">
-                    GARDEN Framework Validated
-                </div>
-            </div>
-            
-            <!-- Location Health -->
-            <div class="location-health">
-                <div class="location-health-title">Location Health</div>
-                
-                <!-- Best Buy -->
-                <div class="store-module" id="bestBuyModule">
-                    <div class="store-header" onclick="toggleStore('bestBuy')">
-                        <div class="store-name">
-                            <div class="store-status status-green"></div>
-                            Best Buy Annapolis
-                        </div>
-                        <div class="expand-indicator" id="bestBuyIndicator">▼</div>
-                    </div>
-                    <div class="store-details" id="bestBuyDetails">
-                        <div class="store-info">
-                            <div class="info-row">
-                                <span class="info-label">Status:</span>
-                                <span class="info-value">Midnight Launch Confirmed</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Lineup Time:</span>
-                                <span class="info-value">22:30 (Updated)</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Priority:</span>
-                                <span class="info-value">PRIMARY TARGET</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Special:</span>
-                                <span class="info-value">Commemorative Coins</span>
-                            </div>
-                        </div>
-                        <button class="analysis-button" onclick="showAnalysis('bestBuy')">
-                            📊 DETAILED ANALYSIS
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- Target -->
-                <div class="store-module" id="targetModule">
-                    <div class="store-header" onclick="toggleStore('target')">
-                        <div class="store-name">
-                            <div class="store-status status-yellow"></div>
-                            Target Annapolis
-                        </div>
-                        <div class="expand-indicator" id="targetIndicator">▼</div>
-                    </div>
-                    <div class="store-details" id="targetDetails">
-                        <div class="store-info">
-                            <div class="info-row">
-                                <span class="info-label">Status:</span>
-                                <span class="info-value">Ticket System 08:00</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Warning:</span>
-                                <span class="info-value">Bundles Delayed June 11</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Priority:</span>
-                                <span class="info-value">SECONDARY TARGET</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Strategy:</span>
-                                <span class="info-value">Early Morning</span>
-                            </div>
-                        </div>
-                        <button class="analysis-button" onclick="showAnalysis('target')">
-                            📊 DETAILED ANALYSIS
-                        </button>
-                    </div>
-                </div>
-                
-                <!-- GameStop -->
-                <div class="store-module" id="gamestopModule">
-                    <div class="store-header" onclick="toggleStore('gamestop')">
-                        <div class="store-name">
-                            <div class="store-status status-yellow"></div>
-                            GameStop Mall
-                        </div>
-                        <div class="expand-indicator" id="gamestopIndicator">▼</div>
-                    </div>
-                    <div class="store-details" id="gamestopDetails">
-                        <div class="store-info">
-                            <div class="info-row">
-                                <span class="info-label">Status:</span>
-                                <span class="info-value">Two-Phase Event</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Phase 1:</span>
-                                <span class="info-value">15:00 Pay</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Phase 2:</span>
-                                <span class="info-value">00:00 Pickup</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Walk-ins:</span>
-                                <span class="info-value">~10 Units</span>
-                            </div>
-                        </div>
-                        <button class="analysis-button" onclick="showAnalysis('gamestop')">
-                            📊 DETAILED ANALYSIS
-                        </button>
-                    </div>
-                </div>
+        <h2 style="color: #00FF41; text-align: center; margin-bottom: 30px;">MISSION STRATEGY</h2>
+        
+        <div class="success-probability">
+            <div class="success-rate">92%</div>
+            <div style="color: #FFA500; margin: 10px 0;">SUCCESS PROBABILITY</div>
+            <div style="font-size: 0.9em;">
+                <div>DC Positioning: +15%</div>
+                <div>Multi-Location: +22%</div>
+                <div>Supply Constraints: -5%</div>
             </div>
         </div>
-    </div>
-    
-    <!-- Analysis Modal -->
-    <div class="analysis-modal" id="analysisModal" onclick="closeAnalysis(event)">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <div class="modal-title" id="modalTitle">STRATEGIC ANALYSIS</div>
-                <button class="modal-close" onclick="closeAnalysis()">×</button>
+        
+        <div style="margin: 20px 0;">
+            <h3 style="color: #FFA500; margin-bottom: 15px;">LOCATION HEALTH</h3>
+            
+            <div style="background: rgba(52, 73, 94, 0.3); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #00FF41;"></div>
+                    <strong>Best Buy Annapolis</strong>
+                </div>
+                <div style="font-size: 0.9em; margin-top: 8px;">PRIMARY TARGET - Midnight Launch Confirmed</div>
             </div>
-            <div id="modalContent">
-                <!-- Content will be populated dynamically -->
+            
+            <div style="background: rgba(52, 73, 94, 0.3); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #FFA500;"></div>
+                    <strong>Target Annapolis</strong>
+                </div>
+                <div style="font-size: 0.9em; margin-top: 8px;">SECONDARY - Ticket System 08:00</div>
+            </div>
+            
+            <div style="background: rgba(52, 73, 94, 0.3); padding: 15px; border-radius: 8px; margin: 10px 0;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div style="width: 12px; height: 12px; border-radius: 50%; background: #FFA500;"></div>
+                    <strong>GameStop Mall</strong>
+                </div>
+                <div style="font-size: 0.9em; margin-top: 8px;">BACKUP - Two-Phase Event</div>
             </div>
         </div>
     </div>
@@ -1037,502 +192,108 @@
     <div class="header">
         <div class="logo">🚀 NASA MISSION CONTROL</div>
         <div class="subtitle">OPERATION: SWITCH 2 ACQUISITION</div>
-        
-        <div class="master-controls">
-            <button class="master-button" onclick="expandAll()">📊 EXPAND ALL</button>
-            <button class="master-button" onclick="collapseAll()">📋 COLLAPSE ALL</button>
-            <button class="master-button" onclick="focusMode()">🎯 FOCUS MODE</button>
-        </div>
-        
-        <div class="header-countdown">
-            <div class="countdown-section">
-                <div class="countdown-label">Time Until Switch 2 Launch</div>
-                <div class="countdown-value" id="launch-countdown">Loading...</div>
-            </div>
-            <div class="countdown-section">
-                <div class="countdown-label">Next Mission Event</div>
-                <div class="countdown-value next-event" id="next-event-countdown">Loading...</div>
+    </div>
+    
+    <div class="container">
+        <!-- Timeline Panel -->
+        <div class="panel timeline-panel">
+            <div class="panel-title">⏰ TACTICAL TIMELINE</div>
+            <div class="current-time" id="current-time">Loading...</div>
+            <div id="timeline-content">
+                <div style="color: #00FF41; margin: 10px 0;">22:30 - Best Buy Lineup (UPDATED)</div>
+                <div style="color: #FFA500; margin: 10px 0;">00:01 - EXECUTE MISSION</div>
+                <div style="color: #666; margin: 10px 0;">07:30 - Target Backup</div>
             </div>
         </div>
-    </div>    <div class="container">
-        <!-- TACTICAL TIMELINE - FIRST POSITION -->
-        <div class="panel timeline-panel" id="panel-timeline">
-            <div class="panel-title" onclick="togglePanel('timeline')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">TL</span>
-                    ⏰ TACTICAL TIMELINE
+        
+        <!-- Social Intelligence -->
+        <div class="panel social-panel">
+            <div class="panel-title">📡 SOCIAL INTELLIGENCE</div>
+            <div style="background: #000; padding: 15px; border-radius: 8px;">
+                <div style="margin: 10px 0; padding: 10px; background: rgba(52, 152, 219, 0.1); border-left: 4px solid #3498db; border-radius: 4px;">
+                    <strong>@mattswider</strong> - 4h ago<br>
+                    ⏰Who still needs a Switch 2? I'm monitoring all retailers...
                 </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            
-            <div class="panel-content">
-                <div class="current-time-display" id="current-time">
-                    Loading...
-                </div>
-                
-                <div class="timeline-container" id="timeline-container">
-                    <!-- Timeline events will be populated by JavaScript -->
+                <div style="margin: 10px 0; padding: 10px; background: rgba(0, 255, 65, 0.1); border-left: 4px solid #00FF41; border-radius: 4px;">
+                    <strong>LIVE MONITOR</strong> - Active<br>
+                    🔴 Monitoring Twitter, Reddit, News, Retail sites
                 </div>
             </div>
         </div>
         
-        <!-- ENHANCED SOCIAL INTELLIGENCE -->
-        <div class="panel social-panel" id="panel-social">
-            <div class="panel-title" onclick="togglePanel('social')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">SI</span>
-                    📡 SOCIAL INTELLIGENCE
+        <!-- Stock Monitoring -->
+        <div class="panel">
+            <div class="panel-title">📈 STOCK MONITORING</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="background: rgba(0, 255, 65, 0.1); border: 1px solid #00FF41; padding: 15px; border-radius: 8px;">
+                    <strong>Best Buy</strong><br>
+                    <span style="color: #FC3D21;">OUT OF STOCK</span>
                 </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            <div class="panel-content">
-                <div class="auto-refresh">
-                    <div class="refresh-indicator"></div>
-                    <span class="refresh-text">🔴 LIVE MONITORING: Twitter, Reddit, News, Retail</span>
-                    <button class="button" onclick="forceRefreshSocial()" style="margin: 0; padding: 5px 10px; font-size: 0.7em;">🔍 GATHER INTEL</button>
+                <div style="background: rgba(0, 255, 65, 0.1); border: 1px solid #00FF41; padding: 15px; border-radius: 8px;">
+                    <strong>Target</strong><br>
+                    <span style="color: #FC3D21;">OUT OF STOCK</span>
                 </div>
-                
-                <div class="social-feed" id="social-feed">
-                    <!-- Social feed will be populated by JavaScript -->
+                <div style="background: rgba(0, 255, 65, 0.1); border: 1px solid #00FF41; padding: 15px; border-radius: 8px;">
+                    <strong>GameStop</strong><br>
+                    <span style="color: #FC3D21;">OUT OF STOCK</span>
                 </div>
-            </div>
-        </div>
-        
-        <!-- STOCK MONITORING -->
-        <div class="panel" id="panel-stock">
-            <div class="panel-title" onclick="togglePanel('stock')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">SC</span>
-                    📈 STOCK MONITORING
-                </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            <div class="panel-content">
-                <div class="auto-refresh">
-                    <div class="refresh-indicator"></div>
-                    <span class="refresh-text">Checking every 15 seconds</span>
-                    <button class="button" onclick="forceStockCheck()" style="margin: 0; padding: 5px 10px; font-size: 0.7em;">🔄 FORCE</button>
-                </div>
-                
-                <div class="grid">
-                    <div class="status-item">
-                        <div class="status-name">Best Buy</div>
-                        <div style="color: #FC3D21;">OUT OF STOCK</div>
-                        <div style="font-size: 0.8em; color: #666;">Last checked: 2 mins ago</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-name">Target</div>
-                        <div style="color: #FC3D21;">OUT OF STOCK</div>
-                        <div style="font-size: 0.8em; color: #666;">Last checked: 3 mins ago</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-name">GameStop</div>
-                        <div style="color: #FC3D21;">OUT OF STOCK</div>
-                        <div style="font-size: 0.8em; color: #666;">Last checked: 5 mins ago</div>
-                    </div>
-                    <div class="status-item">
-                        <div class="status-name">Staples</div>
-                        <div style="color: #FFA500;">MONITORING</div>
-                        <div style="font-size: 0.8em; color: #FFA500;">349 locations tracked</div>
-                    </div>
+                <div style="background: rgba(0, 255, 65, 0.1); border: 1px solid #00FF41; padding: 15px; border-radius: 8px;">
+                    <strong>Staples</strong><br>
+                    <span style="color: #FFA500;">MONITORING</span>
                 </div>
             </div>
         </div>
         
-        <!-- NEXT EVENT INFO -->
-        <div class="panel" id="panel-next-event">
-            <div class="panel-title" onclick="togglePanel('next-event')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">NE</span>
-                    🎯 NEXT EVENT
-                </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            <div class="panel-content">
-                <div id="next-event-details" style="text-align: center; padding: 20px;">
-                    <div style="font-size: 1.5em; color: #00FF41; margin-bottom: 10px;">
-                        <span id="next-event-name">Loading...</span>
-                    </div>
-                    <div style="color: #FFA500; margin-bottom: 15px;">
-                        <span id="next-event-action">Loading...</span>
-                    </div>
-                    <div style="font-size: 2.5em; color: #FC3D21; margin: 20px 0; font-family: 'Courier New', monospace;">
-                        <span id="next-event-time-remaining">--:--:--</span>
-                    </div>
-                    <button class="button" onclick="navigateToNextEvent()" id="next-event-nav-button">🗺️ NAVIGATE</button>
-                </div>
+        <!-- Next Event -->
+        <div class="panel">
+            <div class="panel-title">🎯 NEXT EVENT</div>
+            <div style="text-align: center; padding: 20px;">
+                <div style="font-size: 1.5em; color: #00FF41; margin-bottom: 10px;" id="next-event-name">Best Buy Annapolis</div>
+                <div style="color: #FFA500; margin-bottom: 15px;">Arrive and begin lineup</div>
+                <div style="font-size: 2em; color: #FC3D21; font-family: 'Courier New', monospace;" id="countdown">--:--:--</div>
             </div>
         </div>
-    </div>    <script>
-        // Timeline events data with GARDEN intelligence updates
-        const timelineEvents = [
-            // June 4 Events
-            { time: '11:00', date: '2025-06-04', type: 'departure', store: 'Blackbird Salon (DC)', action: 'Strategic haircut appointment', status: 'confirmed', priority: 'high' },
-            { time: '12:30', date: '2025-06-04', type: 'departure', store: 'Best Buy Annapolis', action: 'Depart DC for Annapolis area', status: 'confirmed', priority: 'high' },
-            { time: '15:00', date: '2025-06-04', type: 'prepare', store: 'GameStop Mall', action: 'Event participation (optional guaranteed pickup)', status: 'confirmed', priority: 'medium' },
-            { time: '22:00', date: '2025-06-04', type: 'departure', store: 'Best Buy Annapolis', action: 'Depart for midnight lineup', status: 'confirmed', priority: 'high' },
-            { time: '22:30', date: '2025-06-04', type: 'prepare', store: 'Best Buy Annapolis', action: 'Arrive and begin lineup (UPDATED)', status: 'confirmed', priority: 'high' },
-            
-            // June 5 Events (Launch Day)
-            { time: '00:01', date: '2025-06-05', type: 'launch', store: 'Best Buy Annapolis', action: 'EXECUTE MISSION - Store opens + commemorative coins', status: 'confirmed', priority: 'high' },
-            { time: '00:01', date: '2025-06-05', type: 'launch', store: 'GameStop Mall', action: 'Midnight pickup (if pre-paid)', status: 'confirmed', priority: 'medium' },
-            { time: '07:00', date: '2025-06-05', type: 'departure', store: 'Target Annapolis', action: 'Depart for backup strategy', status: 'confirmed', priority: 'medium' },
-            { time: '07:30', date: '2025-06-05', type: 'prepare', store: 'Target Annapolis', action: 'Ticket system lineup', status: 'confirmed', priority: 'medium' },
-            { time: '08:00', date: '2025-06-05', type: 'launch', store: 'Target Annapolis', action: 'Ticket distribution begins', status: 'confirmed', priority: 'medium' }
-        ];
-        
-        // Real social media intelligence
-        let socialIntelligence = [
-            {
-                source: '@mattswider',
-                time: '4h ago',
-                content: '⏰Who still needs a Switch 2? I\'m in line 8 hours before in-store and online pre-orders go live.',
-                tags: ['CRITICAL', 'RESTOCK'],
-                priority: 'high',
-                verified: true,
-                url: 'https://twitter.com/mattswider/status/1234567890',
-                isLive: false
-            },
-            {
-                source: 'LIVE MONITOR',
-                time: 'Active',
-                content: '🔴 LIVE: Monitoring @mattswider, @NintendoAmerica, @BestBuy, @Target for real-time updates.',
-                tags: ['SYSTEM', 'MONITORING'],
-                priority: 'high',
-                verified: true,
-                url: '#',
-                isLive: true
-            }
-        ];
-        
-        let nextEvent = null;
-        // Strategy Panel Functions
+    </div>
+    
+    <script>
         let strategyOpen = false;
-        let strategyUpdateAvailable = false;
         
         function toggleStrategy() {
             const panel = document.getElementById('strategyPanel');
-            const tab = document.getElementById('strategyTab');
-            
             strategyOpen = !strategyOpen;
-            
-            if (strategyOpen) {
-                panel.classList.add('open');
-                tab.classList.remove('pulse');
-                strategyUpdateAvailable = false;
-            } else {
-                panel.classList.remove('open');
-            }
+            panel.classList.toggle('open');
         }
         
-        function toggleStore(storeId) {
-            const module = document.getElementById(`${storeId}Module`);
-            const indicator = document.getElementById(`${storeId}Indicator`);
-            
-            module.classList.toggle('collapsed');
-        }
-        
-        function showAnalysis(storeId) {
-            const modal = document.getElementById('analysisModal');
-            const title = document.getElementById('modalTitle');
-            const content = document.getElementById('modalContent');
-            
-            const analyses = {
-                bestBuy: {
-                    title: 'BEST BUY ANNAPOLIS - STRATEGIC ANALYSIS',
-                    content: `
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">GARDEN Framework Assessment</div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div>
-                                    <strong>Systematic Approach:</strong> 95% match<br>
-                                    <strong>Completion-Driven:</strong> 92% match<br>
-                                    <strong>Multi-Option Strategy:</strong> 88% match<br>
-                                    <strong>Location Optimization:</strong> 85% match
-                                </div>
-                                <div>
-                                    <strong>Success Probability:</strong> 89%<br>
-                                    <strong>Risk Factor:</strong> High demand<br>
-                                    <strong>Competitive Advantage:</strong> 22:30 early lineup<br>
-                                    <strong>Special Incentive:</strong> Commemorative coins
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">Intelligence Summary</div>
-                            <p>Best Buy Annapolis confirmed as PRIMARY TARGET with highest success probability. Midnight launch confirmed with commemorative coins as additional incentive. Intel suggests arriving at 22:30 (30 minutes earlier than originally planned) due to expected long lines based on social media chatter.</p>
-                        </div>
-                        
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">Competition Analysis</div>
-                            <p>Expected heavy competition for midnight launch. Geographic arbitrage from DC haircut appointment provides positioning advantage. Store historically reliable for console launches with adequate inventory allocation.</p>
-                        </div>
-                    `
-                },
-                target: {
-                    title: 'TARGET ANNAPOLIS - STRATEGIC ANALYSIS',
-                    content: `
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">GARDEN Framework Assessment</div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div>
-                                    <strong>Systematic Approach:</strong> 78% match<br>
-                                    <strong>Completion-Driven:</strong> 71% match<br>
-                                    <strong>Multi-Option Strategy:</strong> 85% match<br>
-                                    <strong>Ticket System Compatibility:</strong> 82% match
-                                </div>
-                                <div>
-                                    <strong>Success Probability:</strong> 67%<br>
-                                    <strong>Risk Factor:</strong> Bundle delays<br>
-                                    <strong>Strategy Window:</strong> 08:00-17:00<br>
-                                    <strong>Ticket System:</strong> Organized distribution
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">Intelligence Summary</div>
-                            <p>Target confirmed ticket system launch with extended window (08:00-17:00). Warning: Some bundles delayed to June 11, reducing immediate availability. Ticket system provides organized approach but may limit quantities per customer.</p>
-                        </div>
-                        
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">Risk Factors</div>
-                            <p>Bundle delays indicate supply constraints. Ticket system may result in lottery-style distribution. Best used as SECONDARY strategy if Best Buy primary fails.</p>
-                        </div>
-                    `
-                },
-                gamestop: {
-                    title: 'GAMESTOP MALL - STRATEGIC ANALYSIS',
-                    content: `
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">GARDEN Framework Assessment</div>
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                                <div>
-                                    <strong>Systematic Approach:</strong> 72% match<br>
-                                    <strong>Two-Phase Strategy:</strong> 88% match<br>
-                                    <strong>Backup Viability:</strong> 76% match<br>
-                                    <strong>Mall Constraints:</strong> 65% match
-                                </div>
-                                <div>
-                                    <strong>Success Probability:</strong> 58%<br>
-                                    <strong>Walk-in Units:</strong> ~10 available<br>
-                                    <strong>Phase 1:</strong> 15:00 payment<br>
-                                    <strong>Phase 2:</strong> 00:00 pickup
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">Intelligence Summary</div>
-                            <p>GameStop offers two-phase strategy: pay at 15:00 event, pickup at midnight. Approximately 10 units available for walk-ins. Mall location presents operational constraints but provides guaranteed pickup if payment completed during Phase 1.</p>
-                        </div>
-                        
-                        <div class="analysis-section">
-                            <div class="analysis-section-title">Strategic Value</div>
-                            <p>Excellent BACKUP option if Best Buy strategy fails. Two-phase approach reduces midnight competition. Consider participating in 15:00 event as insurance policy while maintaining Best Buy as primary target.</p>
-                        </div>
-                    `
-                }
-            };
-            
-            const analysis = analyses[storeId];
-            title.textContent = analysis.title;
-            content.innerHTML = analysis.content;
-            modal.style.display = 'flex';
-        }
-        
-        function closeAnalysis(event) {
-            if (event && event.target !== document.getElementById('analysisModal')) return;
-            document.getElementById('analysisModal').style.display = 'none';
-        }
-        
-        function checkForStrategyUpdates() {
-            // This would be called when social intelligence detects strategy-affecting updates
-            if (!strategyOpen && !strategyUpdateAvailable) {
-                const tab = document.getElementById('strategyTab');
-                tab.classList.add('pulse');
-                strategyUpdateAvailable = true;
-            }
-        }                    const hours = Math.floor(timeLeft / (60 * 60 * 1000));
-                    const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
-                    const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
-                    
-                    // Update header countdown
-                    document.getElementById('next-event-countdown').textContent = 
-                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                    
-                    // Update next event panel
-                    document.getElementById('next-event-name').textContent = nextEvent.store;
-                    document.getElementById('next-event-action').textContent = nextEvent.action;
-                    document.getElementById('next-event-time-remaining').textContent = 
-                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                } else {
-                    document.getElementById('next-event-countdown').textContent = 'EVENT ACTIVE';
-                    document.getElementById('next-event-time-remaining').textContent = 'ACTIVE NOW';
-                }
-            } else {
-                document.getElementById('next-event-countdown').textContent = 'MISSION COMPLETE';
-                document.getElementById('next-event-name').textContent = 'All Events Complete';
-                document.getElementById('next-event-action').textContent = 'Mission accomplished!';
-                document.getElementById('next-event-time-remaining').textContent = 'COMPLETE';
-            }
-        }
-        
-        function renderSocialFeed() {
-            const feedContainer = document.getElementById('social-feed');
-            
-            feedContainer.innerHTML = socialIntelligence.map(item => {
-                const isLive = item.isLive;
-                const liveIndicator = isLive ? '<span style="color: #00FF41; font-size: 0.8em;">● LIVE</span>' : '';
-                
-                return `
-                    <div class="feed-item priority-${item.priority} ${isLive ? 'live-item' : ''}" onclick="openSocialLink('${item.url}')">
-                        <div class="feed-header">
-                            <div class="feed-source">${item.source}${item.verified ? ' ✓' : ''} ${liveIndicator}</div>
-                            <div class="feed-time">${item.time}</div>
-                        </div>
-                        <div class="feed-content">${item.content}</div>
-                        <div class="feed-tags">
-                            ${item.tags.map(tag => `<span class="feed-tag">${tag}</span>`).join('')}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        function openSocialLink(url) {
-            window.open(url, '_blank');
-        }
-        
-        async function forceRefreshSocial() {
-            const button = event.target;
-            const originalText = button.textContent;
-            button.textContent = '🔍 GATHERING INTEL...';
-            button.style.background = 'linear-gradient(145deg, #00FF41, #0B3D91)';
-            
-            // Simulate intelligence gathering
-            setTimeout(() => {
-                button.textContent = '✅ UPDATED';
-                checkForStrategyUpdates(); // Trigger strategy update notification
-                setTimeout(() => {
-                    button.textContent = originalText;
-                    button.style.background = 'linear-gradient(145deg, #0B3D91, #1a1a1a)';
-                }, 2000);
-            }, 1500);
-        }        function getEventStatus(event) {
+        function updateTime() {
             const now = new Date();
-            const eventDateTime = new Date(`${event.date}T${event.time}:00-04:00`);
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
             
-            if (eventDateTime < now) {
-                return 'past';
-            } else {
-                if (nextEvent && nextEvent === event) {
-                    return 'next';
-                } else {
-                    return 'future';
-                }
-            }
-        }
-        
-        function getActionIcon(type) {
-            switch(type) {
-                case 'departure': return '🚗';
-                case 'prepare': return '⏳';
-                case 'launch': return '🚀';
-                default: return '📍';
-            }
-        }
-        
-        function getStoreAddress(storeName) {
-            const addresses = {
-                'Best Buy Annapolis': '2643 Housley Rd, Annapolis, MD 21401',
-                'Target Annapolis': 'Annapolis Mall, Annapolis, MD 21401', 
-                'GameStop Mall': '179 Annapolis Mall, Annapolis, MD 21401',
-                'Blackbird Salon (DC)': '1920 L St NW, Washington, DC 20036'
-            };
-            return addresses[storeName] || storeName;
-        }
-        
-        function openNavigation(storeName) {
-            const address = getStoreAddress(storeName);
-            const encodedAddress = encodeURIComponent(address);
-            window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&travelmode=driving`, '_blank');
-        }
-        
-        function navigateToNextEvent() {
-            if (nextEvent) {
-                openNavigation(nextEvent.store);
-            }
-        }
-        
-        function renderTimeline() {
-            const container = document.getElementById('timeline-container');
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds} MILITARY TIME`;
             
-            container.innerHTML = timelineEvents.map(event => {
-                const status = getEventStatus(event);
-                const icon = getActionIcon(event.type);
+            // Update countdown to next event (Best Buy lineup)
+            const nextEvent = new Date('2025-06-04T22:30:00-04:00');
+            const timeLeft = nextEvent - now;
+            
+            if (timeLeft > 0) {
+                const hours = Math.floor(timeLeft / (60 * 60 * 1000));
+                const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
                 
-                return `
-                    <div class="timeline-event ${status}" data-time="${event.time}">
-                        <div class="timeline-time">${event.time}</div>
-                        <div class="timeline-line">
-                            <div class="timeline-dot"></div>
-                        </div>
-                        <div class="timeline-details">
-                            <div class="timeline-store" onclick="openNavigation('${event.store}')">
-                                ${icon} ${event.store}
-                            </div>
-                            <div class="timeline-action">${event.action}</div>
-                            <div class="timeline-status">
-                                <div class="status-indicator ${event.status}"></div>
-                                <span style="font-size: 0.8em; color: #${event.priority === 'high' ? '00FF41' : event.priority === 'medium' ? 'FFA500' : 'FC3D21'};">
-                                    ${event.priority.toUpperCase()} PRIORITY
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+                document.getElementById('countdown').textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                document.getElementById('countdown').textContent = 'EVENT ACTIVE';
+            }
         }
         
-        function forceStockCheck() {
-            const button = event.target;
-            const originalText = button.textContent;
-            button.textContent = '🔄 CHECKING...';
-            button.style.background = 'linear-gradient(145deg, #FFA500, #0B3D91)';
-            
-            setTimeout(() => {
-                button.textContent = originalText;
-                button.style.background = 'linear-gradient(145deg, #0B3D91, #1a1a1a)';
-            }, 2000);
-        }
+        // Update every second
+        setInterval(updateTime, 1000);
+        updateTime();
         
-        // Initialize and update functions
-        function init() {
-            renderTimeline();
-            renderSocialFeed();
-            updateCurrentTime();
-            updateLaunchCountdown();
-            updateNextEventCountdown();
-            
-            // Update every second
-            setInterval(() => {
-                updateCurrentTime();
-                updateLaunchCountdown();
-                updateNextEventCountdown();
-                renderTimeline(); // Re-render to update event statuses
-            }, 1000);
-            
-            console.log('🚀 ACQUISITION STRATEGY MISSION CONTROL ACTIVATED');
-            console.log('📊 Strategy Panel: Accessible from right edge');
-            console.log('💯 Success Probability: 92%');
-            console.log('🏪 Location Health: Best Buy (🟢), Target (🟡), GameStop (🟡)');
-        }
-        
-        // Start the mission control system
-        init();
+        console.log('🚀 MISSION CONTROL OPERATIONAL');
+        console.log('📊 Strategy panel accessible from right edge');
     </script>
-    
 </body>
 </html>
