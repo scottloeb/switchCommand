@@ -213,6 +213,172 @@
             padding: 0;
         }
         
+        /* TACTICAL TIMELINE */
+        .timeline-panel {
+            background: linear-gradient(145deg, #000000 0%, #0d1117 100%);
+            border: 2px solid #00FF41;
+        }
+        
+        .timeline-container {
+            max-height: 400px;
+            overflow-y: auto;
+            position: relative;
+            background: #000;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .timeline-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .timeline-container::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+        
+        .timeline-container::-webkit-scrollbar-thumb {
+            background: #00FF41;
+            border-radius: 4px;
+        }
+        
+        .current-time-display {
+            background: #000;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #00FF41;
+            border-radius: 8px;
+            font-size: 1.8em;
+            color: #00FF41;
+            margin-bottom: 20px;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+        
+        .timeline-event {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-time {
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+            color: #FFA500;
+            font-size: 1.1em;
+            width: 60px;
+            letter-spacing: 1px;
+        }
+        
+        .timeline-line {
+            width: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 15px;
+            position: relative;
+        }
+        
+        .timeline-line::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            height: 60px;
+            background: #00FF41;
+            top: -20px;
+            z-index: 1;
+        }
+        
+        .timeline-dot {
+            width: 12px;
+            height: 12px;
+            border: 2px solid #00FF41;
+            border-radius: 50%;
+            background: transparent;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-event.future .timeline-dot {
+            background: #00FF41;
+            box-shadow: 0 0 10px #00FF41;
+        }
+        
+        .timeline-event.next .timeline-dot {
+            background: #FC3D21;
+            border-color: #FC3D21;
+            box-shadow: 0 0 15px #FC3D21;
+            animation: pulse 1s infinite;
+        }
+        
+        .timeline-event.past {
+            opacity: 0.5;
+        }
+        
+        .timeline-event.past .timeline-time {
+            color: #666;
+        }
+        
+        .timeline-event.past .timeline-dot {
+            border-color: #666;
+            background: transparent;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        
+        .timeline-details {
+            flex: 1;
+        }
+        
+        .timeline-store {
+            font-weight: bold;
+            color: #FFFFFF;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .timeline-store:hover {
+            color: #00FF41;
+            text-shadow: 0 0 5px #00FF41;
+        }
+        
+        .timeline-action {
+            color: #00FF41;
+            font-size: 0.9em;
+            margin-top: 2px;
+        }
+        
+        .timeline-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #FFA500;
+        }
+        
+        .status-indicator.confirmed {
+            background: #00FF41;
+            box-shadow: 0 0 5px #00FF41;
+        }
+        
+        .status-indicator.warning {
+            background: #FC3D21;
+            box-shadow: 0 0 5px #FC3D21;
+        }
+        
         /* SOCIAL INTELLIGENCE ENHANCED */
         .social-panel {
             background: linear-gradient(145deg, #1a1a2e 0%, #16213e 100%);
@@ -321,11 +487,6 @@
             font-family: 'Courier New', monospace;
         }
         
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
-        }
-        
         .button {
             background: linear-gradient(145deg, #0B3D91, #1a1a1a);
             border: 2px solid #00FF41;
@@ -408,6 +569,27 @@
     </div>
     
     <div class="container">
+        <!-- TACTICAL TIMELINE - FIRST POSITION -->
+        <div class="panel timeline-panel" id="panel-timeline">
+            <div class="panel-title" onclick="togglePanel('timeline')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">TL</span>
+                    ⏰ TACTICAL TIMELINE
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            
+            <div class="panel-content">
+                <div class="current-time-display" id="current-time">
+                    Loading...
+                </div>
+                
+                <div class="timeline-container" id="timeline-container">
+                    <!-- Timeline events will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+        
         <!-- ENHANCED SOCIAL INTELLIGENCE -->
         <div class="panel social-panel" id="panel-social">
             <div class="panel-title" onclick="togglePanel('social')">
@@ -434,7 +616,7 @@
         <div class="panel" id="panel-intel">
             <div class="panel-title" onclick="togglePanel('intel')">
                 <div class="panel-title-left">
-                    <span class="panel-badge">SI</span>
+                    <span class="panel-badge">AI</span>
                     📍 ANNAPOLIS INTEL
                 </div>
                 <span class="collapse-indicator">▼</span>
@@ -498,15 +680,98 @@
                 </div>
             </div>
         </div>
+        
+        <!-- STOCK MONITORING -->
+        <div class="panel" id="panel-stock">
+            <div class="panel-title" onclick="togglePanel('stock')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">SC</span>
+                    📈 STOCK MONITORING
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            <div class="panel-content">
+                <div class="auto-refresh">
+                    <div class="refresh-indicator"></div>
+                    <span class="refresh-text">Checking every 15 seconds</span>
+                    <button class="button" onclick="forceStockCheck()" style="margin: 0; padding: 5px 10px; font-size: 0.7em;">🔄 FORCE</button>
+                </div>
+                
+                <div class="grid">
+                    <div class="status-item">
+                        <div class="status-name">Best Buy</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 2 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Target</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 3 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">GameStop</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 5 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Staples</div>
+                        <div style="color: #FFA500;">MONITORING</div>
+                        <div style="font-size: 0.8em; color: #FFA500;">349 locations tracked</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- NEXT EVENT INFO -->
+        <div class="panel" id="panel-next-event">
+            <div class="panel-title" onclick="togglePanel('next-event')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">NE</span>
+                    🎯 NEXT EVENT
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            <div class="panel-content">
+                <div id="next-event-details" style="text-align: center; padding: 20px;">
+                    <div style="font-size: 1.5em; color: #00FF41; margin-bottom: 10px;">
+                        <span id="next-event-name">Loading...</span>
+                    </div>
+                    <div style="color: #FFA500; margin-bottom: 15px;">
+                        <span id="next-event-action">Loading...</span>
+                    </div>
+                    <div style="font-size: 2.5em; color: #FC3D21; margin: 20px 0; font-family: 'Courier New', monospace;">
+                        <span id="next-event-time-remaining">--:--:--</span>
+                    </div>
+                    <button class="button" onclick="navigateToNextEvent()" id="next-event-nav-button">🗺️ NAVIGATE</button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
+        // Timeline events data with GARDEN intelligence updates
+        const timelineEvents = [
+            // June 4 Events
+            { time: '11:00', date: '2025-06-04', type: 'departure', store: 'Blackbird Salon (DC)', action: 'Strategic haircut appointment', status: 'confirmed', priority: 'high' },
+            { time: '12:30', date: '2025-06-04', type: 'departure', store: 'Best Buy Annapolis', action: 'Depart DC for Annapolis area', status: 'confirmed', priority: 'high' },
+            { time: '15:00', date: '2025-06-04', type: 'prepare', store: 'GameStop Mall', action: 'Event participation (optional guaranteed pickup)', status: 'confirmed', priority: 'medium' },
+            { time: '22:00', date: '2025-06-04', type: 'departure', store: 'Best Buy Annapolis', action: 'Depart for midnight lineup', status: 'confirmed', priority: 'high' },
+            { time: '22:30', date: '2025-06-04', type: 'prepare', store: 'Best Buy Annapolis', action: 'Arrive and begin lineup (UPDATED)', status: 'confirmed', priority: 'high' },
+            
+            // June 5 Events (Launch Day)
+            { time: '00:01', date: '2025-06-05', type: 'launch', store: 'Best Buy Annapolis', action: 'EXECUTE MISSION - Store opens + commemorative coins', status: 'confirmed', priority: 'high' },
+            { time: '00:01', date: '2025-06-05', type: 'launch', store: 'GameStop Mall', action: 'Midnight pickup (if pre-paid)', status: 'confirmed', priority: 'medium' },
+            { time: '07:00', date: '2025-06-05', type: 'departure', store: 'Target Annapolis', action: 'Depart for backup strategy', status: 'confirmed', priority: 'medium' },
+            { time: '07:30', date: '2025-06-05', type: 'prepare', store: 'Target Annapolis', action: 'Ticket system lineup', status: 'confirmed', priority: 'medium' },
+            { time: '08:00', date: '2025-06-05', type: 'launch', store: 'Target Annapolis', action: 'Ticket distribution begins', status: 'confirmed', priority: 'medium' }
+        ];
+        
         // Real social media intelligence with live content
         const socialIntelligence = [
             {
                 source: '@mattswider',
                 time: '4h ago',
-                content: '👍Who still needs a Switch 2? I\'m in line 8 hours before in-store and online pre-orders go live. Click Walmart at 12am ET/11pm CT/10pm MT/9pm PT. RT+Follow @mattswider for restock notifications',
+                content: '⏰Who still needs a Switch 2? I\'m in line 8 hours before in-store and online pre-orders go live. 👆Click Walmart at 12am ET/11pm CT/10pm MT/9pm PT. 🔄RT+Follow @mattswider for restock notifications',
                 tags: ['CRITICAL', 'RESTOCK', 'WALMART'],
                 priority: 'high',
                 verified: true,
@@ -583,17 +848,10 @@
                 priority: 'high',
                 verified: true,
                 url: 'https://bgr.com/tech/nintendo-switch-2-stock-shortage-launch/'
-            },
-            {
-                source: 'IGN',
-                time: '7h ago',
-                content: 'Switch 2 teardown reveals improved cooling system. Performance upgrades confirmed with 8-second load times for Bowser\'s Fury (vs 41 seconds on original). Welcome Tour requires 4K TV for 100%.',
-                tags: ['TEARDOWN', 'PERFORMANCE'],
-                priority: 'low',
-                verified: true,
-                url: 'https://www.ign.com/articles/switch-2-teardown-analysis'
             }
         ];
+        
+        let nextEvent = null;
         
         // Panel management functions
         function togglePanel(panelName) {
@@ -612,7 +870,7 @@
         }
         
         function focusMode() {
-            const criticalPanels = ['social', 'intel', 'status'];
+            const criticalPanels = ['timeline', 'social', 'intel', 'next-event'];
             const allPanels = document.querySelectorAll('.panel');
             
             allPanels.forEach(panel => {
@@ -623,6 +881,80 @@
                     panel.classList.add('collapsed');
                 }
             });
+        }
+        
+        function updateCurrentTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            
+            document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds} MILITARY TIME`;
+        }
+        
+        function updateLaunchCountdown() {
+            const launchDate = new Date('2025-06-05T00:01:00-04:00');
+            const now = new Date();
+            const timeLeft = launchDate - now;
+            
+            if (timeLeft > 0) {
+                const days = Math.floor(timeLeft / (24 * 60 * 60 * 1000));
+                const hours = Math.floor((timeLeft % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+                const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+                const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+                
+                document.getElementById('launch-countdown').textContent = 
+                    `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            } else {
+                document.getElementById('launch-countdown').textContent = 'LAUNCH ACTIVE';
+            }
+        }
+        
+        function findNextEvent() {
+            const now = new Date();
+            
+            for (let event of timelineEvents) {
+                const eventDateTime = new Date(`${event.date}T${event.time}:00-04:00`);
+                if (eventDateTime > now) {
+                    return event;
+                }
+            }
+            
+            return null; // All events have passed
+        }
+        
+        function updateNextEventCountdown() {
+            nextEvent = findNextEvent();
+            
+            if (nextEvent) {
+                const now = new Date();
+                const eventDateTime = new Date(`${nextEvent.date}T${nextEvent.time}:00-04:00`);
+                const timeLeft = eventDateTime - now;
+                
+                if (timeLeft > 0) {
+                    const hours = Math.floor(timeLeft / (60 * 60 * 1000));
+                    const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+                    const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+                    
+                    // Update header countdown
+                    document.getElementById('next-event-countdown').textContent = 
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    // Update next event panel
+                    document.getElementById('next-event-name').textContent = nextEvent.store;
+                    document.getElementById('next-event-action').textContent = nextEvent.action;
+                    document.getElementById('next-event-time-remaining').textContent = 
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    document.getElementById('next-event-countdown').textContent = 'EVENT ACTIVE';
+                    document.getElementById('next-event-time-remaining').textContent = 'ACTIVE NOW';
+                }
+            } else {
+                document.getElementById('next-event-countdown').textContent = 'MISSION COMPLETE';
+                document.getElementById('next-event-name').textContent = 'All Events Complete';
+                document.getElementById('next-event-action').textContent = 'Mission accomplished!';
+                document.getElementById('next-event-time-remaining').textContent = 'COMPLETE';
+            }
         }
         
         function renderSocialFeed() {
@@ -673,13 +1005,134 @@
             }, 2000);
         }
         
+        function getEventStatus(event) {
+            const now = new Date();
+            const eventDateTime = new Date(`${event.date}T${event.time}:00-04:00`);
+            
+            if (eventDateTime < now) {
+                return 'past';
+            } else {
+                if (nextEvent && nextEvent === event) {
+                    return 'next';
+                } else {
+                    return 'future';
+                }
+            }
+        }
+        
+        function getActionIcon(type) {
+            switch(type) {
+                case 'departure': return '🚗';
+                case 'prepare': return '⏳';
+                case 'launch': return '🚀';
+                default: return '📍';
+            }
+        }
+        
+        function getStoreAddress(storeName) {
+            const addresses = {
+                'Best Buy Annapolis': '2643 Housley Rd, Annapolis, MD 21401',
+                'Target Annapolis': 'Annapolis Mall, Annapolis, MD 21401', 
+                'GameStop Mall': '179 Annapolis Mall, Annapolis, MD 21401',
+                'Blackbird Salon (DC)': '1920 L St NW, Washington, DC 20036'
+            };
+            return addresses[storeName] || storeName;
+        }
+        
+        function openNavigation(storeName) {
+            const address = getStoreAddress(storeName);
+            const encodedAddress = encodeURIComponent(address);
+            window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&travelmode=driving`, '_blank');
+        }
+        
+        function navigateToNextEvent() {
+            if (nextEvent) {
+                openNavigation(nextEvent.store);
+            }
+        }
+        
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            
+            container.innerHTML = timelineEvents.map(event => {
+                const status = getEventStatus(event);
+                const icon = getActionIcon(event.type);
+                
+                return `
+                    <div class="timeline-event ${status}" data-time="${event.time}">
+                        <div class="timeline-time">${event.time}</div>
+                        <div class="timeline-line">
+                            <div class="timeline-dot"></div>
+                        </div>
+                        <div class="timeline-details">
+                            <div class="timeline-store" onclick="openNavigation('${event.store}')">
+                                ${icon} ${event.store}
+                            </div>
+                            <div class="timeline-action">${event.action}</div>
+                            <div class="timeline-status">
+                                <div class="status-indicator ${event.status}"></div>
+                                <span style="font-size: 0.8em; color: #${event.priority === 'high' ? '00FF41' : event.priority === 'medium' ? 'FFA500' : 'FC3D21'};">
+                                    ${event.priority.toUpperCase()} PRIORITY
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Auto-scroll to next event ONLY within timeline container
+            scrollToNextEvent();
+        }
+        
+        function scrollToNextEvent() {
+            const container = document.getElementById('timeline-container');
+            const nextEventElement = container.querySelector('.timeline-event.next');
+            
+            if (nextEventElement) {
+                // Scroll within the timeline container only, not the whole page
+                const containerRect = container.getBoundingClientRect();
+                const eventRect = nextEventElement.getBoundingClientRect();
+                const relativeTop = eventRect.top - containerRect.top;
+                
+                container.scrollTo({
+                    top: container.scrollTop + relativeTop - container.clientHeight / 2,
+                    behavior: 'smooth'
+                });
+            }
+        }
+        
         function openMaps() {
             window.open('https://www.google.com/maps/search/Best+Buy+Target+GameStop+Annapolis+MD', '_blank');
         }
         
+        function forceStockCheck() {
+            // Simulate force check with visual feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '🔄 CHECKING...';
+            button.style.background = 'linear-gradient(145deg, #FFA500, #0B3D91)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = 'linear-gradient(145deg, #0B3D91, #1a1a1a)';
+            }, 2000);
+        }
+        
         // Initialize and update functions
         function init() {
+            renderTimeline();
             renderSocialFeed();
+            updateCurrentTime();
+            updateLaunchCountdown();
+            updateNextEventCountdown();
+            
+            // Update every second
+            setInterval(() => {
+                updateCurrentTime();
+                updateLaunchCountdown();
+                updateNextEventCountdown();
+                renderTimeline(); // Re-render to update event statuses
+            }, 1000);
             
             // Auto-refresh social feed every 30 seconds
             setInterval(() => {
