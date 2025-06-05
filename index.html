@@ -52,6 +52,7 @@
             color: #FC3D21;
             font-size: 1.2em;
             letter-spacing: 2px;
+            margin-bottom: 20px;
         }
         
         .master-controls {
@@ -77,6 +78,43 @@
         .master-button:hover {
             background: linear-gradient(145deg, #00FF41, #0B3D91);
             box-shadow: 0 0 10px #00FF41;
+        }
+        
+        .header-countdown {
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px solid #FC3D21;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px auto 0;
+            max-width: 600px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .countdown-section {
+            text-align: center;
+        }
+        
+        .countdown-label {
+            font-size: 0.9em;
+            color: #FFA500;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .countdown-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #FC3D21;
+            text-shadow: 0 0 5px #FC3D21;
+        }
+        
+        .countdown-value.next-event {
+            color: #00FF41;
+            text-shadow: 0 0 5px #00FF41;
         }
         
         .container {
@@ -341,15 +379,6 @@
             box-shadow: 0 0 5px #FC3D21;
         }
         
-        .countdown {
-            font-size: 3em;
-            color: #FC3D21;
-            text-align: center;
-            margin: 20px 0;
-            text-shadow: 0 0 10px #FC3D21;
-            font-family: 'Courier New', monospace;
-        }
-        
         .button {
             background: linear-gradient(145deg, #0B3D91, #1a1a1a);
             border: 2px solid #00FF41;
@@ -418,6 +447,17 @@
             <button class="master-button" onclick="collapseAll()">📋 COLLAPSE ALL</button>
             <button class="master-button" onclick="focusMode()">🎯 FOCUS MODE</button>
         </div>
+        
+        <div class="header-countdown">
+            <div class="countdown-section">
+                <div class="countdown-label">Time Until Switch 2 Launch</div>
+                <div class="countdown-value" id="launch-countdown">Loading...</div>
+            </div>
+            <div class="countdown-section">
+                <div class="countdown-label">Next Mission Event</div>
+                <div class="countdown-value next-event" id="next-event-countdown">Loading...</div>
+            </div>
+        </div>
     </div>
     
     <div class="container">
@@ -439,21 +479,6 @@
                 <div class="timeline-container" id="timeline-container">
                     <!-- Timeline events will be populated by JavaScript -->
                 </div>
-            </div>
-        </div>
-        
-        <!-- MISSION COUNTDOWN -->
-        <div class="panel" id="panel-countdown">
-            <div class="panel-title" onclick="togglePanel('countdown')">
-                <div class="panel-title-left">
-                    <span class="panel-badge">T-</span>
-                    🎯 MISSION COUNTDOWN
-                </div>
-                <span class="collapse-indicator">▼</span>
-            </div>
-            <div class="panel-content">
-                <div class="countdown" id="countdown">Loading...</div>
-                <div style="text-align: center; color: #FFA500;">Until Nintendo Switch 2 Launch</div>
             </div>
         </div>
         
@@ -550,6 +575,67 @@
                 </div>
             </div>
         </div>
+        
+        <!-- STOCK MONITORING -->
+        <div class="panel" id="panel-stock">
+            <div class="panel-title" onclick="togglePanel('stock')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">SC</span>
+                    📈 STOCK MONITORING
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            <div class="panel-content">
+                <div class="grid">
+                    <div class="status-item">
+                        <div class="status-name">Best Buy</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 2 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Target</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 3 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">GameStop</div>
+                        <div style="color: #FC3D21;">OUT OF STOCK</div>
+                        <div style="font-size: 0.8em; color: #666;">Last checked: 5 mins ago</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Staples</div>
+                        <div style="color: #FFA500;">MONITORING</div>
+                        <div style="font-size: 0.8em; color: #FFA500;">349 locations tracked</div>
+                    </div>
+                </div>
+                <button class="button" onclick="forceStockCheck()">🔄 FORCE CHECK</button>
+            </div>
+        </div>
+        
+        <!-- NEXT EVENT INFO -->
+        <div class="panel" id="panel-next-event">
+            <div class="panel-title" onclick="togglePanel('next-event')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">NE</span>
+                    🎯 NEXT EVENT
+                </div>
+                <span class="collapse-indicator">▼</span>
+            </div>
+            <div class="panel-content">
+                <div id="next-event-details" style="text-align: center; padding: 20px;">
+                    <div style="font-size: 1.5em; color: #00FF41; margin-bottom: 10px;">
+                        <span id="next-event-name">Loading...</span>
+                    </div>
+                    <div style="color: #FFA500; margin-bottom: 15px;">
+                        <span id="next-event-action">Loading...</span>
+                    </div>
+                    <div style="font-size: 2.5em; color: #FC3D21; margin: 20px 0; font-family: 'Courier New', monospace;">
+                        <span id="next-event-time-remaining">--:--:--</span>
+                    </div>
+                    <button class="button" onclick="navigateToNextEvent()" id="next-event-nav-button">🗺️ NAVIGATE</button>
+                </div>
+            </div>
+        </div>
     </div>
     
     <script>
@@ -570,6 +656,8 @@
             { time: '08:00', date: '2025-06-05', type: 'launch', store: 'Target Annapolis', action: 'Ticket distribution begins', status: 'confirmed', priority: 'medium' }
         ];
         
+        let nextEvent = null;
+        
         // Panel management functions
         function togglePanel(panelName) {
             const panel = document.getElementById(`panel-${panelName}`);
@@ -587,7 +675,7 @@
         }
         
         function focusMode() {
-            const criticalPanels = ['timeline', 'countdown', 'intel'];
+            const criticalPanels = ['timeline', 'intel', 'next-event'];
             const allPanels = document.querySelectorAll('.panel');
             
             allPanels.forEach(panel => {
@@ -609,7 +697,7 @@
             document.getElementById('current-time').textContent = `${hours}:${minutes}:${seconds} MILITARY TIME`;
         }
         
-        function updateCountdown() {
+        function updateLaunchCountdown() {
             const launchDate = new Date('2025-06-05T00:01:00-04:00');
             const now = new Date();
             const timeLeft = launchDate - now;
@@ -620,10 +708,57 @@
                 const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
                 const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
                 
-                document.getElementById('countdown').textContent = 
+                document.getElementById('launch-countdown').textContent = 
                     `${days}d ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
             } else {
-                document.getElementById('countdown').textContent = 'LAUNCH ACTIVE';
+                document.getElementById('launch-countdown').textContent = 'LAUNCH ACTIVE';
+            }
+        }
+        
+        function findNextEvent() {
+            const now = new Date();
+            
+            for (let event of timelineEvents) {
+                const eventDateTime = new Date(`${event.date}T${event.time}:00-04:00`);
+                if (eventDateTime > now) {
+                    return event;
+                }
+            }
+            
+            return null; // All events have passed
+        }
+        
+        function updateNextEventCountdown() {
+            nextEvent = findNextEvent();
+            
+            if (nextEvent) {
+                const now = new Date();
+                const eventDateTime = new Date(`${nextEvent.date}T${nextEvent.time}:00-04:00`);
+                const timeLeft = eventDateTime - now;
+                
+                if (timeLeft > 0) {
+                    const hours = Math.floor(timeLeft / (60 * 60 * 1000));
+                    const minutes = Math.floor((timeLeft % (60 * 60 * 1000)) / (60 * 1000));
+                    const seconds = Math.floor((timeLeft % (60 * 1000)) / 1000);
+                    
+                    // Update header countdown
+                    document.getElementById('next-event-countdown').textContent = 
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    
+                    // Update next event panel
+                    document.getElementById('next-event-name').textContent = nextEvent.store;
+                    document.getElementById('next-event-action').textContent = nextEvent.action;
+                    document.getElementById('next-event-time-remaining').textContent = 
+                        `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                } else {
+                    document.getElementById('next-event-countdown').textContent = 'EVENT ACTIVE';
+                    document.getElementById('next-event-time-remaining').textContent = 'ACTIVE NOW';
+                }
+            } else {
+                document.getElementById('next-event-countdown').textContent = 'MISSION COMPLETE';
+                document.getElementById('next-event-name').textContent = 'All Events Complete';
+                document.getElementById('next-event-action').textContent = 'Mission accomplished!';
+                document.getElementById('next-event-time-remaining').textContent = 'COMPLETE';
             }
         }
         
@@ -634,13 +769,7 @@
             if (eventDateTime < now) {
                 return 'past';
             } else {
-                // Find the next event
-                const nextEventIndex = timelineEvents.findIndex(e => {
-                    const eDateTime = new Date(`${e.date}T${e.time}:00-04:00`);
-                    return eDateTime >= now;
-                });
-                
-                if (nextEventIndex !== -1 && timelineEvents[nextEventIndex] === event) {
+                if (nextEvent && nextEvent === event) {
                     return 'next';
                 } else {
                     return 'future';
@@ -671,6 +800,12 @@
             const address = getStoreAddress(storeName);
             const encodedAddress = encodeURIComponent(address);
             window.open(`https://www.google.com/maps/dir/?api=1&destination=${encodedAddress}&travelmode=driving`, '_blank');
+        }
+        
+        function navigateToNextEvent() {
+            if (nextEvent) {
+                openNavigation(nextEvent.store);
+            }
         }
         
         function renderTimeline() {
@@ -708,12 +843,12 @@
         
         function scrollToNextEvent() {
             const container = document.getElementById('timeline-container');
-            const nextEvent = container.querySelector('.timeline-event.next');
+            const nextEventElement = container.querySelector('.timeline-event.next');
             
-            if (nextEvent) {
+            if (nextEventElement) {
                 // Scroll within the timeline container only, not the whole page
                 const containerRect = container.getBoundingClientRect();
-                const eventRect = nextEvent.getBoundingClientRect();
+                const eventRect = nextEventElement.getBoundingClientRect();
                 const relativeTop = eventRect.top - containerRect.top;
                 
                 container.scrollTo({
@@ -739,16 +874,31 @@
             }
         }
         
+        function forceStockCheck() {
+            // Simulate force check with visual feedback
+            const button = event.target;
+            const originalText = button.textContent;
+            button.textContent = '🔄 CHECKING...';
+            button.style.background = 'linear-gradient(145deg, #FFA500, #0B3D91)';
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.background = 'linear-gradient(145deg, #0B3D91, #1a1a1a)';
+            }, 2000);
+        }
+        
         // Initialize and update functions
         function init() {
             renderTimeline();
             updateCurrentTime();
-            updateCountdown();
+            updateLaunchCountdown();
+            updateNextEventCountdown();
             
             // Update every second
             setInterval(() => {
                 updateCurrentTime();
-                updateCountdown();
+                updateLaunchCountdown();
+                updateNextEventCountdown();
                 renderTimeline(); // Re-render to update event statuses
             }, 1000);
         }
