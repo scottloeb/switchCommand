@@ -1704,6 +1704,12 @@
                 keyboardShortcuts: false
             });
 
+            // Verify map element exists
+            const mapElement = document.getElementById('map');
+            if (!mapElement) {
+                throw new Error('Map container element not found');
+            }
+
             // Initialize traffic layer
             trafficLayer = new google.maps.TrafficLayer();
 
@@ -2476,7 +2482,7 @@
     
     <!-- Google Maps API -->
     <script async defer 
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDhyuJmrGlrZvz3t5z1dKjOzHwt_OwrIaU&callback=initMap&loading=async">
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTdJQ1Pk-PdixNjh82D3k7_Xqmfhhj1I0&callback=initMap&loading=async">
     </script>
     
     <!-- Fallback for Google Maps loading issues -->
