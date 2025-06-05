@@ -1,3 +1,14 @@
+#!/bin/bash
+
+echo "🚨 MISSION DEBRIEF MODE DEPLOYMENT - CORRECTED MEDICAL CONTEXT"
+echo "=============================================================="
+
+cd /Users/scottloeb/Desktop/GitHub/switchCommand
+
+echo "📊 Creating post-mission debrief interface with accurate medical situation..."
+
+# Create the mission debrief version with corrected Brandy medical context
+cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -695,3 +706,63 @@
     </script>
 </body>
 </html>
+EOF
+
+echo "✅ Mission debrief interface created with corrected medical context!"
+
+echo ""
+echo "📊 Adding corrected mission debrief deployment..."
+git add .
+
+echo ""
+echo "📝 Committing post-mission debrief with accurate medical situation..."
+git commit -m "🚨 POST-MISSION DEBRIEF: Corrected Medical Context - Brandy Surgery Recovery
+
+🚨 CRITICAL MISSION STATUS:
+- Field agent communications lost at 21:11 EST
+- Last contact: Best Buy Annapolis parking lot
+- Mission outcome unknown - awaiting debrief
+
+🐕 CORRECTED MEDICAL CONTEXT:
+- Brandy post-surgery complications (1 week after major surgery)
+- Post-surgical eating/elimination issues requiring monitoring
+- Mission Control: 'Post-surgical complications take absolute precedence'
+- 19:45 RECOVERY: 'Eating small portions and bathroom functioning restored'
+- Surgery recovery confirmed on track
+
+📡 UPDATED COMMUNICATION LOG:
+- 18:00 MEDICAL PRIORITY: Post-surgery complications
+- 18:15 FAMILY FIRST PROTOCOL: Mission secondary to recovery
+- 19:45 MEDICAL STABLE: Brandy responding well
+- 20:45 TIMELINE COMPROMISED: Medical priorities caused delays
+- 21:11 FINAL TRANSMISSION: 'Brandy stable at home' + Best Buy assessment
+- 21:15 BLACKOUT: Communications lost
+
+⏰ MISSION TIMELINE UPDATED:
+- GameStop: MISSED - MEDICAL PRIORITY
+- Best Buy Lineup: MISSED - MEDICAL PRIORITY
+- Midnight Launch: STATUS UNKNOWN
+
+🎮 STORY ELEMENTS FOR ZACH:
+- Shows legitimate medical concern without being scary
+- Emphasizes family priorities over gaming mission
+- Maintains dramatic communications blackout
+- Brandy confirmed stable before Best Buy departure
+- Ready for debrief about actual mission outcome
+
+Safe, appropriate context that shows why the mission was rightfully delayed! 🐕💚"
+
+echo ""
+echo "🚀 Pushing corrected mission debrief to GitHub..."
+git push origin main
+
+echo ""
+echo "✅ CORRECTED MISSION DEBRIEF DEPLOYED!"
+echo "📍 Repository: https://github.com/scottloeb/switchCommand"
+echo "🌐 Live deployment: https://switch-command.vercel.app"
+echo "🚨 Post-mission debrief mode with accurate medical context!"
+echo ""
+echo "🎖️ STORY STATUS: SAFE FOR ZACH'S DISCOVERY"
+echo "🐕 Medical context: Post-surgery recovery (appropriate concern level)"
+echo "📡 Communication log: Medical priorities → mission delays → blackout"
+echo "🎤 Interactive: Begin debrief protocol ready for real story reveal"

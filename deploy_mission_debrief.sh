@@ -1,3 +1,14 @@
+#!/bin/bash
+
+echo "🚨 MISSION DEBRIEF MODE DEPLOYMENT"
+echo "=================================="
+
+cd /Users/scottloeb/Desktop/GitHub/switchCommand
+
+echo "📊 Creating post-mission debrief interface..."
+
+# Create the mission debrief version
+cat > index.html << 'EOF'
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -458,9 +469,9 @@
                 <div style="background: rgba(255, 68, 68, 0.1); border: 1px solid #FF4444; border-radius: 8px; padding: 15px; margin-top: 15px;">
                     <div style="color: #FF4444; font-weight: bold; margin-bottom: 8px;">MISSION CRITICAL EVENTS:</div>
                     <div style="color: #FFFFFF; font-size: 0.9em; line-height: 1.4;">
-                        • 18:00 - Brandy Post-Surgery Complications<br>
-                        • 19:45 - Medical Situation Stabilized<br>
-                        • 21:11 - Final Transmission (Best Buy)<br>
+                        • 18:00 - Brandy Medical Emergency<br>
+                        • 21:00 - Timeline Compromised<br>
+                        • 21:11 - Final Transmission<br>
                         • 21:15 - Signal Lost
                     </div>
                 </div>
@@ -513,7 +524,7 @@
     </div>
     
     <script>
-        // Communications log data with corrected medical context
+        // Communications log data based on the actual mission timeline
         const communicationsLog = [
             {
                 timestamp: '11:00',
@@ -560,35 +571,35 @@
             {
                 timestamp: '18:00',
                 source: 'FIELD AGENT',
-                message: 'Houston, we have a problem. Brandy post-surgery complications - refusing food and elimination. Medical monitoring required.',
+                message: 'Houston, we have a problem. Brandy refusing dinner and bathroom breaks. Mission-critical canine situation developing.',
                 type: 'critical',
-                status: 'MEDICAL PRIORITY'
+                status: 'EMERGENCY'
             },
             {
                 timestamp: '18:15',
                 source: 'MISSION CONTROL',
-                message: 'Copy medical priority. Post-surgical complications take absolute precedence. Mission secondary to Brandy\'s recovery. Monitor closely.',
+                message: 'Copy emergency status. Recommend immediate veterinary assessment. Mission secondary to family welfare. Keep us informed.',
                 type: 'critical',
-                status: 'FAMILY FIRST PROTOCOL'
+                status: 'PRIORITY OVERRIDE'
             },
             {
-                timestamp: '19:45',
+                timestamp: '19:30',
                 source: 'FIELD AGENT',
-                message: 'Good news - Brandy responding well to encouragement. Eating small portions and bathroom functioning restored. Surgery recovery on track.',
+                message: 'Brandy crisis resolved. Minor digestive issue, now eating and functioning normally. Mission timeline severely compressed.',
                 type: 'warning',
-                status: 'MEDICAL STABLE'
+                status: 'SITUATION NOMINAL'
             },
             {
                 timestamp: '20:45',
                 source: 'FIELD AGENT',
-                message: 'Unable to make 22:30 Best Buy lineup. All early events missed due to medical priorities. Proceeding to Best Buy for assessment.',
+                message: 'Unable to make 22:30 Best Buy lineup. All early events missed. Proceeding to Best Buy for situational assessment.',
                 type: 'critical',
-                status: 'TIMELINE COMPROMISED'
+                status: 'TIMELINE FAILURE'
             },
             {
                 timestamp: '21:11',
                 source: 'FIELD AGENT',
-                message: 'Arrived Best Buy parking lot. Massive crowd visible. Brandy stable at home. Attempting to assess situation and... [SIGNAL DEGRADED]',
+                message: 'Arrived Best Buy parking lot. Massive crowd visible. Attempting to assess situation and... [SIGNAL DEGRADED]',
                 type: 'blackout',
                 status: 'PARTIAL TRANSMISSION'
             },
@@ -611,8 +622,8 @@
         // Mission timeline events with actual status
         const missionTimeline = [
             { time: '11:00', store: 'Blackbird Salon (DC)', action: 'Strategic haircut appointment', status: 'COMPLETED', type: 'success' },
-            { time: '15:00', store: 'GameStop Mall', action: 'Event participation', status: 'MISSED - MEDICAL PRIORITY', type: 'missed' },
-            { time: '22:30', store: 'Best Buy Annapolis', action: 'Lineup commencement', status: 'MISSED - MEDICAL PRIORITY', type: 'missed' },
+            { time: '15:00', store: 'GameStop Mall', action: 'Event participation', status: 'MISSED', type: 'missed' },
+            { time: '22:30', store: 'Best Buy Annapolis', action: 'Lineup commencement', status: 'MISSED', type: 'missed' },
             { time: '00:01', store: 'Best Buy Annapolis', action: 'Midnight launch execution', status: 'UNKNOWN', type: 'unknown' },
             { time: '07:30', store: 'Target Annapolis', action: 'Backup strategy', status: 'UNKNOWN', type: 'unknown' },
             { time: '08:00', store: 'Target Annapolis', action: 'Ticket distribution', status: 'UNKNOWN', type: 'unknown' }
@@ -650,7 +661,7 @@
         
         function startDebrief() {
             // Simulate starting debrief session
-            alert('🎤 MISSION DEBRIEF INITIATED\\n\\nField Agent, please provide detailed status report on Switch 2 acquisition mission.\\n\\nInclude:\\n• Mission outcome\\n• Brandy\'s post-surgery status\\n• Best Buy assessment\\n• Lessons learned\\n\\nMission Control standing by...');
+            alert('🎤 MISSION DEBRIEF INITIATED\\n\\nField Agent, please provide detailed status report on Switch 2 acquisition mission.\\n\\nInclude:\\n• Mission outcome\\n• Brandy medical situation\\n• Best Buy assessment\\n• Lessons learned\\n\\nMission Control standing by...');
             
             // Add debrief started entry to comms log
             const newEntry = {
@@ -686,7 +697,6 @@
             console.log('🚨 POST-MISSION DEBRIEF MODE ACTIVE');
             console.log('📡 Communications log loaded');
             console.log('⏰ Mission timeline analysis complete');
-            console.log('🐕 Brandy\'s post-surgery status: STABLE');
             console.log('🎤 Awaiting field agent debrief...');
         }
         
@@ -695,3 +705,59 @@
     </script>
 </body>
 </html>
+EOF
+
+echo "✅ Mission debrief interface created!"
+
+echo ""
+echo "📊 Adding mission debrief deployment..."
+git add .
+
+echo ""
+echo "📝 Committing post-mission debrief system..."
+git commit -m "🚨 POST-MISSION DEBRIEF: Field Agent Communications Lost
+
+🚨 CRITICAL MISSION STATUS:
+- Field agent communications lost at 21:11 EST
+- Last contact: Best Buy Annapolis parking lot
+- Mission outcome unknown - awaiting debrief
+
+📡 COMMUNICATION LOG FEATURES:
+- Complete mission timeline with actual events
+- Early success: DC haircut mission completed
+- 18:00 CRISIS: Brandy medical emergency (digestive issue)
+- 20:45 TIMELINE FAILURE: All early events missed
+- 21:11 FINAL TRANSMISSION: Best Buy arrival, massive crowd
+- 21:15 BLACKOUT: Communications lost, no response
+
+⏰ MISSION TIMELINE STATUS:
+- 11:00 Haircut: COMPLETED ✅
+- 15:00 GameStop: MISSED ❌
+- 22:30 Best Buy Lineup: MISSED ❌
+- 00:01 Midnight Launch: UNKNOWN ❓
+- Morning Events: UNKNOWN ❓
+
+🎮 DRAMATIC STORY ELEMENTS:
+- Flashing red ALERT banner
+- Mission Control waiting for debrief
+- Authentic communication log with timestamps
+- Brandy crisis as mission-critical event
+- Communications blackout at key moment
+- Interactive debrief protocol button
+
+Perfect wake-up surprise for Zach! 🚨"
+
+echo ""
+echo "🚀 Pushing mission debrief to GitHub..."
+git push origin main
+
+echo ""
+echo "✅ MISSION DEBRIEF DEPLOYED!"
+echo "📍 Repository: https://github.com/scottloeb/switchCommand"
+echo "🌐 Live deployment: https://switch-command.vercel.app"
+echo "🚨 Post-mission debrief mode active!"
+echo ""
+echo "🎖️ STORY STATUS: READY FOR ZACH'S DISCOVERY"
+echo "📡 Communication log: Brandy crisis → Best Buy blackout"
+echo "🚨 Alert system: Field agent missing, awaiting debrief"
+echo "🎤 Interactive: Begin debrief protocol button ready"
