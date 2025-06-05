@@ -54,6 +54,31 @@
             letter-spacing: 2px;
         }
         
+        .master-controls {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .master-button {
+            background: linear-gradient(145deg, #FC3D21, #0B3D91);
+            border: 1px solid #00FF41;
+            color: #FFFFFF;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        
+        .master-button:hover {
+            background: linear-gradient(145deg, #00FF41, #0B3D91);
+            box-shadow: 0 0 10px #00FF41;
+        }
+        
         .container {
             padding: 20px;
             max-width: 1400px;
@@ -65,11 +90,13 @@
         
         @media (min-width: 768px) {
             .container {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: repeat(2, 1fr);
             }
-            .timeline-panel {
-                grid-column: 1 / -1;
-                order: -1;
+        }
+        
+        @media (min-width: 1200px) {
+            .container {
+                grid-template-columns: repeat(3, 1fr);
             }
         }
         
@@ -101,6 +128,19 @@
             letter-spacing: 1px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .panel-title:hover {
+            color: #FFFFFF;
+            text-shadow: 0 0 5px #00FF41;
+        }
+        
+        .panel-title-left {
+            display: flex;
+            align-items: center;
             gap: 10px;
         }
         
@@ -113,9 +153,30 @@
             font-weight: bold;
         }
         
-        /* TACTICAL TIMELINE - ALWAYS FIRST */
+        .collapse-indicator {
+            color: #00FF41;
+            font-size: 1.2em;
+            transition: transform 0.3s ease;
+        }
+        
+        .panel.collapsed .collapse-indicator {
+            transform: rotate(-90deg);
+        }
+        
+        .panel-content {
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .panel.collapsed .panel-content {
+            max-height: 0;
+            opacity: 0;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* TACTICAL TIMELINE - STANDARD WIDTH */
         .timeline-panel {
-            order: -1;
             background: linear-gradient(145deg, #000000 0%, #0d1117 100%);
             border: 2px solid #00FF41;
         }
@@ -310,10 +371,10 @@
         .grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 20px;
+            gap: 15px;
         }
         
-        @media (min-width: 1200px) {
+        @media (min-width: 600px) {
             .grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -351,110 +412,141 @@
     <div class="header">
         <div class="logo">🚀 NASA MISSION CONTROL</div>
         <div class="subtitle">OPERATION: SWITCH 2 ACQUISITION</div>
+        
+        <div class="master-controls">
+            <button class="master-button" onclick="expandAll()">📊 EXPAND ALL</button>
+            <button class="master-button" onclick="collapseAll()">📋 COLLAPSE ALL</button>
+            <button class="master-button" onclick="focusMode()">🎯 FOCUS MODE</button>
+        </div>
     </div>
     
     <div class="container">
-        <!-- TACTICAL TIMELINE - ALWAYS FIRST -->
-        <div class="panel timeline-panel">
-            <div class="panel-title">
-                <span class="panel-badge">TL</span>
-                ⏰ TACTICAL TIMELINE
+        <!-- TACTICAL TIMELINE - FIRST POSITION -->
+        <div class="panel timeline-panel" id="panel-timeline">
+            <div class="panel-title" onclick="togglePanel('timeline')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">TL</span>
+                    ⏰ TACTICAL TIMELINE
+                </div>
+                <span class="collapse-indicator">▼</span>
             </div>
             
-            <div class="current-time-display" id="current-time">
-                Loading...
-            </div>
-            
-            <div class="timeline-container" id="timeline-container">
-                <!-- Timeline events will be populated by JavaScript -->
+            <div class="panel-content">
+                <div class="current-time-display" id="current-time">
+                    Loading...
+                </div>
+                
+                <div class="timeline-container" id="timeline-container">
+                    <!-- Timeline events will be populated by JavaScript -->
+                </div>
             </div>
         </div>
         
         <!-- MISSION COUNTDOWN -->
-        <div class="panel">
-            <div class="panel-title">
-                <span class="panel-badge">T-</span>
-                🎯 MISSION COUNTDOWN
+        <div class="panel" id="panel-countdown">
+            <div class="panel-title" onclick="togglePanel('countdown')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">T-</span>
+                    🎯 MISSION COUNTDOWN
+                </div>
+                <span class="collapse-indicator">▼</span>
             </div>
-            <div class="countdown" id="countdown">Loading...</div>
-            <div style="text-align: center; color: #FFA500;">Until Nintendo Switch 2 Launch</div>
+            <div class="panel-content">
+                <div class="countdown" id="countdown">Loading...</div>
+                <div style="text-align: center; color: #FFA500;">Until Nintendo Switch 2 Launch</div>
+            </div>
         </div>
         
         <!-- STORE INTELLIGENCE -->
-        <div class="panel">
-            <div class="panel-title">
-                <span class="panel-badge">SI</span>
-                📍 ANNAPOLIS INTEL
+        <div class="panel" id="panel-intel">
+            <div class="panel-title" onclick="togglePanel('intel')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">SI</span>
+                    📍 ANNAPOLIS INTEL
+                </div>
+                <span class="collapse-indicator">▼</span>
             </div>
-            <div class="grid">
-                <div class="status-item">
-                    <div class="status-name priority-high">🟢 Best Buy Annapolis</div>
-                    <div>2643 Housley Rd • Midnight launch confirmed</div>
-                    <div style="font-size: 0.8em; color: #00FF41; margin-top: 5px;">PRIMARY TARGET - 23:30 lineup</div>
+            <div class="panel-content">
+                <div class="grid">
+                    <div class="status-item">
+                        <div class="status-name priority-high">🟢 Best Buy Annapolis</div>
+                        <div>2643 Housley Rd • Midnight launch confirmed</div>
+                        <div style="font-size: 0.8em; color: #00FF41; margin-top: 5px;">PRIMARY TARGET - 23:30 lineup</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name priority-medium">🟡 Target Annapolis</div>
+                        <div>Annapolis Mall • Ticket system 08:00-17:00</div>
+                        <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">SECONDARY - Early morning strategy</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name priority-medium">🟡 GameStop Mall</div>
+                        <div>179 Annapolis Mall • Two-phase event</div>
+                        <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">BACKUP - 15:00 pay, 00:00 pickup</div>
+                    </div>
                 </div>
-                <div class="status-item">
-                    <div class="status-name priority-medium">🟡 Target Annapolis</div>
-                    <div>Annapolis Mall • Ticket system 08:00-17:00</div>
-                    <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">SECONDARY - Early morning strategy</div>
-                </div>
-                <div class="status-item">
-                    <div class="status-name priority-medium">🟡 GameStop Mall</div>
-                    <div>179 Annapolis Mall • Two-phase event</div>
-                    <div style="font-size: 0.8em; color: #FFA500; margin-top: 5px;">BACKUP - 15:00 pay, 00:00 pickup</div>
-                </div>
+                <button class="button" onclick="openMaps()">🗺️ TACTICAL MAPS</button>
             </div>
-            <button class="button" onclick="openMaps()">🗺️ TACTICAL MAPS</button>
         </div>
         
         <!-- SOCIAL MONITORING -->
-        <div class="panel">
-            <div class="panel-title">
-                <span class="panel-badge">SM</span>
-                📱 SOCIAL INTELLIGENCE
+        <div class="panel" id="panel-social">
+            <div class="panel-title" onclick="togglePanel('social')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">SM</span>
+                    📱 SOCIAL INTELLIGENCE
+                </div>
+                <span class="collapse-indicator">▼</span>
             </div>
-            <div class="status-item">
-                <div class="status-name">@mattswider</div>
-                <div>Expert tracker - 10,000+ helped acquire Switch 2</div>
-                <button class="button" onclick="openSocial('mattswider')">📡 MONITOR</button>
-            </div>
-            <div class="status-item">
-                <div class="status-name">@NintendoAmerica</div>
-                <div>Official launch announcements</div>
-                <button class="button" onclick="openSocial('NintendoAmerica')">📡 MONITOR</button>
-            </div>
-            <div class="status-item">
-                <div class="status-name">RestockTracker.io</div>
-                <div>Real-time inventory alerts</div>
-                <button class="button" onclick="openSocial('restocktracker')">📡 MONITOR</button>
+            <div class="panel-content">
+                <div class="status-item" style="margin-bottom: 15px;">
+                    <div class="status-name">@mattswider</div>
+                    <div>Expert tracker - 10,000+ helped acquire Switch 2</div>
+                    <button class="button" onclick="openSocial('mattswider')">📡 MONITOR</button>
+                </div>
+                <div class="status-item" style="margin-bottom: 15px;">
+                    <div class="status-name">@NintendoAmerica</div>
+                    <div>Official launch announcements</div>
+                    <button class="button" onclick="openSocial('NintendoAmerica')">📡 MONITOR</button>
+                </div>
+                <div class="status-item">
+                    <div class="status-name">RestockTracker.io</div>
+                    <div>Real-time inventory alerts</div>
+                    <button class="button" onclick="openSocial('restocktracker')">📡 MONITOR</button>
+                </div>
             </div>
         </div>
         
         <!-- MISSION STATUS -->
-        <div class="panel">
-            <div class="panel-title">
-                <span class="panel-badge">MS</span>
-                🚀 MISSION STATUS
+        <div class="panel" id="panel-status">
+            <div class="panel-title" onclick="togglePanel('status')">
+                <div class="panel-title-left">
+                    <span class="panel-badge">MS</span>
+                    🚀 MISSION STATUS
+                </div>
+                <span class="collapse-indicator">▼</span>
             </div>
-            <div class="grid">
-                <div class="status-item">
-                    <div class="status-name">Success Probability</div>
-                    <div style="color: #00FF41; font-size: 1.5em;">97%</div>
-                    <div style="font-size: 0.8em; color: #00FF41;">GARDEN-enhanced strategy</div>
-                </div>
-                <div class="status-item">
-                    <div class="status-name">Target Budget</div>
-                    <div style="color: #FFA500; font-size: 1.5em;">$450</div>
-                    <div style="font-size: 0.8em; color: #FFA500;">Plus $75 contingency</div>
-                </div>
-                <div class="status-item">
-                    <div class="status-name">Strategic Advantage</div>
-                    <div style="color: #00FF41;">DC haircut positioning</div>
-                    <div style="font-size: 0.8em; color: #00FF41;">30-mile geographic arbitrage</div>
-                </div>
-                <div class="status-item">
-                    <div class="status-name">Mission Ready</div>
-                    <div style="color: #00FF41; font-size: 1.5em;">GO</div>
-                    <div style="font-size: 0.8em; color: #00FF41;">All systems operational</div>
+            <div class="panel-content">
+                <div class="grid">
+                    <div class="status-item">
+                        <div class="status-name">Success Probability</div>
+                        <div style="color: #00FF41; font-size: 1.5em;">97%</div>
+                        <div style="font-size: 0.8em; color: #00FF41;">GARDEN-enhanced strategy</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Target Budget</div>
+                        <div style="color: #FFA500; font-size: 1.5em;">$450</div>
+                        <div style="font-size: 0.8em; color: #FFA500;">Plus $75 contingency</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Strategic Advantage</div>
+                        <div style="color: #00FF41;">DC haircut positioning</div>
+                        <div style="font-size: 0.8em; color: #00FF41;">30-mile geographic arbitrage</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-name">Mission Ready</div>
+                        <div style="color: #00FF41; font-size: 1.5em;">GO</div>
+                        <div style="font-size: 0.8em; color: #00FF41;">All systems operational</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -477,6 +569,36 @@
             { time: '07:30', date: '2025-06-05', type: 'prepare', store: 'Target Annapolis', action: 'Ticket system lineup', status: 'confirmed', priority: 'medium' },
             { time: '08:00', date: '2025-06-05', type: 'launch', store: 'Target Annapolis', action: 'Ticket distribution begins', status: 'confirmed', priority: 'medium' }
         ];
+        
+        // Panel management functions
+        function togglePanel(panelName) {
+            const panel = document.getElementById(`panel-${panelName}`);
+            panel.classList.toggle('collapsed');
+        }
+        
+        function expandAll() {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => panel.classList.remove('collapsed'));
+        }
+        
+        function collapseAll() {
+            const panels = document.querySelectorAll('.panel');
+            panels.forEach(panel => panel.classList.add('collapsed'));
+        }
+        
+        function focusMode() {
+            const criticalPanels = ['timeline', 'countdown', 'intel'];
+            const allPanels = document.querySelectorAll('.panel');
+            
+            allPanels.forEach(panel => {
+                const panelId = panel.id.replace('panel-', '');
+                if (criticalPanels.includes(panelId)) {
+                    panel.classList.remove('collapsed');
+                } else {
+                    panel.classList.add('collapsed');
+                }
+            });
+        }
         
         function updateCurrentTime() {
             const now = new Date();
@@ -580,7 +702,7 @@
                 `;
             }).join('');
             
-            // Auto-scroll to next event
+            // Auto-scroll to next event ONLY within timeline container
             scrollToNextEvent();
         }
         
@@ -589,9 +711,14 @@
             const nextEvent = container.querySelector('.timeline-event.next');
             
             if (nextEvent) {
-                nextEvent.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
+                // Scroll within the timeline container only, not the whole page
+                const containerRect = container.getBoundingClientRect();
+                const eventRect = nextEvent.getBoundingClientRect();
+                const relativeTop = eventRect.top - containerRect.top;
+                
+                container.scrollTo({
+                    top: container.scrollTop + relativeTop - container.clientHeight / 2,
+                    behavior: 'smooth'
                 });
             }
         }
